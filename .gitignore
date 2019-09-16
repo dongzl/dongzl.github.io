@@ -24,3 +24,5 @@ hs_err_pid*
 
 blog/node_modules
 .idea
+
+blog/package-lock.json
