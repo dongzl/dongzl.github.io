@@ -1,3 +1,16 @@
+---
+title: 线上系统频繁Full GC问题排查
+date: 2019-09-20 15:02:03
+categories:
+- java
+tags:
+- JVM
+- Full GC
+- HashMap
+- WeakHashMap
+- dump
+- MAT
+---
 ## 线上系统频繁Full GC问题排查
 
 ## 现象描述
