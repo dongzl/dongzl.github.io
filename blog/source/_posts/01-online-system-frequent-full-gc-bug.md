@@ -72,11 +72,12 @@ JSON_OBJ_MAP 全局 Map 的主要作用应该是作为缓存使用，如果相�
 ## 复盘步骤 & 环境
 
 为了更直白的说明问题，我在本地电脑准备了测试环境，通过一些特殊条件跟快速复现出问题现象，来说明问题：
-- 本地通过 main 方法拼接字 body 参数符串，而且每次 body 参数内容都不相同，这样 JSON_OBJ_MAP 缓存失效，每次要放入内容都不同，会持续进行 put 操作；
+- 本地通过 main 方法拼接 body 字参数符串，而且每次 body 参数内容都不相同，这样 JSON_OBJ_MAP 缓存失效，每次要放入内容都不同，会持续进行 put 操作；
 - 本地通过 main 方法方式模拟大量请求解析参数过程，线上流量比较小，系统运行很长时间才会出现 Full GC，而且几乎不出现内存溢出情况，通过 mian 方法循环方式，可以快速模拟出现 Full GC 情况，而且一段时间后还会出现内存溢出；
 - 本地通过 main 方法中创建的 body 字符串，通过某个参数使用长文本字符串，创建大字符串对象，快速消耗内存；
 - 调整本地内存大小，线上服务器内存比较大，所以才会在运行一段时间后出现问题，测试环境可以减小 jvm 内存设置，使问题快速出现，而且还可以设置一些 jvm 垃圾回收参数，分析系统运行，直至出现内存溢出过程中内存使用情况。
 
+测试 main 方法
 ```java
 public static void main(String[] args) throws Exception {
     for (int i = 0; i < 5000000; i++) {
@@ -85,12 +86,12 @@ public static void main(String[] args) throws Exception {
     }
 }
 ```
-
+内存设置
 ```
 // 内存设置
 -Xms500m -Xmx500m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/dump/java_pid.hprof -XX:+PrintGCDetails
 ```
-
+Java 堆内存使用情况
 ```
 Heap
  PSYoungGen      total 152064K, used 133632K [0x00000007f5900000, 0x0000000800000000, 0x0000000800000000)
@@ -103,7 +104,7 @@ Heap
   object space 21504K, 36% used [0x00000007db980000,0x00000007dc142878,0x00000007dce80000)
 ```
 
-## java 堆 dump 文件分析
+## java堆dump文件分析
 
 <img src="http://ww1.sinaimg.cn/large/7dad8649ly1g75yodbmz6j21je0na78g.jpg" width="600px">
 
@@ -152,7 +153,7 @@ public class ParamsUtils implements Serializable {
     }
 }
 ```
-第一版修改后加入条件判断，如果 JSON_OBJ_MAP 中存储内容 > 50000，重新初始化，释放 Map 中内容；
+第一版修改后加入条件判断，如果 JSON_OBJ_MAP 中存储元素数量大于  5W，重新初始化，释放 Map 中内容；
 ```java
 //释放
 if(JSON_OBJ_MAP.size() > MAX_MAP_SIZE) {
