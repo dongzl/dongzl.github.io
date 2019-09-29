@@ -222,7 +222,7 @@ static final int tableSizeFor(int cap) {
     return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 }
 ```
-如果在初始化 `HashMap` 时指定了 `initialCapacity` 参数，由于 HashMap 要求 `capacity` 必须是 **2的k次幂**，因此构造函数调用 `tableSizeFor` 方法计算出 >= initialCapacity 的最小的 **2的k次幂** 数值（如果 initialCapacity 本身就是 ****2的k次幂****，经过计算后还是原值）。
+如果在初始化 `HashMap` 时指定了 `initialCapacity` 参数，由于 HashMap 要求 `capacity` 必须是 **2的k次幂**，因此构造函数调用 `tableSizeFor` 方法计算出 >= initialCapacity 的最小的 **2的k次幂** 数值（如果 initialCapacity 本身就是 **2的k次幂**，经过计算后还是原值）。
 算法步骤：
 > int n = cap - 1;
 
@@ -248,7 +248,7 @@ static final int tableSizeFor(int cap) {
 > 00001111 | (00001111 >>> 4) = 00001111 | 00000000 = 00001111
 
 以此类推右移 8 位、16 位，在这里容量最大也就是 32bit 的正数，因此最后 `n |= n >>> 16;` 后，最多也就 31 个 1（第一位符号位，恒为 0），但是这时已经大于了 `MAXIMUM_CAPACITY`，所以最终取值为 `MAXIMUM_CAPACITY`。
-![](01-JDK8-HashMap-sourcede/HashMap_1.png)
+![](01-JDK8-HashMap-Code/HashMap_1.png)
 之所以执行上面的一波无符号右移操作，就是为了让 `initialCapacity` 的值右移几次之后，二进制的值从某一位起的低位全部为连续 1，之前高位全部为 0，这样最后执行 `n + 1` 操作之后，结果一定是 **2的k次幂** 值，而且是 >=n 的最小的 **2的k次幂** 值。
 
 ## hash 方法
@@ -465,10 +465,10 @@ final Node<K,V>[] resize() {
 当执行 `put` 操作时，如果目前的 `table` 数组的使用程度已经超过 `loadFactor` 的比例（默认 `75%`），就会调用 `resize()` 方法执行扩容操作，`HashMap` 扩容操作是将 `table` 扩容为原来的 `2` 倍，之后重排列元素，这里面的重新排列元素是有技巧的，`resize()` 方法的注释大致意思是：首先要扩容为原来的 `2` 倍，扩容之后，由于是扩容为原来的 `2` 倍，元素的位置或者是在原来的位置，或者是在新 `table` 中偏移 `2` 次幂的位置。
 > Otherwise, because we are using power-of-two expansion, the elements from each bin must either stay at same index, or move with a power of two offset in the new table.
 
-![](01-JDK8-HashMap-sourcede/HashMap_2.png)
+![](01-JDK8-HashMap-Code/HashMap_2.png)
 我们在扩容 HashMap 的时候，不需要重新计算 hash，只需要观察一下原来的 hash 值新增的那个 bit 是 1 还是 0 就好了，是 0 的话索引没变，是 1 的话索引变成 `原索引 + oldCap`。以下图为例，如果 n = 16，扩容后 n = 32:
 
-![](01-JDK8-HashMap-sourcede/HashMap_3.png)
+![](01-JDK8-HashMap-Code/HashMap_3.png)
 ## get 方法
 ```java
 
