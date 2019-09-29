@@ -253,22 +253,6 @@ static final int tableSizeFor(int cap) {
 
 ## hash 方法
 ```java
-/**
- * Computes key.hashCode() and spreads (XORs) higher bits of hash
- * to lower.  Because the table uses power-of-two masking, sets of
- * hashes that vary only in bits above the current mask will
- * always collide. (Among known examples are sets of Float keys
- * holding consecutive whole numbers in small tables.)  So we
- * apply a transform that spreads the impact of higher bits
- * downward. There is a tradeoff between speed, utility, and
- * quality of bit-spreading. Because many common sets of hashes
- * are already reasonably distributed (so don't benefit from
- * spreading), and because we use trees to handle large sets of
- * collisions in bins, we just XOR some shifted bits in the
- * cheapest possible way to reduce systematic lossage, as well as
- * to incorporate impact of the highest bits that would otherwise
- * never be used in index calculations because of table bounds.
- */
 static final int hash(Object key) {
     int h;
     return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
@@ -300,6 +284,8 @@ static final int hash(Object key) {
 > 9
 
 因为当容量比较小的时候，hashCode 只有低位才会参与到运算中，所以容易发生碰撞，所以在 `右移异或` 之后让 hashCode 中高 16bit 也参与到 hash 运算中，降低碰撞出现的概率。
+
+> Computes key.hashCode() and spreads (XORs) higher bits of hash to lower.  Because the table uses power-of-two masking, sets of hashes that vary only in bits above the current mask will always collide. (Among known examples are sets of Float keys holding consecutive whole numbers in small tables.)  So we apply a transform that spreads the impact of higher bits downward. There is a tradeoff between speed, utility, and quality of bit-spreading. Because many common sets of hashes are already reasonably distributed (so don't benefit from spreading), and because we use trees to handle large sets of collisions in bins, we just XOR some shifted bits in the cheapest possible way to reduce systematic lossage, as well as to incorporate impact of the highest bits that would otherwise never be used in index calculations because of table bounds.
 
 在 hash 方法的注释中作者也解释了，这个实现是充分考虑了 `speed(速度), utility(作用), and quality(质量)` 之后的结果，而且 `现在大部分的 hash 函数实现使数据分布已经很均匀了，而且在发生碰撞之后也优化成了树型结构，仅仅进行了一次异或操作，既没有引起系统很大的开销，也降低了因为高位没有参加运算而导致的碰撞情况出现。`
 
@@ -477,9 +463,7 @@ final Node<K,V>[] resize() {
 }
 ```
 当执行 `put` 操作时，如果目前的 `table` 数组的使用程度已经超过 `loadFactor` 的比例（默认 `75%`），就会调用 `resize()` 方法执行扩容操作，`HashMap` 扩容操作是将 `table` 扩容为原来的 `2` 倍，之后重排列元素，这里面的重新排列元素是有技巧的，`resize()` 方法的注释大致意思是：首先要扩容为原来的 `2` 倍，扩容之后，由于是扩容为原来的 `2` 倍，元素的位置或者是在原来的位置，或者是在新 `table` 中偏移 `2` 次幂的位置。
-> Otherwise, because we are using power-of-two expansion, the
-  elements from each bin must either stay at same index, or move
-  with a power of two offset in the new table.
+> Otherwise, because we are using power-of-two expansion, the elements from each bin must either stay at same index, or move with a power of two offset in the new table.
 
 ![](01-JDK8-HashMap-sourcede/HashMap_2.png)
 我们在扩容 HashMap 的时候，不需要重新计算 hash，只需要观察一下原来的 hash 值新增的那个 bit 是 1 还是 0 就好了，是 0 的话索引没变，是 1 的话索引变成 `原索引 + oldCap`。以下图为例，如果 n = 16，扩容后 n = 32:
