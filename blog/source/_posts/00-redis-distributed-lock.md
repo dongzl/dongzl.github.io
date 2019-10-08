@@ -1,5 +1,5 @@
 ---
-title: 基于Redis实现的分布式锁
+title: 基于 Redis 实现的分布式锁
 date: 2019-10-08 18:01:09
 categories:
 - architectural-design
