@@ -86,7 +86,6 @@ return "签到成功";
 - 判断步骤二 `value3` 是否小于当前系统时间，如果小于系统时间，则说明当前 `getset` 执行成功，获取到了锁；如果大于系统时间，说明这个锁又被别的请求竞争到了，当前请求加锁失败；
 - 在获取到锁之后，当前线程可以开始自己的业务处理，当处理完毕后，比较自己的处理时间和锁设置的超时时间，如果小于锁设置的超时时间，则直接执行 `del(key)` 释放锁；如果大于锁设置的超时时间，则不需进行释放锁操作。
 
-![](00-redis-distributed-lock/redis-distributed-lock-01.png)
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Redis_Distributed_Lock_01.png" width="600px">
 
 ```java
@@ -158,7 +157,6 @@ return "签到成功";
 - 线程 A 执行成功，执行 del(key) 命令释放锁成功，此时 B 还未执行成功，且未超时；
 - 线程 C 对 key 加锁成功。
 
-![](00-redis-distributed-lock/redis-distributed-lock-02.png)
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Redis_Distributed_Lock_02.png" width="600px">
 
 这里出现的最大问题是某个线程（A）超时导致自动释放锁，另外一个线程（B）加锁成功，A 线程执行完后执行释放锁操作，会释放掉线程 B 的锁，导致加锁、解锁操作出现错乱。
