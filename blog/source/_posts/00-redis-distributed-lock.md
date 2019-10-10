@@ -201,5 +201,76 @@ redisClient.eval(luaScript, Collections.singletonList(key), Collections.singleto
 
 对于这种自动续航的方式，我们一定要注意的是业务代码一定不能出现死循环，或者说一定要在有限时间内执行完毕，因为一旦某个线程获取锁成功，但是一直无法执行完毕，守护线程会一直为锁续航，锁永远不会超时自动释放，导致出现死锁情况。
 
+## Redis 实现分布式锁的高可用分析
+### 单点 Redis 锁缺陷
+如果 Redis 服务器只有一台，很明显容易出现单点故障，很难保证高可用，一旦服务器宕机，整个分布式锁功能都会不可用。 
+
+### Redis 主从架构的分布式锁
+如果一台 Redis 服务器容易出现单点故障，那么部署 Redis 主从（master / slave，一主多从）架构，还会有问题吗？
+其实仔细分析还是会有问题：
+- 线程 A 在 master 节点上通过 key 获取到一个锁；
+- master 把这个数据同步到 slave 节点的时候宕机了（Redis 中 master 和 slave 之间同步数据机制是**异步**的）；
+- 这时候其中一个 slave 节点会升级为 master 节点；
+- 线程 B 通过相同的 key 去获取分布式锁，是可以成功的，因为新升级的节点上没有这个数据。
+
+单点是不行的，主从架构也不保险，对于这个问题，Redis 的官方给出了一个 `RedLock` 的解决方案。
+
+### `RedLock` 分布式锁解决方案
+
+原文：[Distributed locks with Redis](https://redis.io/topics/distlock)
+
+翻译：[用Redis构建分布式锁](http://ifeve.com/redis-lock/)
+
+实现 `RedLock` 实现分布式锁的前提条件是：假设有 N 个 Redis master 节点，所有节点之间是相互独立，互补影响的，并且业务系统也是单纯的对这些节点进行调用：
+- 获取当前时间毫秒数（t0）；
+- 轮流用相同的 key 和随机值在 N 个节点上请求锁，在这一步里，客户端在每个master 上请求锁时，会有一个和总的锁释放时间相比小的多的超时时间。比如：如果锁自动释放时间是10s，那每个节点锁请求的超时时间可能是 5-50ms 的范围，这个可以防止一个客户端在某个宕掉的 master 节点上阻塞过长时间，**如果一个 master 节点不可用了，我们应该尽快尝试下一个 master 节点**；
+- 客户端计算第二步中获取锁花费的时间（t1），只有客户端在大多数 master 节点上获取锁成功，而且总共消耗的时间不超过锁释放的时间，就认为是成功获取锁了；
+- 如果锁获取成功了，那现在**锁自动释放时间就是最初的锁释放时间减去之前获取锁所消耗的时间（锁业务有效时间：10s - t1）**。
+- 如果锁获取失败了，不管是因为获取成功的锁不超过一半（N/2 + 1）还是因为总消耗时间超过了锁释放时间，客户端都会到每个 master 节点上释放锁，即使是那些没有获取成功的锁。
+
+### `Redisson` 工具中的 `RedLock` 实现
+
+`Redisson` 是一个具备内存数据网格特征的 Redis Java 客户端工具。它提供了 30 多种对象类型和服务功能：Set, Multimap, SortedSet, Map, List, Queue, Deque, Semaphore, Lock, AtomicLong, Map Reduce, Publish / Subscribe, Bloom filter, Spring Cache, Tomcat, Scheduler, JCache API, Hibernate, RPC.
+
+Redisson 对于 RedLock 的实现：
+```java
+Config config = new Config();
+config.useSingleServer().setAddress("redis://192.168.120.0:5378").setPassword("123456").setDatabase(0);
+RedissonClient client = Redisson.create(config);
+
+Config config1 = new Config();
+config1.useSingleServer().setAddress("redis://192.168.120.1:5378").setPassword("123456").setDatabase(0);
+RedissonClient client1 = Redisson.create(config1);
+
+Config config2 = new Config();
+config2.useSingleServer().setAddress("redis://192.168.120.2:5378").setPassword("123456").setDatabase(0);
+RedissonClient client2 = Redisson.create(config2);
+
+String key = "SIGN_GET_GIFT_" + userId;
+RLock rLock = client.getLock(key);
+RLock rLock1 = client1.getLock(key);
+RLock rLock2 = client2.getLock(key);
+RedissonRedLock redLock = new RedissonRedLock(rLock, rLock1, rLock2);
+try {
+    if (!redLock.tryLock()) {
+        return "签到失败，请勿频繁请求";
+    }
+    //执行签到领取礼品逻辑
+    signGetGift();
+    saveSignLog();
+    return "签到成功";
+} catch (Exception e) {
+    return "签到异常";
+} finally {
+    redLock.unlock();
+}
+```
 ## 写在最后
 整理了一些内容，也研究了好久，每个实现方案都有种种缺点和不足，为了解决这些问题，我们不得不引入一些额外的判断和处理流程，写了很多，我感觉我依然无法用 Redis 实现一个简单、高效、完美的分布式锁的功能，当然还有 RedLock 的实现方案，Redission 开源框架的具体实现，这些还得需要进一步去研究一下。
+
+## 参考资料
+- [Java分布式锁看这篇就够了](https://www.cnblogs.com/seesun2012/p/9214653.html)
+- [Redis 命令参考](http://doc.redisfans.com/)
+- [基于Redis的分布式锁真的安全吗？（上）](https://mp.weixin.qq.com/s/1bPLk_VZhZ0QYNZS8LkviA)
+- [Distributed locks with Redis](https://redis.io/topics/distlock)
+- [用Redis构建分布式锁](http://ifeve.com/redis-lock/)
