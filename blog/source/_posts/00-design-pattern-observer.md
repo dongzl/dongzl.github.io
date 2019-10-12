@@ -15,6 +15,8 @@ tags:
 
 **PS.一句话需求，根据订单 MQ 消息，执行一些特殊业务逻辑处理，业务场景比较杂，逻辑分支比较多，而且随时会新增、撤销某些业务功能。**
 
+<!-- more -->
+
 ## 目前实现
 ### 老系统实现分析
 这个类似的功能在老的系统是存在，以前系统中直接在一个 class 的方法中处理所有的逻辑，只是每个业务场景单独一个 Service，在主类中依赖所有的 Service，然后开始顺序执行所有的逻辑，
@@ -144,7 +146,9 @@ public class BServiceMqObserver implements Observer {
 ### 结构与分析
 **模式结构：**
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_01" width="600px">
+类图：
+
+<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_01.png" width="600px">
 
 角色：
 - Subject：抽象主题（被观察者）角色把所有对观察者对象的引用保存在一个集合（比如 ArrayList 集合）里，每个主题都可以有任何数量的观察者，抽象主题提供一个接口，可以增加和删除观察者对象，抽象主题角色又叫做抽象被观察者（Observable）角色；
@@ -152,9 +156,13 @@ public class BServiceMqObserver implements Observer {
 - Observer：抽象观察者，为所有的具体观察者定义一个接口，在得到主题的通知时更新自己，这个接口叫做更新接口；
 - ConcreteObserver：具体观察者，存储与主题的状态匹配的状态，具体观察者角色实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题的状态协调，如果需要，具体观察者角色可以保持一个指向具体主题对象的引用。
 
+JDK 对观察者模式的扩展：
+
+<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_03.png" width="600px">
+
 **时序图：**
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_02" width="600px">
+<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_02.png" width="600px">
 
 ### 优点 & 缺点
 **优点：**
