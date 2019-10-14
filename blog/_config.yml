@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 善积跬步 方以千里
 subtitle:
 description:
 keywords:
-author: John Doe
+author: dongzl
 language: zh-CN
 timezone:
 
@@ -29,6 +29,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
+# new_post_name: :year/:title.md # File name of new posts
 new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
