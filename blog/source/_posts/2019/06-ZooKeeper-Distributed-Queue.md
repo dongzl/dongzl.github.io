@@ -1,5 +1,5 @@
 ---
-title: 从一个业务场景聊聊 ZooKeeper 消息队列使用
+title: 从一个业务场景聊聊 ZooKeeper 队列使用
 date: 2019-10-19 17:03:49
 categories:
 - architectural-design
@@ -10,20 +10,20 @@ tags:
 ---
 
 ## 背景描述
-目前在做 APP 客户端，有个业务场景是对于登录的新用户需要做一些操作，例如初始化一些用户账户信息，同时需要给该新用户发放一些优惠，比如发放优惠券、赠送经验积分等等。对于这种功能场景一般很容易想到使用消息队列（MQ），但是考虑到目前的业务场景，每天新增的用户并不多，如果引入专门的消息队列框架（例如：RocketMQ、RabbitMQ）等感觉比较重，意义并不是很大。
+目前在做的 APP 客户端有个业务场景，对于登录的新用户需要做一些操作，例如初始化用户账户信息，给该新用户发放一些优惠，比如发放优惠券、赠送经验积分等等。对于这种场景一般很容易想到使用消息队列（MQ），但是考虑到目前的业务场景，每天新增的用户并不多，如果引入专门的消息队列框架（例如：RocketMQ、RabbitMQ）等感觉比较重，意义并不是很大。
 
 **PS. 一句话需求，新增登录用户模块要实现功能解耦，用户登录与新用户业务逻辑功能分开，想到使用消息队列机制，但是不想引入重量级 MQ 框架。**
 
 <!-- more -->
 
-通过调研，发现利用 ZooKeeper + Curator 是可以实现分布式队列类似的效果的，同时预研使用 ZooKeepr + Curator 实现了该功能，这一篇文章对 ZooKeepr + Curator 实现消息队列机制的一个总结。
+通过调研，发现利用 ZooKeeper + Curator 是可以实现分布式队列类似的效果的，同时预研使用 ZooKeepr + Curator 实现了该功能，这一篇文章对 ZooKeepr + Curator 实现队列机制的一个总结。
 
 ## ZooKeeper 队列实现原理
 ### 生产者
-为了在 ZooKeeper 中实现分布式队列，需要设计一个 Znode 节点来存放数据，这个节点是`队列节点`，例如：`/app_name/first_login_user`。生产者向队列中存放数据，每一个消息数据都是`队列节点`下的一个新节点，我们称作`消息节点`。消息节点的命名规则为：queue-xxxx，其中 xxxx 是一个单调递增序列，从 ZooKeeper 内部存储结构来说，其实就是创建`持久顺序（PERSISTENT_SEQUENTIAL）`来实现，这样，生产者不断的向队列节点中发送消息，消息数据存储为：queue-xxxx，这就是生产者端的实现原理。
+为了在 ZooKeeper 中实现分布式队列，需要设计一个 ZNode 节点来存放数据，这个节点是`队列节点`，例如：`/app_name/first_login_user`。生产者向队列中存放数据，每一个消息数据都是`队列节点`下的一个新节点，我们称作`消息节点`。消息节点的命名规则为：queue-xxxx，其中 xxxx 是一个单调递增序列，从 ZooKeeper 内部存储结构来说，其实就是创建`持久顺序（PERSISTENT_SEQUENTIAL）`类型节点来实现。这样，生产者不断的在队列节点下创建消息节点，消息节点数据存储为：queue-xxxx，这就是生产者端的实现原理。
 
 ### 消费者
-消费中从队列中获取数据消费消息是通过 `getChildren()` 方法获取到`队列节点`中的所有`消息节点`，然后获取消息节点中存储数据，处理业务逻辑，并删除`消息节点`。 如果 `getChildren()` 没有获取到节点数据，说明队列是空的，则消费者进入等待状态，同时调用 `getChildren()` 方法设置观察者监听队列节点，队列节点发生变化后（消息节点变更），触发监听事件，唤起消费者。
+消费者从队列中获取数据是通过 `getChildren()` 方法获取到`队列节点`中的所有`消息节点`，然后获取消息节点中存储数据，处理业务逻辑，并删除`消息节点`。 如果 `getChildren()` 没有获取到节点数据，说明队列是空的，则消费者进入等待状态，同时调用 `getChildren()` 方法设置观察者监听队列节点，队列节点发生变化后（消息节点变更），触发监听事件，唤起消费者。
 
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/ZooKeeper-Distributed-Queue.png" width="600px">
 
@@ -114,7 +114,7 @@ int numberRemoved = queue.remove(itemId);
 ### DistributedPriorityQueue
 > Distributed Priority Queue - An implementation of the Distributed Priority Queue ZK recipe.
 
-`Distributed Priority Queue - 分布式阻塞队列的 ZK 实现。`
+`Distributed Priority Queue - 分布式优先级队列的 ZK 实现。`
 
 数据存储格式：
 ```
@@ -198,16 +198,16 @@ public byte[] take() throws Exception
 ```
 
 ## 系统实现
-业务系统中的实现是采用 `DistributedQueue` 的实现，首先在用户登录成功后向 ZooKeeper 的固定节点下写入 `PERSISTENT_SEQUENTIAL` 数据，写入后直接返回，不阻塞用户登录操作，在另外的线程中使用 `DistributedQueue` 消费数据功能，直接按顺序获取节点数据，开始进行业务逻辑处理。
+业务系统中是采用 `DistributedQueue` 的实现，首先在用户登录成功后向 ZooKeeper 的固定节点下写入 `PERSISTENT_SEQUENTIAL` 数据，写入后直接返回，不阻塞用户登录操作；在另外的线程中消费 `DistributedQueue` 队列中数据，直接按顺序获取节点数据，开始进行业务逻辑处理。
 
 ## 写在最后
 对于使用 ZooKeeper 实现的分布式消息队列，需要注意一些问题。首先，对于使用 ZooKeeper 实现的队列这件事情本身，Curator 的官方文档就是不推荐的：
 
 **IMPORTANT - We recommend that you do NOT use ZooKeeper for Queues. Please see [Tech Note 4](https://cwiki.apache.org/confluence/display/CURATOR/TN4) for details.**
 
-ZooKeeper 的使用手册页面列举了很多 ZooKeeper 作为消息队列的使用场景。Curator 包括了几种队列的实现方式，以我们的经验，使用 ZooKeeper 作为消息队列是一个糟糕的选择：
+ZooKeeper 的使用手册页面列举了一些 ZooKeeper 作为队列的使用场景。Curator 包括了几种队列的实现方式，以我们的经验，使用 ZooKeeper 作为消息队列是一个糟糕的选择：
 
-- ZooKeeper 有 1MB 的传输限制。 实践中 ZNode 必须相对较小，而队列包含成千上万的消息，非常的大；
+- ZooKeeper 有 1MB 的传输限制。 实践中 ZNode 必须相对较小，而队列包含成千上万的消息，可能非常的大；
 - 如果有很多节点，ZooKeeper 启动时相当的慢。而使用队列需要创建很多 ZNode 节点，所以在使用中需要显著调大 initLimit 和 syncLimit 参数值；
 - 当某个 ZNode 很大的时候会很难清理，同时调用这个节点的 `getChildren()` 方法会失败；
 - 当出现大量的包含成千上万的子节点的 ZNode 时，ZooKeeper 的性能会急剧下降；
