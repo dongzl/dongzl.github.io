@@ -10,7 +10,7 @@ tags:
 ---
 
 ## 背景描述
-最近在在参与 [Apache ShardingSphere](http://shardingsphere.apache.org/) 开源项目的一些工作，在 Github 的 [issue 列表](https://github.com/apache/incubator-shardingsphere/issues)认领了一个问题 [#3005](https://github.com/apache/incubator-shardingsphere/issues/3005)。
+最近在在参与 [Apache ShardingSphere](http://shardingsphere.apache.org/) 开源项目的一些工作，在 Github 的 [issue 列表](https://github.com/apache/incubator-shardingsphere/issues) 认领了一个问题 [#3005](https://github.com/apache/incubator-shardingsphere/issues/3005)。
 
 产品描述：首先简单介绍一下 ShardingSphere 中的一个产品 Sharding-Proxy，Sharding-Proxy 产品的功能是做一个透明的中间层代理，后面连接很多的 MySQL 数据库（可能是很多分库后 MySQL 数据库）。用户在使用中可以不用直接连到真实 MySQL 数据库上，而是连接到 Sharding-Proxy 上，通过这个工具再连接到真实的数据库上。
 
