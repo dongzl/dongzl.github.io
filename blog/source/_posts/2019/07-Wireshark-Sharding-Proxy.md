@@ -14,6 +14,8 @@ tags:
 
 产品描述：首先简单介绍一下 ShardingSphere 中的一个产品 Sharding-Proxy，Sharding-Proxy 产品的功能是做一个透明的中间层代理，后面连接很多的 MySQL 数据库（可能是很多分库后 MySQL 数据库）。用户在使用中可以不用直接连到真实 MySQL 数据库上，而是连接到 Sharding-Proxy 上，通过这个工具再连接到真实的数据库上。
 
+<!-- more -->
+
 这个过程对于用户应该是无感知的（所以才叫透明的中间层代理），可以像使用 MySQL 一样使用 Sharding-Proxy，例如通过一些工具，像 MySQL JDBC 驱动或者是客户端工具（Navicat、MySQL Workbench）直接使用 Sharding-Proxy，所以 Sharding-Proxy 需要对 MySQL 协议进行解析和封装。对于客户端发送请求，Sharding-Proxy 解析后重新封装发送给 MySQL 服务器，对于 MySQL 服务器响应数据需要解析后重新封装发送给客户端，这个过程要做到精确，才能实现`透明的中间层代理`的效果。
 
 认领的 issue 中的问题现象是，Navicat 直接连到 MySQL 服务器打开数据表没有问题，而通过 Sharding-Proxy 代理连接后再打开数据表，就会提示 <font color=#FF0000> There is no primary key here. Update will only use exact matching of the old values of the columns here. Thus, it may update more than one record. </font> 这个错误，虽然对于使用是没有影响的，但是依然没有做到完全透明。
