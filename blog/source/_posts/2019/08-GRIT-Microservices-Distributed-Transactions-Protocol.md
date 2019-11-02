@@ -8,6 +8,7 @@ tags:
 - microservice
 - distributed 
 - transaction
+- deterministic
 ---
 
 > 原文链接：https://tech.ebayinc.com/engineering/grit-a-protocol-for-distributed-transactions-across-microservices/
