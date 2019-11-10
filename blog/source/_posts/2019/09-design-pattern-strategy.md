@@ -111,3 +111,35 @@ public class Client {
 
 ### 类图描述
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Strategy_01.png" width="600px">
+
+## 观察者模式的四要素
+### 定义与动机
+**定义：** 
+
+策略模式（Strategy Pattern）：定义**一系列算法**，将**每一个算法封装起来**，并让他们可以**相互替换**。策略模式**让算法独立于使用它的客户而变化**，也称为**政策模式**（Policy）。策略模式是一种**对象行为型**模式。
+
+Strategy Pattern: Define **a family of algorithms**, **encapsulate each one**, and **make them interchangeable**. Strategy lets the algorithm vary independently from clients that use it.
+
+**动机：**
+
+完成一项任务，往往可以有很多种不同的方式，<font color="red">每一种方式称为一个策略</font>，我们<font color="red">可以根据环境或者条件的不同选择不同的策略来完成任务</font>。
+
+为了解决这些问题，<font color="red">可以定义一些独立的类来封装不同的算法，每一个类封装一个具体的算法</font>，在这里，<font color="red">每一个封装算法的类我们都可以称之为策略(Strategy)</font>，为了保证这些策略的一致性，一般会用一个<font color="red">抽象的策略类来做算法的定义，而具体每种算法则对应于一个具体策略类</font>。
+
+### 结构与分析
+**模式结构：**
+
+类图：
+
+
+
+### 优点 & 缺点
+**优点：**
+
+**缺点：**
+
+### 应用场景
+
+## 写在最后
+
+## 参考资料
