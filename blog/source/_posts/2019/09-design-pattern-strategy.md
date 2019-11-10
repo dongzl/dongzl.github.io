@@ -110,3 +110,4 @@ public class Client {
 ```
 
 ### 类图描述
+<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Strategy_01.png" width="600px">
