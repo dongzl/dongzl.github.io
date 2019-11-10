@@ -1,11 +1,12 @@
 ---
-title: 从一个功能设计聊聊策略模式 + 工厂模式的使用
+title: 从一个功能设计聊聊策略模式的使用
 date: 2019-11-06 16:25:58
 categories:
 - design-pattern
 tags:
 - 设计模式
 - 策略模式
+- 策略枚举
 ---
 
 ## 背景描述
@@ -131,15 +132,74 @@ Strategy Pattern: Define **a family of algorithms**, **encapsulate each one**, a
 
 类图：
 
+<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Strategy_02.png" width="600px">
 
+- Context封装角色：上下文角色，起承上启下封装作用，屏蔽高层模块对策略、算法的直接访问，封装可能存在的变化。
+- Strategy抽象策略角色：策略、算法家族的抽象，通常为接口，定义每个策略或算法必须具有的方法和属性。
+- ConcreteStratrgy具体策略角色：实现抽象策略中的操作，该类含有具体的算法。
 
 ### 优点 & 缺点
 **优点：**
+- 对“**开闭原则**”的完美支持，可以在不修改原有系统的基础上灵活的增加新的算法和行为；
+- 策略模式**提供了管理相关算法族的办法**；
+- 策略模式**提供了可以替换继承关系的办法**；
+- 策略模式**可以避免使用多重条件转移语句**。
 
 **缺点：**
+- 客户端**必须知道所有的策略类**；
+- 策略模式**将造成产生很多策略类**。
 
 ### 应用场景
+可以在以下情况中选择使用粗略模式：
+- 如果在一个系统里面有很多类，**它们之间的区别仅在于它们的行为**，那么使用策略模式可以动态的让一个对象在许多行为中选择一种行为。
+- 一个系统**需要动态地在几种算法中选择一种**。
+- 如果**一个对象有很多的行为**，如果不用恰当的模式，这些行为就只好使用**多重的条件选择语句**来实现。
+- 不希望客户端知道复杂的、与算法相关的数据结构，**在具体策略类中封装算法和相关的数据结构**，提高算法的保密性与安全性。
 
-## 写在最后
+## 策略模式的扩展-枚举策略
+### 枚举类定义
 
+```java
+public enum CalculateStrategy {
+
+    ANDROID_VIP_ORDER {
+        @Override
+        public Integer calculate(StrategyParam param) throws Exception {
+            Order order = queryOrder(param);
+            return order.getOnlineAmount;
+        }
+    },
+
+    IOS_VIP_ORDER {
+        @Override
+        public Integer calculate(StrategyParam param) throws Exception {
+            Order order = queryOrder(param);
+            return order.getOnlineAmount * 0.7;
+        }
+    },
+
+    BINDVIPORDER {
+        @Override
+        public Integer calculate(StrategyParam param) throws Exception {
+            return 199;
+        }
+    };
+
+    /**
+     * 计算金额
+     * @param param 参数
+     * @return 计算结果
+     * @throws Exception
+     */
+    public abstract Integer calculate(StrategyParam param) throws Exception;
+}
+```
+
+### Client调用类
+```java
+public static void main(String args[]) throws Exception {
+    Integer result = CalculateStrategy.ANDROID_VIP_ORDER.calculate(new StrategyParam());
+}
+```
 ## 参考资料
+- [业务复杂=if else？刚来的大神竟然用策略+工厂彻底干掉了他们！](https://mp.weixin.qq.com/s/VSjVx5kf-Rc7QifEs4xf6A)
