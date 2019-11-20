@@ -13,6 +13,8 @@ tags:
 
 **PS.数据库事务的知识有哪些，一起来整理一下，今天先以 MySQL 数据库 InnoDB 存储引擎为例，总结一下单数据库事务。**
 
+<!-- more -->
+
 ## 事务的ACID特性
 
 ### A：原子性（Atomicity）
@@ -105,44 +107,3 @@ T7 | 提交事务 |
 
 
 ## 123456789wwwwww
-
-```flow
-st=>start: Start|past:>http://www.google.com[blank]
-e=>end: End:>http://www.google.com
-op1=>operation: My Operation|past
-op2=>operation: Stuff|current
-sub1=>subroutine: My Subroutine|invalid
-cond=>condition: Yes
-or No?|approved:>http://www.google.com
-c2=>condition: Good idea|rejected
-io=>inputoutput: catch something...|request
-
-st->op1(right)->cond
-cond(yes, right)->c2
-cond(no)->sub1(left)->op1
-c2(yes)->io->e
-c2(no)->op2->e
-```
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
-
-{% plantuml %}
-    Bob->Alice : hello
-{% endplantuml %}
-
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}$$
-
-$MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
-
-Simple inline $a = b + c$.
-
-$$\frac{\partial u}{\partial t}
-= h^2 \left( \frac{\partial^2 u}{\partial x^2} +
-\frac{\partial^2 u}{\partial y^2} +
-\frac{\partial^2 u}{\partial z^2}\right)$$
