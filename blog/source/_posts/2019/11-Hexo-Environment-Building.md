@@ -1,5 +1,5 @@
 ---
-title: Hexo 环境搭建
+title: Hexo 环境搭建 & 常用插件集成
 date: 2019-11-20 19:12:09
 categories:
 - other
@@ -17,7 +17,9 @@ tags:
 
 <!-- more -->
 
-## PlantUml 安装使用
+## 常用插件集成
+
+### PlantUml 安装使用
 
 **作用：** 在 Hexo 中识别并生成由 flow 编写的图表。
 
@@ -30,11 +32,6 @@ tags:
 **Install：** `npm hexo-tag-plantuml --save`
 
 **示例：**
-
-{% plantuml %}
-    Bob->Alice : hello
-{% endplantuml %}
-
 
 {% plantuml %}
 
@@ -53,7 +50,7 @@ note left: On last defined class
 
 {% endplantuml %}
 
-## flowchart 安装使用
+### flowchart 安装使用
 
 **作用：** 在 Hexo 中识别并生成由 flow 编写的图表。
 
@@ -85,7 +82,7 @@ c2(yes)->io->e
 c2(no)->op2->e
 ```
 
-## mermaid 安装使用
+### mermaid 安装使用
 
 **作用：** 在 Hexo 中识别并生成由 mermaid 编写的图表。
 
@@ -98,14 +95,6 @@ c2(no)->op2->e
 **Install：** `npm install hexo-filter-mermaid-diagrams --save`
 
 **示例：**
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
 
 ```mermaid
 sequenceDiagram
@@ -130,43 +119,7 @@ Parallel 3   :         des5, after des3, 1d
 Parallel 4   :         des6, after des4, 1d
 ```
 
-```mermaid
-classDiagram
-Class01 <|-- AveryLongClass : Cool
-<<interface>> Class01
-Class09 --> C2 : Where am i?
-Class09 --* C3
-Class09 --|> Class07
-Class07 : equals()
-Class07 : Object[] elementData
-Class01 : size()
-Class01 : int chimp
-Class01 : int gorilla
-class Class10 {
-  <<service>>
-  int id
-  size()
-}
-```
-
-```mermaid
-stateDiagram
-[*] --> Still
-Still --> [*]
-Still --> Moving
-Moving --> Still
-Moving --> Crash
-Crash --> [*]
-```
-
-```mermaid
-pie
-"Dogs" : 386
-"Cats" : 85
-"Rats" : 15 
-```
-
-## MathJax 安装使用
+### MathJax 安装使用
 
 **作用：** 在 Hexo 中识别并生成由 flow 编写的图表。
 
