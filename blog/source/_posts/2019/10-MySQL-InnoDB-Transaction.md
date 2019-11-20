@@ -27,5 +27,122 @@ tags:
 ### D：持久性（Durability）
 一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务的执行结果页不能丢失。
 
+## 事务的并发一致性问题
+
+### 丢失更新
+
+#### 第一类丢失更新
+
+一个事务（A）更新某条记录数据，此时还未提交，这时另外一个事务（B）也更新了该记录数据并提交事务成功，这时 A 撤销事务，此时 B 更新成功的数据会丢失。
+
+时间 | 事务A | 事务B
+---|---|---
+T1 | 开启事务 | 
+T2 |  | 开启事务
+T3 | 查询账户余额为 100 | 
+T4 |  | 查询账户余额为 100
+T5 |  | 更新数据 + 10 结果为 110
+T6 |  | 提交事务
+T7 | 更新数据 - 10 结果为 90 | 
+T8 | 撤销事务 | 
+T7 | 数据恢复为100（丢失更新） | 
+
+#### 第二类丢失更新
+
+一个事务（A）更新某条记录数据，此时还未提交，这时另外一个事务（B）也更新了该记录数据并提交事务成功，此时 A 提交事务，此时 B 更新成功的数据会丢失。
+
+时间 | 事务A | 事务B
+---|---|---
+T1 | 开启事务 | 
+T2 |  | 开启事务
+T3 | 查询账户余额为100 | 
+T4 |  | 查询账户余额为100
+T5 |  | 更新数据 - 10 结果为 90
+T6 |  | 提交事务
+T7 | 更新数据 + 10 结果 为 110 | 
+T8 | 提交事务 | 
+T7 | 数据结果为110（丢失更新） | 
+
+### 脏读
+
+脏读是指一个事务读取到了另外一个事务未提交的数据。一个事务正在对一条记录进行修改，在这个事务提交并完成前，这条记录的数据就处于不一致状态。这时， 另一个事务也来读取同一条记录，如果不加控制，第二个事务读取了这些“脏”数据，并据此做进一步的处理，就会产生未提交的数据依赖关系。
+
+时间 | 事务A | 事务B
+---|---|---
+T1 | 开启事务 | 
+T2 | 查询账户余额为100 | 开启事务
+T3 | 充值50，余额修改为150 | 
+T4 |  | 查询余额为150
+T5 | 撤销事务，余额改回100 | 
+T6 |  | 汇入50，余额修改为200
+T7 |  | 提交事务
+
+### 不可重复读
+不可重复读是指一个事务读取到了另外一个事务已提交的数据。一个事务（A）读取某一个数据后，另外一个事务（B）对该数据进行了修改，当 A 再读取这个数据时，发现前后两次读取的数据不一致。
+
+时间 | 事务A | 事务B
+---|---|---
+T1 | 开启事务 | 
+T2 | 查询账户余额为100 | 开启事务
+T3 |   | 更新账户余额为150 
+T4 |  | 提交事务
+T5 | 查询账户余额为150 | 
+T6 | ... | 
+T7 | 提交事务 | 
+
+### 幻读（幻影读）
+一个事务（A）按某一条件检索到 N 条数据，另外一个事务（B）新增或删除了满足条件的数据，这时 A 再按相同条件检索数据，查询到的结果 != N。
+
+时间 | 事务A | 事务B
+---|---|---
+T1 | 开启事务 | 开启事务
+T2 | select * from table where condition = 'xxx' 返回 N 条记录 | 
+T3 |   | 向 table 表插入一条满足 condition = 'xxx' 的数据
+T4 |  | 提交事务
+T5 | select * from table where condition = 'xxx' 返回 N + 1 条记录 | 
+T6 | ... | 
+T7 | 提交事务 | 
 
 
+## 123456789wwwwww
+
+```flow
+st=>start: Start|past:>http://www.google.com[blank]
+e=>end: End:>http://www.google.com
+op1=>operation: My Operation|past
+op2=>operation: Stuff|current
+sub1=>subroutine: My Subroutine|invalid
+cond=>condition: Yes
+or No?|approved:>http://www.google.com
+c2=>condition: Good idea|rejected
+io=>inputoutput: catch something...|request
+
+st->op1(right)->cond
+cond(yes, right)->c2
+cond(no)->sub1(left)->op1
+c2(yes)->io->e
+c2(no)->op2->e
+```
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
+{% plantuml %}
+    Bob->Alice : hello
+{% endplantuml %}
+
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}$$
+
+$MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
+
+Simple inline $a = b + c$.
+
+$$\frac{\partial u}{\partial t}
+= h^2 \left( \frac{\partial^2 u}{\partial x^2} +
+\frac{\partial^2 u}{\partial y^2} +
+\frac{\partial^2 u}{\partial z^2}\right)$$
