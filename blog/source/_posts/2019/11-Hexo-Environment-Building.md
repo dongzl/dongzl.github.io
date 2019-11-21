@@ -9,6 +9,7 @@ tags:
 - flowchart
 - mermaid
 - MathJax
+mathjax: true
 ---
 
 ## 背景描述
@@ -119,37 +120,46 @@ Parallel 3   :         des5, after des3, 1d
 Parallel 4   :         des6, after des4, 1d
 ```
 
-### MathJax 安装使用
+### MathJax 安装使用(未生效)
 
-**作用：** 在 Hexo 中识别并生成由 flow 编写的图表。
+**作用：** MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all modern browsers.
 
-**网址：** http://flowchart.js.org/
+**网址：** https://www.mathjax.org/
 
-**Github地址：** [adrai/flowchart.js](https://github.com/adrai/flowchart.js)
+**Github地址：** [mathjax/MathJax](https://github.com/mathjax/MathJax)
 
-**Hexo插件：** [bubkoo/hexo-filter-flowchart](https://github.com/bubkoo/hexo-filter-flowchart)
+**Hexo插件：** [phoenixcw/hexo-renderer-mathjax](https://github.com/phoenixcw/hexo-renderer-mathjax)
 
-**Install：** `npm install hexo-filter-flowchart --save`
+**Install：** `npm install hexo-renderer-mathjax --save`
 
 **示例：**
 
-```flow
-st=>start: Start|past:>http://www.google.com[blank]
-e=>end: End:>http://www.google.com
-op1=>operation: My Operation|past
-op2=>operation: Stuff|current
-sub1=>subroutine: My Subroutine|invalid
-cond=>condition: Yes
-or No?|approved:>http://www.google.com
-c2=>condition: Good idea|rejected
-io=>inputoutput: catch something...|request
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-st->op1(right)->cond
-cond(yes, right)->c2
-cond(no)->sub1(left)->op1
-c2(yes)->io->e
-c2(no)->op2->e
-```
+$MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
+
+$$ f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
+
+$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$
+
+$$f(x) = 3x + 7$$
+
+$a = b + c$
+
+$$\frac{\partial u}{\partial t}
+= h^2 \left( \frac{\partial^2 u}{\partial x^2} +
+\frac{\partial^2 u}{\partial y^2} +
+\frac{\partial^2 u}{\partial z^2}\right)$$
+
+$F_a = F_b + F_c + F_{\mu}$
+
+$$lim_{1\to+\infty}P(|\frac{1}{n}\sum_i^nX_i-\mu|<\epsilon)=1, i=1,...,n$$
+
+## 参考资料
+- [在Hexo中渲染MathJax数学公式](https://www.jianshu.com/p/7ab21c7f0674)
+- [在Hexo中使用Markdown绘制图表](https://segmentfault.com/a/1190000020123689?utm_source=tag-newest)
+- [如何在 hexo 中支持 Mathjax？](https://blog.csdn.net/u014630987/article/details/78670258)
+- [hexo下LaTeX无法显示的解决方案](https://blog.csdn.net/crazy_scott/article/details/79293576)
 
 
 
