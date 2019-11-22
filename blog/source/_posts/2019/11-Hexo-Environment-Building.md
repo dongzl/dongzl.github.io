@@ -120,7 +120,7 @@ Parallel 3   :         des5, after des3, 1d
 Parallel 4   :         des6, after des4, 1d
 ```
 
-### MathJax 安装使用(未生效)
+### MathJax 安装使用
 
 **作用：** MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all modern browsers.
 
@@ -128,30 +128,36 @@ Parallel 4   :         des6, after des4, 1d
 
 **Github地址：** [mathjax/MathJax](https://github.com/mathjax/MathJax)
 
-**Hexo插件：** [phoenixcw/hexo-renderer-mathjax](https://github.com/phoenixcw/hexo-renderer-mathjax)
+**Hexo插件：** [phoenixcw/hexo-renderer-mathjax](https://github.com/phoenixcw/hexo-renderer-mathjax) | [hexojs/hexo-math](https://github.com/hexojs/hexo-math)
 
-**Install：** `npm install hexo-renderer-mathjax --save`
+**Install：** `npm install hexo-renderer-mathjax --save` | `npm install hexo-math --save`
+
+<font color="red">**PS. 对于 MathJax 功能的支持，有一些不同的 hexo 插件，根据使用的插件不同需要不同的配置。我使用的 [hexo-theme-concise](https://github.com/sanonz/hexo-theme-concise) 主题，在这个 issue 中解决了 MathJax 支持问题：[issue33](https://github.com/sanonz/hexo-theme-concise/issues/33)**</font>
 
 **示例：**
 
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+行内表达式：
 
 $MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
 
-$$ f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
-
 $f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$
 
-$$f(x) = 3x + 7$$
-
 $a = b + c$
+
+$F_a = F_b + F_c + F_{\mu}$
+
+块表达式：
+
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+
+$$ f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
+
+$$f(x) = 3x + 7$$
 
 $$\frac{\partial u}{\partial t}
 = h^2 \left( \frac{\partial^2 u}{\partial x^2} +
 \frac{\partial^2 u}{\partial y^2} +
 \frac{\partial^2 u}{\partial z^2}\right)$$
-
-$F_a = F_b + F_c + F_{\mu}$
 
 $$lim_{1\to+\infty}P(|\frac{1}{n}\sum_i^nX_i-\mu|<\epsilon)=1, i=1,...,n$$
 

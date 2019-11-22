@@ -86,8 +86,17 @@ deploy:
   branch: master
 
 math:
-  engine: 'mathjax' # or 'katex'
+  engine: 'mathjax'
   mathjax:
-    src: custom_mathjax_source
+    src: 'https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
     config:
-      # MathJax config
+      tex2jax:
+        inlineMath:
+          - - '$'
+            - '$'
+          - - '\\('
+            - '\\)'
+        processEscapes: true
+      TeX:
+        equationNumbers:
+          autoNumber: 'AMS'

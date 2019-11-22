@@ -248,7 +248,9 @@ static final int tableSizeFor(int cap) {
 > 00001111 | (00001111 >>> 4) = 00001111 | 00000000 = 00001111
 
 以此类推右移 8 位、16 位，在这里容量最大也就是 32bit 的正数，因此最后 `n |= n >>> 16;` 后，最多也就 31 个 1（第一位符号位，恒为 0），但是这时已经大于了 `MAXIMUM_CAPACITY`，所以最终取值为 `MAXIMUM_CAPACITY`。
+
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/HashMap_01.png" width="600px">
+
 之所以执行上面的一波无符号右移操作，就是为了让 `initialCapacity` 的值右移几次之后，二进制的值从某一位起的低位全部为连续 1，之前高位全部为 0，这样最后执行 `n + 1` 操作之后，结果一定是 **2的k次幂** 值，而且是 >=n 的最小的 **2的k次幂** 值。
 
 ## hash 方法

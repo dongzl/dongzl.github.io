@@ -26,3 +26,7 @@ blog/node_modules
 .idea
 
 blog/package-lock.json
+
+node_modules
+
+package-lock.json
