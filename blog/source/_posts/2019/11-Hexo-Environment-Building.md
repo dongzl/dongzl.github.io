@@ -136,30 +136,30 @@ Parallel 4   :         des6, after des4, 1d
 
 **示例：**
 
-行内表达式：
+- 行内表达式：
 
-$MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
+  - $MEMORY*(单节点总核数/NPROC)\leq单节点总内存$
 
-$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$
+  - $f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$
 
-$a = b + c$
+  - $a = b + c$
 
-$F_a = F_b + F_c + F_{\mu}$
+  - $F_a = F_b + F_c + F_{\mu}$
 
-块表达式：
+- 块表达式：
 
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+  - $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-$$ f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
+  - $$ f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
 
-$$f(x) = 3x + 7$$
+  - $$f(x) = 3x + 7$$
 
-$$\frac{\partial u}{\partial t}
+  - $$\frac{\partial u}{\partial t}
 = h^2 \left( \frac{\partial^2 u}{\partial x^2} +
 \frac{\partial^2 u}{\partial y^2} +
 \frac{\partial^2 u}{\partial z^2}\right)$$
 
-$$lim_{1\to+\infty}P(|\frac{1}{n}\sum_i^nX_i-\mu|<\epsilon)=1, i=1,...,n$$
+  - $$lim_{1\to+\infty}P(|\frac{1}{n}\sum_i^nX_i-\mu|<\epsilon)=1, i=1,...,n$$
 
 ## 参考资料
 - [在Hexo中渲染MathJax数学公式](https://www.jianshu.com/p/7ab21c7f0674)
