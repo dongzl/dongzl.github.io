@@ -4,7 +4,10 @@ date: 2019-11-19 19:08:31
 categories:
 - database
 tags:
-- 
+- 数据库事务
+- 事务隔离级别
+- ACID
+- 并发一致性问题
 ---
 
 ## 背景描述
@@ -106,4 +109,47 @@ T6 | ... |
 T7 | 提交事务 | 
 
 
-## 123456789wwwwww
+### 总结说明
+- 幻读和不可重复读的区别：
+  - 不可重复读的重点是更新：在同一事务中，相同的条件，第一次和第二次读取到的数据不一致（中间有其它事务提交了更新）；
+  - 幻读的重点是新增或删除：在同一事务中，相同的条件，第一次和第二次读到的记录数据不一样（中间有其它事务提交了新增或者删除）。
+
+- 两类丢失更新问题：
+  - 第一类丢失更新 （通过设置 **Repeatable Read** 隔离级别解决）
+  - 第二类丢失更新 （需要应用程序控制，使用乐观锁解决）
+
+## 事务隔离级别
+
+SQL 标准定义了四种数据库事务的隔离级别，每一种级别中都规定了一个事务中所做的修改，哪些在事务内和事务间是可见的，哪些是不可见的。
+
+- Read Uncommitted：所有事务都可以看到其它事务未提交的执行结果。
+- Read Committed（RC）：一个事务能够看到其它事务已提交的执行结果。
+- Repeatable Read（RR）：在一个事务内多次执行同一个查询操作，前后几次获取的结果相同。
+- Serializable：串行化，每次读都需要获得表级共享锁，读写相互阻塞。
+
+隔离级别 | 脏读 | 不可重复读 | 幻读
+---|---|---|---
+Read Uncommitted | YES | YES | YES
+Read Committed | NO | YES | YES 
+Repeatable Read | NO | NO | YES
+Serializable | NO | NO | NO
+
+四种数据库事务的隔离级别只是 SQL 标准的定义，对于不同的数据库也会有不同的实现，比如：Oracle 仅支持 Read Committed 和 Serializable 隔离级别，其中 Read Committed 是默认的隔离级别；对于 MySQL 支持 SQL 标准的四种隔离级别，其中 Repeatable Read 为默认的隔离级别。
+
+
+
+https://github.com/ctripcorp/apollo/wiki/Java%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97#1241-environment
+
+https://github.com/ctripcorp/apollo/wiki/Apollo%E5%BC%80%E6%94%BE%E5%B9%B3%E5%8F%B0
+
+https://www.jianshu.com/p/03d1bf80f7e8
+
+https://blog.csdn.net/z69183787/article/details/52213670
+
+https://www.jianshu.com/p/592b2cdbc589
+
+https://www.jianshu.com/p/d829df873332
+
+https://blog.csdn.net/weixin_28760063/article/details/81369266
+
+https://juejin.im/post/5b5a0bf9f265da0f6523913b
