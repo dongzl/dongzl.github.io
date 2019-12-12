@@ -22,6 +22,8 @@ Lombok 是一个 java 类库，它可以自动插入到编辑器和构建工具�
 
 使用 Lombok 后不需要再实现 getter 或者 equals 方法，使用一个注解，您的类就可以拥有一个功能齐全的构造器，自动生成一个日志变量等等功能。
 
+> 测试 Lombok 版本：1.18.10
+
 ## 构造方法相关注解
 
 ### @NoArgsConstructor
@@ -103,7 +105,7 @@ public class Test {
 
 ## @Getter & @Setter
 
-@Getter & @Setter 标注在字段上，用于自动生成 get、set 方法，boolean 类型字段 get 方法以 isXXX() 方法。
+@Getter & @Setter 标注在字段上，用于自动生成 get、set 方法，boolean 类型字段 get 方法为 isXXX() 方法。
 
 生成的 get、set 方法默认情况下都是 public 的，但也可以手动指定以下四种范围：
 ```java
@@ -113,7 +115,7 @@ AccessLevel.PROTECTED
 AccessLevel.PACKAGE
 AccessLevel.PRIVATE
 ```
-@Getter & @Setter 也可以标注在类上，表示针对该类中所有的非静态字段进行 get、set 方法自动生成。如果指定某个字段的 `AccessLevel = AccessLevel.NONE`，则可以使该生成动作失效，此时可以手动实现get、set方法，这应用于在这些方法中有一些自定义逻辑的情况下。
+@Getter & @Setter 也可以标注在类上，表示针对该类中所有的非静态字段进行 get、set 方法自动生成。如果指定某个字段的 `AccessLevel = AccessLevel.NONE`，则可以使该生成动作失效，此时可以手动实现get、set方法，AccessLevel.NONE 可以应用于在某些方法中有一些自定义逻辑的情况下。
 
 ```java
 import lombok.AccessLevel;
@@ -151,8 +153,8 @@ public class User {
 @ToString 标注于类之上，用于生成 toString() 方法。
 
 - includeFieldNames：默认为 true，表示在 toString 输出时输出字段名称；
-- exclude：字符串数组，表示在 toString 输出时排除掉字段名称；
-- of：
+- exclude：字符串数组，表示在 toString 输出时排除掉字段名称，这个属性将要被废弃了，用 @ToString.Exclude 来代替；
+- of：字符串数组，明确的列出在 toString 输出时输出字段名称，这个属性将要被废弃了，用 @ToString.Include 来代替；
 - callSuper：默认为 false，表示生成 toString 时不输出超类中的字段内容；
 - doNotUseGetters：默认为 false，表示获取字段值时通过 get 方法获取，设置为 true 表示直接通过字段获取。
 
