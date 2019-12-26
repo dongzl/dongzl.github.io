@@ -156,7 +156,10 @@ public class User {
 - exclude：字符串数组，表示在 toString 输出时排除掉字段名称，这个属性将要被废弃了，用 @ToString.Exclude 来代替；
 - of：字符串数组，明确的列出在 toString 输出时输出字段名称，这个属性将要被废弃了，用 @ToString.Include 来代替；
 - callSuper：默认为 false，表示生成 toString 时不输出超类中的字段内容；
-- doNotUseGetters：默认为 false，表示获取字段值时通过 get 方法获取，设置为 true 表示直接通过字段获取。
+- doNotUseGetters：默认为 false，表示获取字段值时通过 get 方法获取，设置为 true 表示直接通过字段获取；
+- onlyExplicitlyIncluded：默认为 false，表示在 toString 输出时输出全部非静态字段；设置为 true 时，表示只输出 @ToString.Include 标识的字段；
+- Exclude：标识属性，表示在 toString 输出时排除该字段；
+- 
 
 ```java
 import lombok.NoArgsConstructor;
