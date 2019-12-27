@@ -32,6 +32,16 @@ tags:
 - 比较难给类起一个合适的名字；
 - 类中大量的方法都是集中操作类中的某几个属性。
 
+### 16 | 理论二：如何做到“对扩展开放、修改关闭”？扩展和修改各指什么？
+
+开闭原则：Open Closed Principle，简写为 OCP。
+
+Software entities (modules, classes, functions, etc.) should be open for extension , but closed for modification。我们把它翻译成中文就是：软件实体（模块、类、方法等）应该“对扩展开放、对修改关闭”。
+
+### 17 | 理论三：里式替换（LSP）跟多态有何区别？哪些代码违背了LSP？
+
+
+
 ## 参考资料
 
 - [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)
