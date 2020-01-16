@@ -146,6 +146,26 @@ tags:
 
 ### 24 | 实战一（下）：如何实现一个遵从设计原则的积分兑换系统？
 
+**MVC 三层开发作用：**
+
+- 分层能起到代码复用的作用
+- 分层能起到隔离变化的作用
+- 分层能起到隔离关注点的作用
+- 分层能提高代码的可测试性
+- 分层能应对系统的复杂性
+
+<img src="https://static001.geekbang.org/resource/image/33/61/3332071c82182e72518143d05b8eaa61.jpg">
+
+---
+
+### 25 | 实战二（上）：针对非业务的通用框架开发，如何做需求分析和设计？
+
+---
+
+### 26 | 实战二（下）：如何实现一个支持各种统计规则的性能计数器？
+
+---
+
 ## 参考资料
 
 - [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)
