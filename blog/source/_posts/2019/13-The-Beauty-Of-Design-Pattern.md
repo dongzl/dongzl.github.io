@@ -177,6 +177,10 @@ tags:
 
 ---
 
+### 27 | 理论一：什么情况下要重构？到底重构什么？又该如何重构？
+
+重构是一种对软件内部结构的改变，目的是在不改变软件的可见行为的情况下，使其更易理解，修改成本更低。
+
 ## 参考资料
 
 - [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)
