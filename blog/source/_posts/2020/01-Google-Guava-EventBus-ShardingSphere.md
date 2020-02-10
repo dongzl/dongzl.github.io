@@ -11,7 +11,7 @@ tags:
 
 Guava 的 EventBus 可以简化生产/消费模型。EventBus 通过非常简单的方式，实现了观察者模式中的监听注册，事件分发。
 
-> Dispatches events to listeners, and provides ways for listeners to register themselves. The EventBus allows publish-subscribe-style communication between components without requiring the components to explicitly register with one another (and thus be aware of each other). It is designed exclusively to replace traditional Java in-process event distribution using explicit registration. It is not a general-purpose publish-subscribe system, nor is it intended for interprocess communication.
+> Dispatches events to listeners, and provides ways for listeners to register themselves. The EventBus allows publish-subscribe-style communication between components without requiring the components to explicitly register with one another (and thus be aware of each other). It is designed exclusively to replace traditional Java in-processs event distribution using explicit registration. It is not a general-purpose publish-subscribe system, nor is it intended for interprocess communication.
 
 > 将事件分发给监听器，同时提供监听器注册监听的方式。EventBus 支持组件之间的发布-订阅式通信，而不需要组件显式地彼此注册（从而彼此感知对方存在）。它是专门为使用显式注册来替代传统的 Java 进程内事件分发而设计的。它不是一个通用的发布订阅系统，也不支持进程间通信。
 
