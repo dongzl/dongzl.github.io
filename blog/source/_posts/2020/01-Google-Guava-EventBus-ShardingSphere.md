@@ -15,6 +15,8 @@ Guava 的 EventBus 可以简化生产/消费模型。EventBus 通过非常简单
 
 > 将事件分发给监听器，同时提供监听器注册监听的方式。EventBus 支持组件之间的发布-订阅式通信，而不需要组件显式地彼此注册（从而彼此感知对方存在）。它是专门为使用显式注册来替代传统的 Java 进程内事件分发而设计的。它不是一个通用的发布订阅系统，也不支持进程间通信。
 
+<!-- more -->
+
 <img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Google-Guava-EventBus.png" width="600px">
 
 通过阅读 Guava 的 EventBus 源码，EventBus 支持的操作如下：
