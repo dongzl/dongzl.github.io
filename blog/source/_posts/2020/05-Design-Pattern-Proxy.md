@@ -205,7 +205,7 @@ super.h.invoke(this, m3, (Object[])null);
 
 JDK 动态代理实现流程图：
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/05-Design-Pattern-Proxy/Design-Pattern-Proxy_02.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/05-Design-Pattern-Proxy/Design-Pattern-Proxy_02.png">
 
 ## cglib 动态代理
 
