@@ -21,7 +21,7 @@ tags:
 
 **Proxy Pattern**: Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design-Pattern-Proxy_01.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/05-Design-Pattern-Proxy/Design-Pattern-Proxy_01.png" width="600px">
 
 - Subject：定义 RealSubject 对外的接口，且这些接口必须被 Proxy 实现，这样外部调用 proxy 的接口最终都被转化为对 RealSubject 的调用。
 - RealSubject：真正的目标对象（被代理对象）。
@@ -205,7 +205,7 @@ super.h.invoke(this, m3, (Object[])null);
 
 JDK 动态代理实现流程图：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design-Pattern-Proxy_02.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/05-Design-Pattern-Proxy/Design-Pattern-Proxy_02.png" width="600px">
 
 ## cglib 动态代理
 

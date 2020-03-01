@@ -17,7 +17,7 @@ Guava 的 EventBus 可以简化生产/消费模型。EventBus 通过非常简单
 
 <!-- more -->
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Google-Guava-EventBus.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/01-Google-Guava-EventBus-ShardingSphere/Google-Guava-EventBus.png" width="600px">
 
 通过阅读 Guava 的 EventBus 源码，EventBus 支持的操作如下：
 
