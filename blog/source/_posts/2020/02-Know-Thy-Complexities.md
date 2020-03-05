@@ -17,25 +17,25 @@ tags:
 
 Big-O Complexity Chart
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Big-O-Complexity-Chart.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Big-O-Complexity-Chart.png" width="1000px">
 
 ## 常用数据结构操作
 
 Common Data Structure Operations
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Common-Data-Structure-Operations.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Common-Data-Structure-Operations.png" width="1000px">
 
 ## 线性排序算法
 
 Array Sorting Algorithms
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Array-Sorting-Algorithms.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Array-Sorting-Algorithms.png" width="1000px">
 
 ## 官方网站 Big-O 统计数据图
 
 Get the Official Big-O Cheat Sheet Poster
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Big-O-Cheat-Sheet-Poster.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/02-Know-Thy-Complexities/Big-O-Cheat-Sheet-Poster.png" width="1000px">
 
 ## 参考资料
 
