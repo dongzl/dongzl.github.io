@@ -449,6 +449,28 @@ Decouple an abstraction from its implementation so that the two can vary indepen
 **装饰器模式**：装饰者模式在不改变原始类接口的情况下，对原始类功能进行增强，并且支持多个装饰器的嵌套使用。
 **适配器模式**：适配器模式是一种事后的补救策略。适配器提供跟原始类不同的接口，而代理模式、装饰器模式提供的都是跟原始类相同的接口。
 
+### 52 | 门面模式：如何设计合理的接口粒度以兼顾接口的易用性和通用性？
+
+**门面模式**：
+- Provide a unified interface to a set of interfaces in a subsystem. Facade Pattern defines a higher-level interface that makes the subsystem easier to use.
+- 门面模式为子系统提供一组统一的接口，定义一组高层接口让子系统更易用。
+
+完成接口设计，就相当于完成了一半的开发任务。只要接口设计得好，那代码就差不到哪里去。
+
+尽量保持接口的可复用性，但针对特殊情况，允许提供冗余的门面接口，来提供更易用的接口。
+
+- 当要为一个复杂子系统提供一个简单接口时可以使用外观模式。
+- 客户程序与多个子系统之间存在很大的依赖性。
+- 使用外观模式定义系统中每一层的入口，层与层之间不直接产生联系，而通过外观类建立联系，降低层之间的耦合度。
+
+增加新的子系统可能需要修改外观类或客户端的源代码，**违背了“开闭原则”**。
+
+### 53 | 组合模式：如何设计实现支持递归遍历的文件系统目录树结构？
+
+组合模式：Compose objects into tree structure to represent part-whole hierarchies. Composite lets client treat individual objects and compositions of objects uniformly.
+
+将一组对象组织（Compose）成树形结构，以表示一种“部分 - 整体”的层次结构。组合让客户端（在很多设计模式书籍中，“客户端”代指代码的使用者。）可以统一单个对象和组合对象的处理逻辑。
+
 ## 参考资料
 
 - [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)
