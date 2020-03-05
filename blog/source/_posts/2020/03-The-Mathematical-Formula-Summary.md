@@ -5,6 +5,10 @@ categories:
 tags:
 ---
 
-斐波那契数列通向公式：
+- 斐波那契数列通向公式：
 
-$$a_n=\frac{1}{\sqrt{5}} \begin{bmatrix} \begin{pmatrix} \frac{1 + \sqrt{5}}{2} \end{pmatrix}^2 - \begin{pmatrix} \frac{1 - \sqrt{5}}{2} \end{pmatrix}^2\end{bmatrix}$$
+$$a_n=\frac{1}{\sqrt{5}} \begin{bmatrix} \begin{pmatrix} \frac{1 + \sqrt{5}}{2} \end{pmatrix}^n - \begin{pmatrix} \frac{1 - \sqrt{5}}{2} \end{pmatrix}^n\end{bmatrix}$$
+
+- 斐波那契数列矩阵方程：
+
+$$\begin{bmatrix} f(n)\\\\ f(n - 1) \end{bmatrix} = \begin{bmatrix} 1&1\\\\ 1&0 \end{bmatrix} \begin{bmatrix} f(n - 1)\\\\ f(n - 2) \end{bmatrix} = \begin{bmatrix} 1&1\\\\ 1&0 \end{bmatrix}^{n + 1} \begin{bmatrix} f(1)\\\\ f(0) \end{bmatrix}$$
