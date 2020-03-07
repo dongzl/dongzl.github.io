@@ -31,7 +31,7 @@ tags:
 
 下图描述了 GRIT 协议在两个数据库的微服务环境中的使用。GRIT 组件中包含了在图中中间部分显示的 GTM、GPL、DBTM、DBTL 和 LogPlayer 等组件。
 
-<img src="https://tech.ebayinc.com/assets/Uploads/Editor/GRIT-Protocol-for-Distributed-Transactions-across-Microservices6.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/08-GRIT-Microservices-Distributed-Transactions-Protocol/GRIT-Protocol-for-Distributed-Transactions-across-Microservices6.png">
 
 图中除去 GRIT 相关组件，剩余部分是一个横向扩展的两个数据库组成的微服务架构系统。它包括如下组成部分：
 
@@ -50,7 +50,7 @@ GRIT 包含的关键组件：
 
 为了更好的理解 GRIT 协议的实现细节，我们用下图来演示分布式事务的主要步骤：
 
-<img src="https://tech.ebayinc.com/assets/Uploads/Editor/GRIT-main-steps2.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/08-GRIT-Microservices-Distributed-Transactions-Protocol/GRIT-main-steps2.png">
 
 在 GRIT 中，一个分布式事务要经历三个步骤：
 
@@ -68,7 +68,7 @@ GRIT 能够为调用微服务的应用程序实现一致性的高吞吐量和可
 
 下图显示了如何使用两个可用区域（AZ1 和 AZ2）部署来实现 NuGraphStore。
 
-<img src="https://tech.ebayinc.com/assets/Uploads/Editor/GRIT-Protocol-for-Distributed-Transactions-across-Microservices4.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/08-GRIT-Microservices-Distributed-Transactions-Protocol/GRIT-Protocol-for-Distributed-Transactions-across-Microservices4.png">
 
 JanusGraph 的 NuGraphStore 存储后端包含了以下几个组件：
 

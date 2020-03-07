@@ -120,7 +120,7 @@ public class Client {
 
 ### 类图描述
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Strategy_01.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/09-design-pattern-strategy/Design_Pattern_Strategy_01.png" width="600px">
 
 ## 观察者模式的四要素
 
@@ -144,7 +144,7 @@ Strategy Pattern: Define **a family of algorithms**, **encapsulate each one**, a
 
 类图：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Strategy_02.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/09-design-pattern-strategy/Design_Pattern_Strategy_02.png" width="600px">
 
 - Context封装角色：上下文角色，起承上启下封装作用，屏蔽高层模块对策略、算法的直接访问，封装可能存在的变化。
 - Strategy抽象策略角色：策略、算法家族的抽象，通常为接口，定义每个策略或算法必须具有的方法和属性。

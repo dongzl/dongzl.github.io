@@ -105,9 +105,9 @@ Heap
 
 ## java堆dump文件分析
 
-<img src="http://ww1.sinaimg.cn/large/7dad8649ly1g75yodbmz6j21je0na78g.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/05-online-system-frequent-full-gc-bug/online-system-frequent-full-gc-bug-01.jpg" width="600px">
 
-<img src="http://ww1.sinaimg.cn/large/7dad8649ly1g75yq8k07gj214c10wqpk.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/05-online-system-frequent-full-gc-bug/online-system-frequent-full-gc-bug-02.png" width="600px">
 
 通过 MAT 工具查看 dump.hprof 文件，问题还是比较明显的（现在想不明白为什么当时定位这个问题花了好长时间，可能是“事后诸葛亮”，现在逆向反推感觉好简单^_^）。
 
@@ -176,9 +176,9 @@ if(JSON_OBJ_MAP.size() > MAX_MAP_SIZE) {
 
 ... ...
 ```
-<img src="http://ww1.sinaimg.cn/large/7dad8649ly1g77dj7kvypj20xi0fi0vk.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/05-online-system-frequent-full-gc-bug/online-system-frequent-full-gc-bug-03.jpg" width="600px">
 
-<img src="http://ww1.sinaimg.cn/large/7dad8649ly1g77dhfyr01j20xq0fwdie.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/05-online-system-frequent-full-gc-bug/online-system-frequent-full-gc-bug-04.jpg" width="600px">
 
 ## 第二版代码修改
 ```java
@@ -235,7 +235,7 @@ Heap
   object space 21504K, 36% used [0x00000007db980000,0x00000007dc13fa48,0x00000007dce80000)
 ```
 
-<img src="http://ww1.sinaimg.cn/large/7dad8649ly1g77dk2hiqsj20xm0fwtal.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/05-online-system-frequent-full-gc-bug/online-system-frequent-full-gc-bug-05.jpg" width="600px">
 
 ## 题外话
 除去前面提到的 Full GC 问题，单独看这段代码的实现，还是有值得思考的地方的，这是一个网关请求参数的公共解析类，线上系统流量进来之后，请求参数首先要这个类处理，这个类中对于全局变量 JSON_OBJ_MAP 的写操作是同步的，也就是如果有写操作，每次只有一个线程可以拿到锁，其它线程被阻塞，需要排队等待执行。

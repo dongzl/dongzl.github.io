@@ -26,7 +26,7 @@ tags:
 
 启动软件后，出现一堆网卡，可能是装虚拟机导致出现了好多虚拟网卡吧，不过大部分网卡没有数据流量。
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_01.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_01.png" width="600px">
 
 首先是 **Wi-Fi: en0** 网卡，进去之后列表一堆数据，直接刷屏，根本看不出有效信息，毫无头绪。
 
@@ -40,7 +40,7 @@ tags:
 
 首先使用 Navicat 直接连到 MySQL 数据库上，在 Wireshark 软件中只过滤 MySQL 协议的网络数据请求：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_02.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_02.png" width="600px">
 
 
 Wireshark 还是很强大，很直观的。每一次的 Request 请求，紧跟着是是配对的 Response 响应数据。其中在 Request 请求中 **MySQL Protocol** 中显示了 Navicat 客户端发送给 MySQL 数据库的命令：**SHOW VARIABLES LIKE 'lower_case_%'**；在 Response 相应的 **MySQL Protocol** 中显示了 MySQL 数据库发送给 Navicat 客户端的相应结果数据，通过上面的操作和观察，至少能大概明白简单的使用方式了。
@@ -51,15 +51,15 @@ Wireshark 大概使用是明白了，现在需要看的就是 Navicat 直连 MyS
 ### Navicat 直连 MySQL 抓包
 根据 Navicat 的提示，只有在查询表数据表的时候会提示错误，所以问题大概应该出现在 select 查询语句的请求 & 相应数据上，我们抓取了一张表的 select 语句数据：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_04.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_04.png" width="600px">
 
 对于查询的这张数据表，其实 id 字段就是主键，主键是一定存在的，我们看一下返回结果中有关 id 字段的描述信息：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_05.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_05.png" width="600px">
 
 其中有 **Flags** 属性展开后就是一串标志位，通过实际内容大概就能明白就是标识该字段的一些特殊属性信息：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_06.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_06.png" width="600px">
 
 ### Navicat 连接 Sharding-Proxy 抓包
 
@@ -71,19 +71,19 @@ Wireshark 大概使用是明白了，现在需要看的就是 Navicat 直连 MyS
 
 select 请求数据：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_07.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_07.png" width="600px">
 
 Sharding-Proxy 相应结果：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_08.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_08.png" width="600px">
 
 ## 结果分析
 
 仔细分析抓取的数据结果，其实还是能看到一些差别的，不过 Sharding-Proxy 抓取到的结果不是很直观，还是给结果分析带来一定困难的，还是直接上结论吧：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_09.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_09.png" width="600px">
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Wireshark_Sharding-Proxy_10.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/07-Wireshark-Sharding-Proxy/Wireshark_Sharding-Proxy_10.png" width="600px">
 
 分析的结果可以看出，Navicat 工具直连 MySQL 数据库时执行的 select 查询语句中返回的 `Flags` 信息标志位二进制数据为 `03 50`，标识该字段为 `Not null` 和 `Primary key`；但是 Navicat 连接 Sharding-Proxy 代理后返回的数据中该标志位二进制位 `00 00`，其实到这里，结果就很明显了，Sharding-Proxy 返回的数据中 `Flags` 信息缺失，而该数据正式判断该数据是否为主键、是否允许为null等等信息的一种标识。
 

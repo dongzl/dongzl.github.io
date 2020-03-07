@@ -25,7 +25,7 @@ tags:
 ### 消费者
 消费者从队列中获取数据是通过 `getChildren()` 方法获取到`队列节点`中的所有`消息节点`，然后获取消息节点中存储数据，处理业务逻辑，并删除`消息节点`。 如果 `getChildren()` 没有获取到节点数据，说明队列是空的，则消费者进入等待状态，同时调用 `getChildren()` 方法设置观察者监听队列节点，队列节点发生变化后（消息节点变更），触发监听事件，唤起消费者。
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/ZooKeeper-Distributed-Queue.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/06-ZooKeeper-Distributed-Queue/ZooKeeper-Distributed-Queue.png" width="600px">
 
 ## Curator 框架队列实现
 

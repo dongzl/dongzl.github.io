@@ -148,7 +148,7 @@ public class BServiceMqObserver implements Observer {
 
 类图：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_01.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/01-design-pattern-observer/Design-Pattern-Observer-01.png" width="600px">
 
 角色：
 - Subject：抽象主题（被观察者）角色把所有对观察者对象的引用保存在一个集合（比如 ArrayList 集合）里，每个主题都可以有任何数量的观察者，抽象主题提供一个接口，可以增加和删除观察者对象，抽象主题角色又叫做抽象被观察者（Observable）角色；
@@ -158,11 +158,13 @@ public class BServiceMqObserver implements Observer {
 
 JDK 对观察者模式的扩展：
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_03.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/01-design-pattern-observer/Design-Pattern-Observer-03.png" width="600px">
+
+https://gitee.com/dongzl/article-images/raw/master/2019/01-design-pattern-observer/Design-Pattern-Observer-03.png
 
 **时序图：**
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_02.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/01-design-pattern-observer/Design-Pattern-Observer-02.png" width="600px">
 
 ### 优点 & 缺点
 **优点：**
@@ -193,7 +195,7 @@ JDK 对观察者模式的扩展：
 ### 拉模型
 被观察者对象（主题对象）在通知观察者的时候，只传递少量信息。如果观察者需要更具体的信息，由观察者主动到主题对象中获取，相当于是观察者从主题对象中拉数据。一般这种模型的实现中，会把主题对象自身通过 `update()` 方法传递给观察者，这样在观察者需要获取数据的时候，就可以通过这个引用来获取了。
 
-<img src="https://raw.githubusercontent.com/dongzl/dongzl.github.io/hexo/blog/source/images/Design_Pattern_Observer_04.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2019/01-design-pattern-observer/Design_Pattern_Observer_04.png" width="600px">
 
 ### 推模型 vs 拉模型
 - 推模型实现前提被观察者对象（主题对象）知道观察者需要什么数据，所以只传递数据；拉模型可能是主题对象不知道观察者需要什么样的数据，所以只能把自身传递过去，观察者根据自身需要到主题对象中拉取数据；

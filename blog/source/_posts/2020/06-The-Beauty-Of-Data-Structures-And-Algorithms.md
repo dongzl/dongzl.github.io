@@ -8,6 +8,7 @@ tags:
 
 本文是 [极客时间](https://time.geekbang.org/) 上 [数据结构与算法之美](https://time.geekbang.org/column/intro/126) 课程的学习笔记内容。
 
+<!-- more -->
 
 ## 基础篇
 

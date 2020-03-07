@@ -471,6 +471,14 @@ Decouple an abstraction from its implementation so that the two can vary indepen
 
 将一组对象组织（Compose）成树形结构，以表示一种“部分 - 整体”的层次结构。组合让客户端（在很多设计模式书籍中，“客户端”代指代码的使用者。）可以统一单个对象和组合对象的处理逻辑。
 
+### 54 | 享元模式（上）：如何利用享元模式优化文本编辑器的内存占用？
+
+享元模式(Flyweight Pattern)：运用共享技术有效地支持大量细粒度对象的复用。(Use sharing to support large numbers of fine-grained objects efficiently.)
+
+享元模式的代码实现非常简单，主要是通过工厂模式，在工厂类中，通过一个 Map 或者 List 来缓存已经创建好的享元对象，以达到复用的目的。
+
+
+
 ## 参考资料
 
 - [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)
