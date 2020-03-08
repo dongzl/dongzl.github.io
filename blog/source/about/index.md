@@ -1,6 +1,8 @@
 ---
 title: 个人简介
 date: 2019-05-20 10:43:58
+type: about
+layout: about
 ---
 ### 个人信息
 - 董宗磊 / 男 / 1987

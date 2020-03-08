@@ -1,21 +1,30 @@
 ---
 title: 论“茴”字的四种写法：一道面试题总结线程间通信的几种方式
-date: 2020-03-07 14:04:30
-categories:
-- java
-tags:
-- Thread
-- LockSupport
-- volatile
-- AtomicBoolean
-- BlockingQueue
-- PipedInputStream
-- PipedOutputStream
-- synchronized
-- wait
-- notifyAll
-- Lock
-- Condition
+cover: https://gitee.com/dongzl/article-images/raw/master/2020/07-Several-Methods-Of-Communication-Between-Thread/Several-Methods-Of-Communication-Between-Thread.png
+# author information, multiple authors are set to array
+# single author
+# author: 
+#   nick: BruceYJ
+#   link: https://www.github.com/BruceYuj
+# multiple authors
+author:
+  - nick: dongzl
+    link: https://www.github.com/dongzl
+
+# If the article is reproduced, you need to increase the article source
+editor:
+  name: Minfive
+  link: https://www.github.com/Mrminfive
+
+# post subtitle in your index page
+subtitle: 一道面试题总结线程间通信的几种方式
+
+categories: 
+  - java
+tags: 
+  - Thread
+  - Lock
+  - synchronized
 ---
 
 ## 背景描述
