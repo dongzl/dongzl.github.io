@@ -1,11 +1,23 @@
 ---
-title: Google Guava EventBus在 ShardingShere 中的应用
+title: Google Guava EventBus 在 ShardingShere 中的应用
 date: 2020-02-01 18:02:52
-categories:
-tags:
-- Google
-- Guava
-- EventBus
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/google_guava.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: Guava 的 EventBus 可以简化生产/消费模型。EventBus 通过非常简单的方式，实现了观察者模式中的监听注册，事件分发。
+
+categories: 
+  - web开发
+
+tags: 
+  - Google
+  - Guava
+  - EventBus
 ---
 ## Guava EventBus 介绍
 

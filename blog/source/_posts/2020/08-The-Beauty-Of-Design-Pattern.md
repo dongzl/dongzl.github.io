@@ -1,11 +1,21 @@
 ---
 title: 极客时间 《设计模式之美》 学习笔记
 date: 2019-12-26 21:35:58
-categories:
-- design-pattern
-tags:
-- 设计模式
-- 设计原则
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/design_pattern.png
+# author information, multiple authors are set to array
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 《极客时间》网站《设计模式之美》课程学习笔记内容。
+
+categories: 
+  - 设计模式
+tags: 
+  - 设计模式
+  - 设计原则
 ---
 
 本文是 [极客时间](https://time.geekbang.org/) 上 [设计模式之美](https://time.geekbang.org/column/intro/100039001) 课程的学习笔记内容。

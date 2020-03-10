@@ -1,15 +1,21 @@
 ---
 title: Hexo 环境搭建 & 常用插件集成
 date: 2019-11-20 19:12:09
-categories:
-- other
-tags:
-- hexo
-- PlantUml
-- flowchart
-- mermaid
-- MathJax
-mathjax: true
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/hexo_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在记录使用 Hexo 搭建博客步骤，以及常用 Hexo 插件的安装和使用。
+
+categories: 
+  - 其他
+
+tags: 
+  - Hexo
 ---
 
 ## 背景描述

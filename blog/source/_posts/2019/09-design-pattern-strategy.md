@@ -1,12 +1,22 @@
 ---
 title: 从一个功能设计聊聊策略模式的使用
 date: 2019-11-06 16:25:58
-categories:
-- design-pattern
-tags:
-- 设计模式
-- 策略模式
-- 策略枚举
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/design_pattern.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在根据工作中的一个功能设计场景，总结策略模式的应用。
+
+categories: 
+  - 设计模式
+
+tags: 
+  - 设计模式
+  - 策略模式
 ---
 
 ## 背景描述

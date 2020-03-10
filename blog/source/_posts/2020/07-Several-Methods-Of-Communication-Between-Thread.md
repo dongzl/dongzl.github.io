@@ -1,26 +1,18 @@
 ---
 title: 论“茴”字的四种写法：一道面试题总结线程间通信的几种方式
-cover: https://gitee.com/dongzl/article-images/raw/master/2020/07-Several-Methods-Of-Communication-Between-Thread/Several-Methods-Of-Communication-Between-Thread.png
+date: 2020-03-07 21:35:58
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
 # author information, multiple authors are set to array
 # single author
-# author: 
-#   nick: BruceYJ
-#   link: https://www.github.com/BruceYuj
-# multiple authors
 author:
-  - nick: dongzl
+  - nick: 董宗磊
     link: https://www.github.com/dongzl
 
-# If the article is reproduced, you need to increase the article source
-editor:
-  name: Minfive
-  link: https://www.github.com/Mrminfive
-
 # post subtitle in your index page
-subtitle: 一道面试题总结线程间通信的几种方式
+subtitle: 本文旨在通过一道面试题总结线程间通信的几种方式。
 
 categories: 
-  - java
+  - java开发
 tags: 
   - Thread
   - Lock

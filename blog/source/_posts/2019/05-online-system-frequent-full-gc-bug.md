@@ -1,15 +1,23 @@
 ---
 title: 线上系统频繁Full GC问题排查
 date: 2019-09-20 15:02:03
-categories:
-- java
-tags:
-- JVM
-- Full GC
-- HashMap
-- WeakHashMap
-- dump
-- MAT
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文总结了一次线上系统频繁 Full GC 问题排查过程。
+
+categories: 
+  - java开发
+
+tags: 
+  - JVM
+  - Full GC
+  - MAT
 ---
 
 ## 现象描述

@@ -1,13 +1,22 @@
 ---
 title: 10-MySQL-InnoDB-Transaction
 date: 2019-11-19 19:08:31
-categories:
-- database
-tags:
-- 数据库事务
-- 事务隔离级别
-- ACID
-- 并发一致性问题
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在学习总结数据库事务相关知识内容。
+
+categories: 
+  - 数据库
+
+tags: 
+  - 数据库事务
+  - ACID
 ---
 
 ## 背景描述

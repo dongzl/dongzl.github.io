@@ -1,12 +1,23 @@
 ---
 title: 从一个业务场景聊聊 ZooKeeper 队列使用
 date: 2019-10-19 17:03:49
-categories:
-- architectural-design
-tags:
-- ZooKeeper
-- Curator
-- Distributed Queue
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/zookeeper_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文根据工作中一个实际的业务场景，总结了如何使用 Zookeeper 实现分布式队列。
+
+categories: 
+  - 架构设计
+
+tags: 
+  - ZooKeeper
+  - Curator
+  - Queue
 ---
 
 ## 背景描述

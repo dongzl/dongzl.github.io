@@ -1,9 +1,20 @@
 ---
 title: Hello World
+date: 2019-12-26 21:35:58
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/hexo_study.png
+# author information, multiple authors are set to array
+# single author
+author:
+  - nick: Hexo
+    link: https://hexo.io/
+
+# post subtitle in your index page
+subtitle: Hexo 版 Hello World!
+
 categories: 
-  - other
+  - 其他
 tags: 
-  - Hexo
+  - hexo
 ---
 Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 

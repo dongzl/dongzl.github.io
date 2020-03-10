@@ -1,14 +1,23 @@
 ---
 title: 基于 Redis 实现的分布式锁
 date: 2019-10-08 18:01:09
-categories:
-- architectural-design
-tags:
-- redis
-- distributed lock
-- setnx
-- expire
-- getset
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文根据现有项目中 Redis 分布式锁的实现，来总结归纳各种分布式锁方案的实现机制。
+
+categories: 
+  - 架构设计
+
+tags: 
+  - redis
+  - lock
+  - setnx
 ---
 
 ## 背景描述

@@ -1,12 +1,23 @@
 ---
 title: json-lib 解析 Long 类型数据 Bug 排查
 date: 2019-09-14 08:10:17
-categories:
-- web
-tags:
-- json-lib
-- Java
-- Long
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文总结了一次在工作使用 json-lib 工具出现的问题以及排查过程。
+
+categories: 
+  - web开发
+
+tags: 
+  - json-lib
+  - Java
+  - Long
 ---
 
 ## 背景描述

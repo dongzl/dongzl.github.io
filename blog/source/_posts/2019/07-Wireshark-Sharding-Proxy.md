@@ -1,12 +1,22 @@
 ---
 title: 记一次 Wireshark 抓包 Sharding-Proxy 过程
 date: 2019-10-23 17:39:35
-categories:
-tags:
-- Wireshark
-- ShardingSphere
-- Sharding-Proxy
-- MySQL
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/shardingsphere.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文总结了一次使用 Wireshark 工具抓包 Sharding-Proxy 网络请求，排查定位问题的过程。
+
+categories: 
+  - 架构设计
+
+tags: 
+  - Wireshark
+  - ShardingSphere
 ---
 
 ## 背景描述

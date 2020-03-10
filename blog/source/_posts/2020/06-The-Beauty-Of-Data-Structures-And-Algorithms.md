@@ -1,9 +1,22 @@
 ---
 title: 极客时间 《数据结构与算法之美》 学习笔记
 date: 2020-03-05 09:36:44
-categories:
-- data-structures-algorithms
-tags:
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithms.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 《极客时间》网站《数据结构与算法之美》课程学习笔记内容。
+
+categories: 
+  - 数据结构与算法
+
+tags: 
+  - 数据结构
+  - 算法
 ---
 
 本文是 [极客时间](https://time.geekbang.org/) 上 [数据结构与算法之美](https://time.geekbang.org/column/intro/126) 课程的学习笔记内容。

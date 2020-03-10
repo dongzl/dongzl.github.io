@@ -1,12 +1,23 @@
 ---
 title: 一个工作的真实场景聊聊 HashMap 的实现
 date: 2019-09-29 13:39:36
-categories:
-- java
-tags:
-- HashMap
-- Hash
-- 红黑树
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文根据工作中的一个真实场景，学习总结了 HashMap 中内部的实现原理。
+
+categories: 
+  - java开发
+
+tags: 
+  - HashMap
+  - Hash
+  - 红黑树 
 ---
 ## 背景描述
 业务同事和其他公司合作活动，对方公司筛选 2W 优质用户手机号提供给我方，出于安全考虑（其实具体原因未知），对方提供的手机号都是 MD5 加密内容；业务同事想对这 2W 用户做短信触达，搞促销活动，业务找到研发需要将现在的 2W MD5 手机号内容逆向转换成用户手机号，然后发短信，需求场景就是这样。

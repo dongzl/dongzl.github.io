@@ -13,9 +13,9 @@
 
 # # URL
 # ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-# url: https://dongzl.github.io
-# root: /
-# permalink: :year/:month/:day/:title/
+url: https://dongzl.github.io
+root: /
+permalink: :year/:month/:day/:title/
 # permalink_defaults:
 
 # # Directory
@@ -30,13 +30,13 @@
 
 # # Writing
 # # new_post_name: :year/:title.md # File name of new posts
-# new_post_name: :year/:title.md # File name of new posts
+new_post_name: :year/:title.md # File name of new posts
 # default_layout: post
 # titlecase: false # Transform title into titlecase
 # external_link: true # Open external links in new tab
 # filename_case: 0
 # render_drafts: false
-# post_asset_folder: true
+post_asset_folder: true
 # relative_link: false
 # future: true
 # highlight:
@@ -84,12 +84,12 @@ menu:
   archive: /archives
   about: /about
 
-# # Deployment
-# ## Docs: https://hexo.io/docs/deployment.html
-# deploy:
-#   type: git
-#   repo: https://github.com/dongzl/dongzl.github.io.git
-#   branch: master
+# Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repo: https://github.com/dongzl/dongzl.github.io.git
+  branch: master
 
 # math:
 #   engine: 'mathjax'
@@ -117,7 +117,7 @@ language: zh-cn
 subtitle: 董宗磊的博客--善积跬步，方以千里
 
 # introduction  in the banner header
-subtitle_desc: 取法于上，仅得为中；取法于中，故为其下。
+subtitle_desc: 取法乎上，得乎其中；取法乎中，得乎其下；取法呼下，无所得矣。
 
 # seo keyword
 keywords: minfive, minfive blog, 前端博客, 前端, 程序员, 前端开发, 全栈开发, node.js, javascript
@@ -129,27 +129,27 @@ description: 取法于上，仅得为中；取法于中，故为其下。
 introduction: 不思量，自难忘！
 
 # your blog favicon icon, support two ways: local and online. the local way need you to put the icon under  themes/hexo-theme-skapp/source/img directory
-favicon_ico: https://blog.static.minfive.com/other/favicon.ico
+favicon_ico: /img/theme/favicon.ico
 
 # blog logo icon in the upper left corner. support the local way and online way. 
-logo: http://imgblog.mrdear.cn/1518101048.png
+logo: /img/theme/title.png
 
 # avatar
-avatar: /images/avatar.jpg #http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
+avatar: /img/theme/qrcode.jpg #http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
 # qrcode: http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
 
 # page default cover
-default_cover: http://imgblog.mrdear.cn/mrdearblog-mysql.png
+default_cover: /img/theme/blog_work.png
 
 # header background picture
-header_cover: https://blog.static.minfive.com/other/banner.jpeg
+header_cover: /img/theme/banner.jpeg
 #http://imgblog.mrdear.cn/21312%20%281%29.jpg
 
 # 404 page background picture
-error_page_bg: https://blog.static.minfive.com/other/dogs.jpg
+error_page_bg: /img/theme/dogs.jpg
 
 # page loading icon
-loader_img: http://imgblog.mrdear.cn/loading.gif
+loader_img: /img/theme/loading.gif
 
 # Baidu statistic
 baidu_statistic: e4027971a230b210f4671f485b33846a
@@ -159,8 +159,8 @@ busuanzi: true
 
 # author information
 author:
-  name: minfive
-  link: https://github.com/Mrminfive
+  name: 董宗磊
+  link: https://github.com/dongzl
 
 # Links:
 links:

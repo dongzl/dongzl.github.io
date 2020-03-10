@@ -1,13 +1,22 @@
 ---
 title: 从一个功能设计聊聊观察者模式的使用
 date: 2019-10-11 11:06:46
-categories:
-- design-pattern
-tags:
-- 设计模式
-- 观察者模式
-- Observer
-- Observable
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/design_pattern.png
+# author information, multiple authors are set to array
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在根据工作中的一个功能设计场景，总结观察者模式的应用。
+
+categories: 
+  - 设计模式
+tags: 
+  - 观察者模式
+  - Observer
+  - Observable
 ---
 
 ## 背景描述

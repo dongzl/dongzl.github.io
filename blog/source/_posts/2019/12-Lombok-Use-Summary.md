@@ -1,10 +1,21 @@
 ---
 title: Lombok 框架使用总结
 date: 2019-11-30 20:38:18
-categories:
-- web
-tags:
-- lombok
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在学习和总结 Lombok 框架的使用。
+
+categories: 
+  - web开发
+
+tags: 
+  - Lombok
 ---
 
 ## 背景描述

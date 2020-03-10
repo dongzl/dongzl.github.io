@@ -1,14 +1,22 @@
 ---
 title: GRIT：一种微服务场景下分布式事务协议实现
 date: 2019-10-29 09:42:47
-categories:
-- architectural-design
-tags:
-- GRIT
-- microservice
-- distributed 
-- transaction
-- deterministic
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文描述了 eBay 技术人员最近发布的 GRIT 分布式事务协议的基本思想。（译）
+
+categories: 
+  - 架构设计
+
+tags: 
+  - GRIT
+  - distributed transaction
 ---
 
 > 原文链接：https://tech.ebayinc.com/engineering/grit-a-protocol-for-distributed-transactions-across-microservices/

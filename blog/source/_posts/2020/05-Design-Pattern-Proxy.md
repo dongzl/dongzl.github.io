@@ -1,12 +1,19 @@
 ---
 title: 聊聊代理模式（Proxy）的使用
 date: 2020-02-29 14:44:21
-categories:
-- design-pattern
-tags:
-- 设计模式
-- 代理模式
-- Proxy
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/design_pattern.png
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+# post subtitle in your index page
+subtitle: 本文旨在学习代理模式中静态代理 & 动态代理的实现技术。
+categories: 
+  - 设计模式
+tags: 
+  - 设计模式
+  - 代理模式
+  - Proxy
 ---
 
 ## 背景介绍

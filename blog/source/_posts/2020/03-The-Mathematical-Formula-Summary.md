@@ -1,8 +1,21 @@
 ---
 title: 计算机中常用数学公式汇总
 date: 2020-02-17 22:04:54
-categories:
-tags:
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithms.png
+
+# single author
+author:
+  - nick: 董宗磊
+    link: https://www.github.com/dongzl
+
+# post subtitle in your index page
+subtitle: 本文旨在总结在计算机中常用的数学公式（持续更新中）。
+
+categories: 
+  - 其他
+
+tags: 
+  - 数学公式
 ---
 
 - 斐波那契数列通向公式：
