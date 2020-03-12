@@ -487,6 +487,21 @@ Decouple an abstraction from its implementation so that the two can vary indepen
 
 享元模式的代码实现非常简单，主要是通过工厂模式，在工厂类中，通过一个 Map 或者 List 来缓存已经创建好的享元对象，以达到复用的目的。
 
+### 55 | 享元模式（下）：剖析享元模式在Java Integer、String中的应用
+
+JDK 设置 Integer 缓存参数：
+
+- 方法一：-Djava.lang.Integer.IntegerCache.high=255
+- 方法二：-XX:AutoBoxCacheMax=255
+
+JDK 中 Integer 对象缓存，String 常量池，都是使用的享元模式。
+
+## 设计模式与规范：行为型
+
+### 56 | 观察者模式（上）：详解各种应用场景下观察者模式的不同实现方式
+
+**设计模式要干的事情就是解耦。创建型模式是将创建和使用代码解耦，结构型模式是将不同功能代码解耦，行为型模式是将不同的行为代码解耦，具体到观察者模式，它是将观察者和被观察者代码解耦。**
+
 
 
 ## 参考资料
