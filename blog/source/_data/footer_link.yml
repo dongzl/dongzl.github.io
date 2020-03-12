@@ -2,6 +2,9 @@ friend_links:
   - name: mrdear
     desc: mrdear
     link: https://mrdear.cn/
+  - name: draveness
+    desc: draveness
+    link: https://draveness.me/
 
 build_tools:
   - name: Hexo
