@@ -167,11 +167,44 @@ Parallel 4   :         des6, after des4, 1d
 
   - $$lim_{1\to+\infty}P(|\frac{1}{n}\sum_i^nX_i-\mu|<\epsilon)=1, i=1,...,n$$
 
+### hexo-pdf 安装使用
+
+**作用：** 在 Hexo 中展示 PDF 文件内容。
+
+**网址：** 暂无
+
+**Github地址：** 暂无
+
+**Hexo插件：** [superalsrk/hexo-pdf](https://github.com/superalsrk/hexo-pdf)
+
+**Install：** `npm install --save hexo-pdf`
+
+**示例：**
+
+- Normal PDF
+```
+{% pdf http://7xov2f.com1.z0.glb.clouddn.com/bash_freshman.pdf %}
+
+{% pdf ./bash_freshman.pdf %}
+```
+
+- Google drive
+```
+{% pdf https://drive.google.com/file/d/0B6qSwdwPxPRdTEliX0dhQ2JfUEU/preview %}
+```
+
+- Slideshare
+```
+{% pdf http://www.slideshare.net/slideshow/embed_code/key/8Jl0hUt2OKUOOE %}
+```
+
 ## 参考资料
 - [在Hexo中渲染MathJax数学公式](https://www.jianshu.com/p/7ab21c7f0674)
 - [在Hexo中使用Markdown绘制图表](https://segmentfault.com/a/1190000020123689?utm_source=tag-newest)
 - [如何在 hexo 中支持 Mathjax？](https://blog.csdn.net/u014630987/article/details/78670258)
 - [hexo下LaTeX无法显示的解决方案](https://blog.csdn.net/crazy_scott/article/details/79293576)
+- [hexo 博客添加 pdf 插件](https://www.jianshu.com/p/7f10f51bce47)
+
 
 
 
