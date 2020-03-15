@@ -22,7 +22,7 @@ tags:
 
 ## 面试题
 
-> MySQL 数据库的原子性和持久性怎么保证。
+> MySQL 数据库的原子性和持久性怎么保证？
 
 > 技术关键点：通过 undo log 保证原子性；通过 redo log 保证持久性。
 
@@ -53,6 +53,8 @@ tags:
 - 并发控制技术（保证事务隔离性，防止事务并发执行破坏数据的一致性）
 
 - 日志恢复技术（保证事务的原子性和持久性，防止事务故障或系统故障破坏数据一致性）
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_01.png">
 
 ### 事务的实现原理
 
@@ -92,27 +94,28 @@ SQL 标准定义的事务的隔离级别：
 
 - 读已提交（READ COMMITTED）：Oracle 数据库默认的隔离级别
 
-- 可重复的（REPEATABLE READ）：MySQL 数据库默认隔离级别
+- 可重复读（REPEATABLE READ）：MySQL 数据库默认隔离级别
 
-- 串行化（SERIALIZABLE）：并发性能最低
+- 串行化（SERIALIZABLE）：并发性能最低，不推荐
 
 不同的隔离级别可能导致的并发异常：
 
 事务的隔离级别 | 脏读 |  不可重复读 | 幻读
 -|-|-|-
-未提交（READ UNCOMMITTED） | YES | YES | YES
+读未提交（READ UNCOMMITTED） | YES | YES | YES
 读已提交（READ COMMITTED）  |    | YES | YES
-可重复的（REPEATABLE READ） |    |     | YES
+可重复读（REPEATABLE READ） |    |     | YES
 串行化（SERIALIZABLE）     |     |     |   
 
 设置事务的隔离级别操作：
 
 ```SQL
-// MySQL 关闭事务自动提交
-set session autocommit=0;
-
 // 查看 MySQL 事务是否自动提交
 show session variables like 'autocommit';
+select @@autocommit;
+
+// MySQL 关闭事务自动提交
+set session autocommit=0;
 
 // 查看 MySQL 当前事务隔离级别
 SELECT @@tx_isolation;
@@ -149,9 +152,42 @@ MySQL 锁分类：
 
 - 若锁被授予，则申请锁的事务可以继续执行；若被拒绝，则申请锁的事务将进行等待，知道锁被其他事务释放。
 
+## 面试题
+
+> MySQL 中 InnoDB 存储引擎和 MyISAM 存储引擎的区别？
+
+[Mysql 中 MyISAM 和 InnoDB 的区别有哪些？](https://www.zhihu.com/question/20596402?sort=created)
+
+ 特征| MyISAM |  InnoDB 
+-|-|-
+索引类型 | 非聚簇索引 | 聚簇索引
+支持事务 | 否    | 是
+支持表锁 | 是    | 是
+支持行锁 | 否    | 是
+支持外键 | 否    | 是
+支持全文索引 | 是 | 是（5.6版本后支持）
+适合操作类型 | 大量select |  大量 inset/delete/update 
+文件组织形式 | .frm / .ibd | .MYD / .MYI / .frm
+
+
+**其他区别内容：**
+
+- MyISAM：.frm文件存储表定义；数据文件的扩展名为.MYD(MYData)；索引文件的扩展名是.MYI (MYIndex)。
+
+- InnoDB：.frm文件存储表定义；.ibd 文件和 .ibdata 文件：这两种文件都是存放InnoDB 数据的文件，之所以用两种文件来存放 文件：这两种文件都是存放InnoDB 的数据，是因为 文件：这两种文件都是存放InnoDB 的数据存储方式能够通过配置来决定是使用共享表空间存放存储数据，还是用独享表空间存放存储数据。独享表空间存储方式使用 .ibd 文件，并且每个表一个 .ibd 文件；共享表空间存储方式使用 .ibdata 文件，所有表共同使用一个 .ibdata 文件。
+
+- MyISAM：允许没有任何索引和主键的表存在，索引都是保存行的地址。
+
+- InnoDB：如果没有设定主键或者非空唯一索引，就会自动生成一个6字节的主键(用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值。
+
+- MyISAM： 保存有表的总行数，如果 select count() from table; 会直接取出出该值。
+
+- InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 wehre 条件后，MyISAM 和 InnoDB 处理的方式都一样。
+
 {% pdf https://gitee.com/dongzl/article-images/raw/master/pdf/这几道mysql题你搞懂了，金三银四涨薪稳了.pdf %}
 
 - 参考资料
 
-[详细分析MySQL事务日志(redo log和undo log)](https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html)
+- [详细分析MySQL事务日志(redo log和undo log)](https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html)
 
+- [Mysql 中 MyISAM 和 InnoDB 的区别有哪些？](https://www.zhihu.com/question/20596402?sort=created)
