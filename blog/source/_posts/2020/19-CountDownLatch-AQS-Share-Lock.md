@@ -9,7 +9,7 @@ author:
     link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 本文旨总结在面试中 Redis 的缓存雪崩、缓存穿透、缓存击穿等问题涉及的知识内容。
+subtitle: 本文通过 JDK 源码分析如何使用 AQS 的共享模式实现 CountDownLatch 类。
 
 categories: 
   - java开发
