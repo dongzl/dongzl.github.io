@@ -15,8 +15,6 @@ categories:
   - 架构设计
 tags: 
   - BloomFilter
-  - Redis
-  - Guava
 ---
 
 ## 布隆过滤器介绍

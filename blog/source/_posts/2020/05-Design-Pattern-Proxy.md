@@ -12,8 +12,6 @@ categories:
   - 设计模式
 tags: 
   - 设计模式
-  - 代理模式
-  - Proxy
 ---
 
 ## 背景介绍

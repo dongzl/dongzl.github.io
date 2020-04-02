@@ -16,8 +16,6 @@ categories:
 
 tags: 
   - ZooKeeper
-  - Curator
-  - Queue
 ---
 
 ## 背景描述

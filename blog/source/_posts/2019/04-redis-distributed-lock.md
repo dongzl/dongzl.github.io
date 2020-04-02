@@ -15,9 +15,7 @@ categories:
   - 架构设计
 
 tags: 
-  - redis
-  - lock
-  - setnx
+  - Redis
 ---
 
 ## 背景描述

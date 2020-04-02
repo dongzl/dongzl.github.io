@@ -14,7 +14,7 @@ subtitle: 本文旨在总结分析对于使用 MQ 中容易出现的问题，Kaf
 categories: 
   - 架构
 tags: 
-  - kafka
+  - Kafka
 ---
 
 ## 背景描述
