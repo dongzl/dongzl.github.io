@@ -5,16 +5,16 @@ type: about
 layout: about
 ---
 ## 个人信息
-- 董宗磊 / 男 / 1987
+- 董宗磊 / 男 / 1987.04
 - 13436670847 （同微信）
 - dongzonglei@apache.org
-- 本科 / 辽宁工业大学 / 电子商务专业
+- 辽宁工业大学 / 本科 / 电子商务专业 / 2011年毕业
 - 工作年限：8年
-- 技术博客：[http://dongzl.github.io](http://dongzl.github.io)
-- Github：[http://github.com/dongzl](http://github.com/dongzl)
 - 期望职位：Java 高级工程师 / 系统架构师
 - 期望薪资：面议
 - 期望城市：北京
+- 技术博客：[http://dongzl.github.io](http://dongzl.github.io)
+- Github：[http://github.com/dongzl](http://github.com/dongzl)
 
 ## 工作经历
 - 北京京东尚科信息技术有限公司（2015.9 - 至今）
@@ -32,13 +32,13 @@ layout: about
 - 精通 Java 多线程、高并发开发，熟悉 JUC 包内部常用工具类的使用以及 CAS 的实现原理，熟悉以 AQS 为基础的 ReentrantLock / CountDownLatch 等 Java 内部锁的实现机制；
 
 - 精通 JVM 内存管理机制，熟悉 JVM 内部垃圾回收机制以及常用垃圾回收算法，
-精通 JVM 调优，有线上系统 JVM 优化实际工作经验积累；
+熟悉 JVM 调优，有线上系统 JVM 优化实际工作经历；
 
-- 精通**设计模式**，理解常用设计模式的结构原理与使用场景，并在实际工作中有大量设计模式的使用经验；
+- 精通设计模式，理解常用设计模式的结构原理与使用场景，并在实际工作中有大量设计模式的使用经验；
 
-- 精通 MySQL 使用，熟悉 MySQL 内部事务ACID / 锁 / 索引 / 主从复制的实现原理，熟悉 MySQL 优化，对于线上系统有丰富的 SQL 优化经验；
+- 精通 MySQL 使用，熟悉 MySQL 事务ACID / 锁 / 索引 / 主从复制的实现原理，熟悉 MySQL 优化，对于线上系统有丰富的 SQL 优化经验；
 
-- 精通 Redis 使用，熟悉 Redis 常用数据类型以及使用场景，熟悉 Redis 持久化 / 主从复制 / 高可用集群 / 哨兵机制 实现原理；
+- 精通 Redis 使用，熟悉 Redis 常用数据类型以及使用场景，熟悉 Redis 持久化 / 主从复制 / 高可用集群 / 哨兵机制实现原理；
 
 - 精通 Spring / SpringMVC / Spring jpa 使用，熟悉 Spring AOP & IOC 和 Spring 事务实现原理，阅读过 Spring 源码；
 
@@ -56,9 +56,9 @@ layout: about
 
 ### 北京京东尚科信息技术有限公司（京东读书APP项目）
 
-[京东读书](https://e.jd.com/) 是京东旗下一款集书城、订单、VIP会员、阅读引擎于一体的电子书阅读软件。目前主要有Android、iOS、JDread阅读器、Windows Client、PC Web 等客户端产品。
+[京东读书](https://e.jd.com/) 是京东旗下一款集书城、订单、VIP会员、阅读引擎于一体的电子书阅读软件。目前主要有Android、iOS、Jdread 阅读器、Windows Client、PC Web 等客户端产品。
 
-**团队规模**：60人
+**团队规模**：40人
 
 **个人职位**：高级软件工程师
 
@@ -74,7 +74,7 @@ layout: about
 
 - 负责京东读书 VIP 会员服务功能开发工作，完成整个会员体系 充值/服务/供应商结算 整个流程的开发工作；
 
-- 负责网文内容抓取工作，通过分布式定时任务框架 + 线程池技术，提升数据抓取时效性与准确性。
+- 负责网文内容抓取工作，通过分布式定时任务框架 + 线程池技术，提升数据抓取时效性与准确性；
 
 - 负责系统优化相关工作，包括 SQL 优化工作，使用 MAT 工具分析线上系统内存溢出，根据监控系统分析慢接口请求进行代码优化；
 
@@ -114,7 +114,7 @@ layout: about
 
 - 参与 ShardingSphere 框架 Orchestration 模块重构工作，对编排治理模块接口进行细粒度拆分，提升系统的可用性和扩展性；
 
-- 将 ZooKeepr / etcd 框架作为注册中心集成到 Orchestration 模块，将 Nacos / Apollo 框架作为配置中心集成到 Orchestration 模块；
+- 将 Zookeepr / etcd 框架作为注册中心集成到 Orchestration 模块，将 Nacos / Apollo 框架作为配置中心集成到 Orchestration 模块；
 
 - 参与 issue 讨论，提交核心 PR；[参与 issue 讨论列表](https://github.com/apache/incubator-shardingsphere/issues/created_by/dongzl) / [解决 issue 列表](https://github.com/apache/incubator-shardingsphere/issues/assigned/dongzl) / [提交核心 PR 列表](https://github.com/apache/incubator-shardingsphere/pulls/dongzl)
 
