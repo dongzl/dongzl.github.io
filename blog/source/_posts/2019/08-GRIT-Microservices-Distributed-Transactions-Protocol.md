@@ -15,8 +15,7 @@ categories:
   - 架构设计
 
 tags: 
-  - GRIT
-  - distributed transaction
+  - 事务
 ---
 
 > 原文链接：https://tech.ebayinc.com/engineering/grit-a-protocol-for-distributed-transactions-across-microservices/

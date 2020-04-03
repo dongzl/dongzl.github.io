@@ -9,7 +9,7 @@ author:
     link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 本文通过 JDK 源码分析如何使用 AQS 的共享模式实现 CountDownLatch 类。
+subtitle: 本文通过 JDK 源码分析如何使用 AQS 的共享模式实现 CountDownLatch 类功能。
 
 categories: 
   - java开发

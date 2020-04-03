@@ -195,3 +195,22 @@ gitTalk:
   owner: dongzl
   admin: 
     - dongzl
+
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  debug: false
+  model:
+    use: live2d-widget-model-koharu
+  display:
+    position: left
+    width: 175
+    height: 350
+  mobile:
+    show: true
+  react:
+    opacity: 1.0
