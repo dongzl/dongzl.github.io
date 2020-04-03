@@ -198,6 +198,11 @@ Parallel 4   :         des6, after des4, 1d
 {% pdf http://www.slideshare.net/slideshow/embed_code/key/8Jl0hUt2OKUOOE %}
 ```
 
+### live2dw 安装使用
+
+[在Hexo博客上添加可爱的Live 2D模型](https://www.jianshu.com/p/4b61d8702cfa)
+
+
 ## 参考资料
 - [在Hexo中渲染MathJax数学公式](https://www.jianshu.com/p/7ab21c7f0674)
 - [在Hexo中使用Markdown绘制图表](https://segmentfault.com/a/1190000020123689?utm_source=tag-newest)
