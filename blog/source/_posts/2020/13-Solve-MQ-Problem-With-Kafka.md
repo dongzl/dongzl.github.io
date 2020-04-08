@@ -12,7 +12,7 @@ author:
 subtitle: 本文旨在总结分析对于使用 MQ 中容易出现的问题，Kafka是如何解决的。
 
 categories: 
-  - 架构
+  - 架构设计
 tags: 
   - Kafka
 ---
