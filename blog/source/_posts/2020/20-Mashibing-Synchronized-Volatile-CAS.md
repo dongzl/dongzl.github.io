@@ -9,7 +9,7 @@ author:
     link: http://www.mashibing.com/
 
 # post subtitle in your index page
-subtitle: 本文是[马士兵教育](http://www.mashibing.com/)公开课中课程笔记内容。
+subtitle: 本文是根据马士兵教育公开课课程笔记内容整理。
 
 categories: 
   - java开发
@@ -17,6 +17,25 @@ categories:
 tags: 
   - synchronized
 ---
+
+## 面试题
+
+> 请描述 synchrnoized 和 ReentrantLock 的底层实现及重入的底层原理 -- 百度、阿里
+> 请描述锁的四种状态和升级过程 -- 百度、阿里
+> CAS 的 ABA 问题如何解决 -- 百度
+> 请谈一下 AQS，为什么 AQS 的底层是 CAS + volatile -- 百度
+> 请谈一下你对 volatile 的理解 -- 美团、阿里
+> volatile 的可见性和禁止指令重排序是如何实现的 -- 美团
+> CAS 是什么 -- 美团
+> 请描述一下对象的创建过程 -- 美团、顺丰
+> 对象在内存中的内存布局 -- 美团、顺丰
+> DCL 单例为什么要加 volatile -- 美团
+> 解释一下锁的四种状态 -- 顺丰
+> Object o = new Object() 在内存中占了多少字节? -- 顺丰
+> 请描述 synchronized 和 ReentrantLock 的异同
+> 聊聊你对 as-if-serial 和 happens-before 语义的理解 -- 京东
+> 你了解ThreadLocal吗？你知道ThreadLocal 中如何解决内存泄漏问题吗? -- 京东、阿里
+> 请描述一下锁的分类以及 JDK 中的应用 -- 阿里
 
 ## 用户态与内核态
 
@@ -368,7 +387,7 @@ inflate方法：膨胀为重量级锁
 
 ### JDK8 markword实现表：
 
-![markword](./markword.png)
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/20-Mashibing-Synchronized-Volatile-CAS/Mashibing-Synchronized-Volatile-CAS-01.png">
 
 new - 偏向锁 - 轻量级锁 （无锁, 自旋锁，自适应自旋）- 重量级锁
 
@@ -793,3 +812,25 @@ inline void OrderAccess::fence() {
   }
 }
 ```
+
+## 总结
+
+- 用户空间锁 VS 重量级锁
+  - 偏向锁、自旋锁都是用户空间完成；
+  - 重量级锁是需要向内核申请。
+
+- 为何会有偏向锁？
+  - 多数 sychronized 方法，在很多情况下，只有一个线程在运行；
+  - 例如：StringBuffer 中的一些 sync 方法，Vector 中的一些 sync 方法；
+
+- 偏向锁的实现
+  - 把自己的线程 ID 设置到 markword；
+
+- 自旋锁
+  - 有人竞争（自旋锁，轻量级锁，无锁）；
+  - 每个线程在线程栈中生成 LockRecord，用 CAS 方式尝试把自己的指针更新到 markword；
+  - 每一次锁重入，都会有一个 LockRecord；
+
+- 偏向锁是否一定提高效率？
+  - 不一定
+  - 在明确知道多个线程强烈竞争的时候，系统会把大量资源消耗在撤销上。
