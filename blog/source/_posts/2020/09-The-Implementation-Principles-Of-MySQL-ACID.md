@@ -15,9 +15,7 @@ categories:
   - 数据库
 tags: 
   - MySQL
-  - ACID
-  - Redo log
-  - Undo log
+  - 事务
 ---
 
 ## 面试题
@@ -184,7 +182,7 @@ MySQL 锁分类：
 
 - InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 wehre 条件后，MyISAM 和 InnoDB 处理的方式都一样。
 
-{% pdf https://gitee.com/dongzl/article-images/raw/master/pdf/这几道mysql题你搞懂了，金三银四涨薪稳了.pdf %}
+{% pdf https://gitee.com/dongzl/article-images/raw/master/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_02.pdf %}
 
 - 参考资料
 

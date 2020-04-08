@@ -15,7 +15,7 @@ categories:
   - 数据库
 tags: 
   - MySQL
-  - 优化
+  - 调优
 ---
 
 ## 性能监控
