@@ -123,7 +123,7 @@ subtitle_desc: 取法乎上，得乎其中；取法乎中，得乎其下；取�
 keywords: 程序员, java, web, 数据库, 架构, 设计模式, 数据结构, 算法
 
 # blog description（for seo）
-description: 取法于上，仅得为中；取法于中，故为其下。
+description: 记录自己作为程序员的技术成长经历，程序员是个特殊的职业，一旦选择这个职业就要时刻保持学习的热情，如果你也喜欢我的博客，欢迎订阅RSS。
 
 # self introduction
 introduction: 不思量，自难忘！
@@ -135,7 +135,7 @@ favicon_ico: /img/theme/favicon.ico
 logo: /img/theme/title.png
 
 # avatar
-avatar: /img/theme/qrcode.jpg #http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
+avatar: /img/theme/qrcode.jpeg #http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
 # qrcode: http://oo12ugek5.bkt.clouddn.com/images/qrcode.png
 
 # page default cover
@@ -155,7 +155,7 @@ loader_img: /img/theme/loading.gif
 baidu_statistic: e4027971a230b210f4671f485b33846a
 
 # Busuanzi
-busuanzi: true
+busuanzi: false
 
 # author information
 author:
