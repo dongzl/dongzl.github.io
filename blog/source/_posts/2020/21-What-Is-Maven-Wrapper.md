@@ -26,7 +26,7 @@ tags:
 
 ## Maven Wrapper 原理
 
-`Maven` 是目前 `java` 开发中广泛使用的项目构建工具，目前 `maven` 工具已经发行了很多个版本，如果在一个公司内部，我们可以通过规定要求大家使用统一的 `maven` 版本，那如果是开源项目，如何保证彼此不熟悉的开源参与者使用的 `maven` 版本保持一致呢，这时候 `Maven Wrapper` 就派上用场了。`Maven Wrapper` 的原理是在 `maven-wrapper.properties` 文件中记录项目中使用的 `maven` 版本，当用户执行 `mvnw clean` 命令时，发现当前用户的 `maven` 版本和期望的版本不一致，那么就下载指定的版本，然后用指定的版本来执行 `mvn` 命令。
+`Maven` 是 `java` 开发中广泛使用的项目构建工具，目前 `maven` 工具已经发行了很多个版本，如果在一个公司内部，我们可以通过规定要求大家使用统一的 `maven` 版本，那如果是开源项目，如何保证彼此不熟悉的开源参与者使用的 `maven` 版本保持一致呢，这时候 `Maven Wrapper` 就派上用场了。`Maven Wrapper` 的原理是在 `maven-wrapper.properties` 文件中记录项目中使用的 `maven` 版本，当用户执行 `mvnw clean` 命令时，发现当前用户的 `maven` 版本和期望的版本不一致，那么就下载指定的版本，然后用指定的版本来执行 `mvn` 命令。
 
 ## Maven Wrapper 使用
 
