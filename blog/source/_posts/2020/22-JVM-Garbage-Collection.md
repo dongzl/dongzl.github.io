@@ -40,7 +40,7 @@ tags:
 
 ### 标记--清除算法（Mark-Sweep）
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-01.png">
 
 优点：
 
@@ -53,7 +53,7 @@ tags:
 
 ### 标记--复制算法（Copying）
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-02.png">
 
 优点：
 
@@ -66,7 +66,7 @@ tags:
 
 ### 标记--整理算法（Mark-Compack）
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-03.png">
 
 优点：
 
@@ -88,9 +88,11 @@ tags:
   - 垃圾对象少
   - 使用 Mark-Compack 算法
 
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-04.png">
+
 ## HotSpot 虚拟机垃圾收集器
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.png">
 
 ### Serial
 
@@ -100,13 +102,17 @@ tags:
 - 简单而高效，额外的内存消耗最小；
 - 可以管理较小内存（几十兆到一两百兆内存）
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg">
+
+Serial/Serial Old收集器运行示意图
 
 ### Serial Old
 
 **a stop-the-world, mark-sweep-compact collector that uses a single GC thread.**
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg">
 
 ### Parallel Scavenge
 
@@ -117,7 +123,7 @@ tags:
 - 并行收集的多线程收集器；
 - 可控制吞吐量的收集器。
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-07.jpg">
 
 - -XX:MaxGCPauseMillis：控制最大垃圾收集停顿时间；该参数允许的值是一个大于 0 的毫秒数，收集器将尽力保证内存回收花费的时间不超过用户设定值；
 
@@ -137,17 +143,17 @@ tags:
 
 - ParNew 收集器默认开启的收集线程数与处理器核心数量相同，在处理器核心非常多的环境中，可以使用 `-XX:ParallelGCThreads` 参数来限制垃圾收集的线程数。
 
-### Serial Old
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-08.jpg">
 
-Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ParNew/Serial Old收集器运行示意图
 
 ### Parallel Old
 
 Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-09.jpg">
+
+Parallel Scavenge/Parallel Old收集器运行示意图
 
 ### CMS
 
@@ -163,7 +169,9 @@ CMS 垃圾收集四个步骤：
 
 - 并发清除（CMS concurrent sweep）：并发清除阶段，清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-10.jpg">
+
+Concurrent Mark Sweep收集器运行示意图
 
 CMS 垃圾收集器不足：
 
@@ -176,6 +184,10 @@ CMS 垃圾收集器不足：
   - -XX:CMSFullGCsBefore-Compaction：这个参数的作用是要求 CMS 收集器在执行过若干次（数量由参数值决定）不整理空间的 Full GC 之后，下一次进入 Full GC 前会先进行碎片整理（默认值为 0，表示每次进入 Full GC 时都进行碎片整理）。
 
 ### Garbage First
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-11.jpg">
+
+
 
 
 
