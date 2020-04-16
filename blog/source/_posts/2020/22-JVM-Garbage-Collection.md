@@ -9,7 +9,7 @@ author:
     link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 面试官：用一句话证明你的 JVM 水平很牛；面试者：精通 JVM 的 10 种垃圾回收算法。
+subtitle: 面试官：用一句话证明你的 JVM 水平很牛；面试者：精通 HotSpot 虚拟机的 10 种垃圾回收器的实现原理。
 categories: 
   - java开发
 tags: 
@@ -18,7 +18,7 @@ tags:
 
 ## 背景描述
 
-> 面试官：用一句话证明你的 JVM 水平很牛；面试者：精通 JVM 的 10 种垃圾回收算法。
+> 面试官：用一句话证明你的 JVM 水平很牛；面试者：精通 HotSpot 虚拟机的 10 种垃圾回收器的实现原理。
 
 如果真有面试官这么问，会感觉很不专业，但是据听说的确是有人碰到过，现在的 Java 服务端面试，`JVM` 的问题基本上是绕不过去的坎儿了，今天这篇文章由这个奇葩的面试题引入，总结一下 `JVM` 中常用垃圾回收算法的一些知识内容，总结的不一定深入，但是先混个脸儿熟。
 
@@ -40,7 +40,7 @@ tags:
 
 ### 标记--清除算法（Mark-Sweep）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-01.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-01.png" width="600px">
 
 优点：
 
@@ -53,7 +53,7 @@ tags:
 
 ### 标记--复制算法（Copying）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-02.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-02.png" width="600px">
 
 优点：
 
@@ -66,7 +66,7 @@ tags:
 
 ### 标记--整理算法（Mark-Compack）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-03.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-03.png" width="600px">
 
 优点：
 
@@ -88,11 +88,11 @@ tags:
   - 垃圾对象少
   - 使用 Mark-Compack 算法
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-04.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-04.png" width="600px">
 
 ## HotSpot 虚拟机垃圾收集器
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.png">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.png" width="600px">
 
 ### Serial
 
@@ -102,7 +102,7 @@ tags:
 - 简单而高效，额外的内存消耗最小；
 - 可以管理较小内存（几十兆到一两百兆内存）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
 
 Serial/Serial Old收集器运行示意图
 
@@ -112,7 +112,7 @@ Serial/Serial Old收集器运行示意图
 
 Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
 
 ### Parallel Scavenge
 
@@ -123,7 +123,7 @@ Serial Old是Serial收集器的老年代版本，它同样是一个单线程收�
 - 并行收集的多线程收集器；
 - 可控制吞吐量的收集器。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-07.jpg">
+$$吞吐量=\frac{运行用户代码时间}{运行用户代码时间+运行垃圾收集时间}$$
 
 - -XX:MaxGCPauseMillis：控制最大垃圾收集停顿时间；该参数允许的值是一个大于 0 的毫秒数，收集器将尽力保证内存回收花费的时间不超过用户设定值；
 
@@ -143,7 +143,7 @@ Serial Old是Serial收集器的老年代版本，它同样是一个单线程收�
 
 - ParNew 收集器默认开启的收集线程数与处理器核心数量相同，在处理器核心非常多的环境中，可以使用 `-XX:ParallelGCThreads` 参数来限制垃圾收集的线程数。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-08.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-08.jpg" width="600px">
 
 ParNew/Serial Old收集器运行示意图
 
@@ -151,7 +151,7 @@ ParNew/Serial Old收集器运行示意图
 
 Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-09.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-09.jpg" width="600px">
 
 Parallel Scavenge/Parallel Old收集器运行示意图
 
@@ -169,7 +169,7 @@ CMS 垃圾收集四个步骤：
 
 - 并发清除（CMS concurrent sweep）：并发清除阶段，清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-10.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-10.jpg" width="600px">
 
 Concurrent Mark Sweep收集器运行示意图
 
@@ -185,7 +185,32 @@ CMS 垃圾收集器不足：
 
 ### Garbage First
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-11.jpg">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-11.png" width="600px">
+
+- G1是一款主要面向服务端应用的垃圾收集器。
+
+- G1不再坚持固定大小以及固定数量的分代区域划分，而是把连续的Java堆划分为多个大小相等的独立区域（Region），每一个Region都可以根据需要，扮演新生代的Eden空间、Survivor空间，或者老年代空间。
+
+- Region中还有一类特殊的Humongous区域，专门用来存储大对象。G1认为只要大小超过了一个Region容量一半的对象即可判定为大对象。
+
+- -XX:G1HeapRegionSize：指定 Region 大小，取值范围 1MB ~ 32MB， 为 2 的 N 次幂。
+
+- G1 收集器负责跟踪各个 Region 里面的垃圾堆积的“价值”大小，价值即回收所获得的空间大小以及回收所需时间的经验值，然后在后台维护一个优先级列表，每次根据用户设定允许的收集停顿时间（使用参数-XX:MaxGCPauseMillis指定，默认值是200毫秒），优先处理回收价值收益最大的那些 Region，这也就是“Garbage First” 名字的由来。
+
+G1 收集器工作步骤：
+- 初始标记 （Initial Marking）
+- 并发标记（Concurrent Marking）
+- 最终标记（Final Marking）
+- 筛选回收（Live Data Counting and Evacuation）
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-12.jpg" width="600px">
+
+### Shenandoah
+
+### ZGC
+
+### Epsilon
+
 
 
 
