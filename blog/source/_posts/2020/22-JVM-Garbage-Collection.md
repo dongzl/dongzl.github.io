@@ -92,7 +92,7 @@ tags:
 
 ## HotSpot 虚拟机垃圾收集器
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.jpg" width="600px">
 
 ### Serial
 
@@ -207,10 +207,63 @@ G1 收集器工作步骤：
 
 ### Shenandoah
 
+Shenandoah 收集器工作过程：
+
+- 初始标记（Initial Marking）
+
+- 并发标记（Concurrent Marking）
+
+- 最终标记（Final Marking）
+
+- 并发清理（Concurrent Cleanup）
+
+- 并发回收（Concurrent Evacuation）
+
+- 初始引用更新（Initial Update Reference）
+
+- 并发引用更新（Concurrent Update Reference）
+
+- 最终引用更新（Final Update Reference）
+
+- 并发清理（Concurrent Cleanup）
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-13.jpg" width="600px">
+
+Shenandoah 收集器的工作过程
+
 ### ZGC
+
+ZGC 是一款在 JDK 11 中新加入的具有实验性质的低延迟垃圾收集器。
+
+ZGC 和 Shenandoah 的目标是高度相似的，都希望在尽可能对吞吐量影响不太大的前提下，实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在十毫秒以内的低延迟。
+
+ZGC 也是采用基于Region的堆内存布局，ZGC 的 Region 具有动态性——动态创建和销毁，以及动态的区域容量大小。
+
+- 小型Region（Small Region）：容量固定为2MB，用于放置小于256KB的小对象。
+
+- 中型Region（Medium Region）：容量固定为32MB，用于放置大于等于256KB但小于4MB的对象。
+
+- 大型 Region（Large Region）：容量不固定，可以动态变化，但必须为2MB的整数倍，用于放置4MB或以上的大对象。
+
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-14.jpg" width="600px">
+
+ZGC 执行过程：
+
+- 并发标记 （Concurrent Mark）
+
+- 并发预备重分配 （Concurrent Prepare for Relocate）
+
+- 并发重分配 （Concurrent Relocate）
+
+- 并发重映射 （Concurrent Remap）
 
 ### Epsilon
 
+Epsilon 被形容是一个无操作的收集器，如果某个应用只要运行数分钟甚至数秒，只要 Java 虚拟机能正确分配内存，在堆耗尽之前就会退出，那显然运行负载极小、没有任何回收行为的 Epsilon 便是很恰当的选择。
+
+## 参考资料
+
+- 深入理解Java虚拟机：JVM高级特性与最佳实践（第3版）作者：周志明 机械工业出版社 2029-12-01 出版，ISBN：9787111641247
 
 
 
