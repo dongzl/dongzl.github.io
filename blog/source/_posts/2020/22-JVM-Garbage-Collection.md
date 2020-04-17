@@ -227,7 +227,7 @@ Shenandoah 收集器工作过程：
 
 - 并发清理（Concurrent Cleanup）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-13.jpg" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-13.png" width="600px">
 
 Shenandoah 收集器的工作过程
 
