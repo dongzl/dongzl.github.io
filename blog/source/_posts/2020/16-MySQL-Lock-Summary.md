@@ -201,7 +201,7 @@ insert into tab_no_index values(1,'1'),(2,'2'),(3,'3'),(4,'4');
 
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| set autocommit=0<br />select * from tab_no_index where id = 1; | set autocommit=0<br />select * from tab_no_index where id =2 |
+| set autocommit = 0;<br />select * from tab_no_index where id = 1; | set autocommit = 0;<br />select * from tab_no_index where id = 2; |
 |      select * from tab_no_index where id = 1 for update;      |                                                              |
 |                                                              |     select * from tab_no_index where id = 2 for update;      |
 
@@ -217,7 +217,7 @@ insert into tab_with_index values(1,'1'),(2,'2'),(3,'3'),(4,'4');
 
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| set autocommit=0<br />select * from tab_with_indexwhere id = 1; | set autocommit=0<br />select * from tab_with_indexwhere id =2 |
+| set autocommit = 0;<br />select * from tab_with_indexwhere id = 1; | set autocommit = 0;<br />select * from tab_with_indexwhere id =2; |
 |     select * from tab_with_indexwhere id = 1 for update;      |                                                              |
 |                                                              |     select * from tab_with_indexwhere id = 2 for update;     |
 
@@ -230,7 +230,7 @@ insert into tab_with_index  values(1,'4');
 
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                       set autocommit=0                       |                       set autocommit=0                       |
+|                       set autocommit = 0;                  |                       set autocommit = 0;                       |
 | select * from tab_with_index where id = 1 and name='1' for update; |                                                              |
 |                                                              | select * from tab_with_index where id = 1 and name='4' for update;<br />虽然 session2 访问的是和 session1 不同的记录，但是锁的是具体的表，所以需要等待锁 |
 
