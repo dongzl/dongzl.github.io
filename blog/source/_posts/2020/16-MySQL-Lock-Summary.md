@@ -121,6 +121,7 @@ INSERT INTO `mylock` (`id`, `NAME`) VALUES ('4', 'd');
 | 当前session对表的查询，插入，更新操作都可以执行<br />select * from mylock;<br />insert into mylock values(5,'e'); | 当前session对表的查询会被阻塞<br />select * from mylock； |
 |                释放锁：<br />unlock tables；                 |          当前session能够立刻执行，并返回对应结果          |
 
+
 **MyISAM读阻塞写的案例：**
 
 一个 session 使用 `lock table` 给表加读锁，这个 session 可以锁定表中的记录，但更新和访问其他表都会提示错误，同时，另一个 session 可以查询表中的记录，但更新就会出现锁等待。
@@ -129,8 +130,8 @@ INSERT INTO `mylock` (`id`, `NAME`) VALUES ('4', 'd');
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |        获得表的read锁定<br />lock table mylock read;         |                                                              |
 |   当前session可以查询该表记录：<br />select * from mylock;   |   当前session可以查询该表记录：<br />select * from mylock;   |
-| 当前session不能查询没有锁定的表<br />select * from person<br />Table 'person' was not locked with LOCK TABLES | 当前session可以查询或者更新未锁定的表<br />select * from person<br />insert into person values(1,'zhangsan'); |
-| 当前session插入或者更新表会提示错误<br />insert into mylock values(6,'f')<br />Table 'mylock' was locked with a READ lock and can't be updated<br />update mylock set name='aa' where id = 1;<br />Table 'mylock' was locked with a READ lock and can't be updated | 当前session插入数据会等待获得锁<br />insert into mylock values(6,'f'); |
+| 当前session不能查询没有锁定的表<br />select * from person;<br />Table 'person' was not locked with LOCK TABLES | 当前session可以查询或者更新未锁定的表<br />select * from person;<br />insert into person values(1,'zhangsan'); |
+| 当前session插入或者更新表会提示错误<br />insert into mylock values(6,'f');<br />Table 'mylock' was locked with a READ lock and can't be updated<br />update mylock set name='aa' where id = 1;<br />Table 'mylock' was locked with a READ lock and can't be updated | 当前session插入数据会等待获得锁<br />insert into mylock values(6,'f'); |
 |                  释放锁<br />unlock tables;                  |                       获得锁，更新成功                       |
 
 **注意：MyISAM 在执行查询语句之前，会自动给涉及的所有表加读锁，在执行更新操作前，会自动给涉及的表加写锁，这个过程并不需要用户干预，因此用户一般不需要使用命令来显式加锁，上例中的加锁时为了演示效果。**
@@ -141,11 +142,11 @@ MyISAM 表的读和写是串行的，这是就总体而言的，在一定条件�
 
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|   获取表的read local锁定<br />lock table mylock read local   |                                                              |
-| 当前session不能对表进行更新或者插入操作<br />insert into mylock values(6,'f')<br />Table 'mylock' was locked with a READ lock and can't be updated<br />update mylock set name='aa' where id = 1;<br />Table 'mylock' was locked with a READ lock and can't be updated |    其他session可以查询该表的记录<br />select* from mylock    |
-| 当前session不能查询没有锁定的表<br />select * from person<br />Table 'person' was not locked with LOCK TABLES | 其他session可以进行<font color="red">插入</font>操作，但是<font color="red">更新</font>会阻塞<br />update mylock set name = 'aa' where id = 1; |
+|   获取表的read local锁定<br />lock table mylock read local;   |                                                              |
+| 当前session不能对表进行更新或者插入操作<br />insert into mylock values(6,'f');<br />Table 'mylock' was locked with a READ lock and can't be updated<br />update mylock set name='aa' where id = 1;<br />Table 'mylock' was locked with a READ lock and can't be updated |    其他session可以查询该表的记录<br />select* from mylock    |
+| 当前session不能查询没有锁定的表<br />select * from person;<br />Table 'person' was not locked with LOCK TABLES | 其他session可以进行<font color="red">插入</font>操作，但是<font color="red">更新</font>会阻塞<br />update mylock set name = 'aa' where id = 1; |
 |          当前session不能访问其他session插入的记录；          |                                                              |
-|                  释放锁资源：unlock tables                   |               当前session获取锁，更新操作完成                |
+|                  释放锁资源：unlock tables;                   |               当前session获取锁，更新操作完成                |
 |           当前session可以查看其他session插入的记录           |                                                              |
 
  可以通过检查 `table_locks_waited` 和 `table_locks_immediate `状态变量来分析系统上的表锁定争夺：
@@ -201,7 +202,7 @@ insert into tab_no_index values(1,'1'),(2,'2'),(3,'3'),(4,'4');
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | set autocommit=0<br />select * from tab_no_index where id = 1; | set autocommit=0<br />select * from tab_no_index where id =2 |
-|      select * from tab_no_index where id = 1 for update      |                                                              |
+|      select * from tab_no_index where id = 1 for update;      |                                                              |
 |                                                              |     select * from tab_no_index where id = 2 for update;      |
 
 session1 只给一行加了排他锁，但是 session2 在请求其他行的排他锁的时候，会出现锁等待。原因是在没有索引的情况下，InnoDB 只能使用表锁。
@@ -217,7 +218,7 @@ insert into tab_with_index values(1,'1'),(2,'2'),(3,'3'),(4,'4');
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | set autocommit=0<br />select * from tab_with_indexwhere id = 1; | set autocommit=0<br />select * from tab_with_indexwhere id =2 |
-|     select * from tab_with_indexwhere id = 1 for update      |                                                              |
+|     select * from tab_with_indexwhere id = 1 for update;      |                                                              |
 |                                                              |     select * from tab_with_indexwhere id = 2 for update;     |
 
 - 由于 MySQL 的行锁是针对索引加的锁，不是针对记录加的锁，所以虽然是访问不同行的记录，但是依然无法访问到具体的数据
@@ -230,8 +231,8 @@ insert into tab_with_index  values(1,'4');
 |                           session1                           |                           session2                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |                       set autocommit=0                       |                       set autocommit=0                       |
-| select * from tab_with_index where id = 1 and name='1' for update |                                                              |
-|                                                              | select * from tab_with_index where id = 1 and name='4' for update<br />虽然 session2 访问的是和 session1 不同的记录，但是锁的是具体的表，所以需要等待锁 |
+| select * from tab_with_index where id = 1 and name='1' for update; |                                                              |
+|                                                              | select * from tab_with_index where id = 1 and name='4' for update;<br />虽然 session2 访问的是和 session1 不同的记录，但是锁的是具体的表，所以需要等待锁 |
 
 ## 总结
 
