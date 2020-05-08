@@ -79,16 +79,13 @@ newWorkStealingPool | - | - | - | - | - | - | -
 
 - RUNNING：能接受新提交的任务，并且也能处理阻塞队列中的任务；
 
-- SHUTDOWN：关闭状态，不再接受新提交的任务，但却可以继续处理阻
-塞队列中已保存的任务；
+- SHUTDOWN：关闭状态，不再接受新提交的任务，但却可以继续处理阻塞队列中已保存的任务；
 
-- STOP：不能接受新任务，也不处理队列中的任务，会中断正在处理任务的
-线程；
+- STOP：不能接受新任务，也不处理队列中的任务，会中断正在处理任务的线程；
 
-- TIDYING：如果所有的任务都已终止了，workerCount(有效线程数)为0，线程池进入该状态后会调用terminated()方法进入TERMINATED状态；
+- TIDYING：如果所有的任务都已终止了，workerCount(有效线程数)为0，线程池进入该状态后会调用 terminated() 方法进入TERMINATED状态；
 
-- TERMINATED：在 terminated (方法执行完后进入该状态，默认
-terminated()方法中什么也没有做。
+- TERMINATED：在 terminated (方法执行完后进入该状态，默认 terminated() 方法中什么也没有做。
 
 ## 拒绝策略
 
