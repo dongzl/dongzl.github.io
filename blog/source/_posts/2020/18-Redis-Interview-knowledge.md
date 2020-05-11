@@ -58,3 +58,7 @@ Redis 实现分布式锁的一些问题：
 - 资源浪费。
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-02.png">
+
+## 参考资料
+
+- [阿里一面：关于【缓存穿透、缓存击穿、缓存雪崩、热点数据失效】问题的解决方案](https://juejin.im/post/5c9a67ac6fb9a070cb24bf34)
