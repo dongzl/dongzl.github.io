@@ -13,6 +13,9 @@ subtitle: 本文是《OKR 工作法》读书笔记内容。
 
 categories: 
   - 读书笔记
+
+tags: 
+  - 读书笔记
 ---
 
 > OKR：Objective and Key Results，目标与关键结果。
