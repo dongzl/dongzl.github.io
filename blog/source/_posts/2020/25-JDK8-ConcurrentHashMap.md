@@ -224,15 +224,15 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
 }
 ```
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/25-JDK8-ConcurrentHashMap/JDK8-ConcurrentHashMap-01.png" width="600px">
+<img src="https://gitee.com/dongzl/article-images/raw/master/2020/25-JDK8-ConcurrentHashMap/JDK8-ConcurrentHashMap-01.png">
 
 通过对代码分析，我们可以了解到，在执行 `put` 操作时会进行如下操作：
 
-- 如果 table 为空，执行初始化操作，这一点是 ConcurrentHashMap 和 HashMap 比较大的区别，ConcurrentHashMap 在构造方法中不会对 table 进行初始化，而 HashMap 会在构造方法中对 table 进行初始化；
-- 如果 table 某个位置元素为空，也就是这个位置还没有元素，put 的内容是这个位置的第一个元素，ConcurrentHashMap 会通过 CAS 操作，将该元素放入该位置；
-- 在 put 过程中，有可能 ConcurrentHashMap 正在执行扩容操作，需要等到扩容操作，继续进行 put 操作；
-- 如果 table 某个位置元素不为空，需要使用 synchronized 对该位置第一个元素 f 加锁，完成 put 操作；
-- 至于后面执行的操作，根据判断是链表 or 红黑树来执行不同操作，与 HashMap 中的操作基本是相同的。
+- 如果 `table` 为空，执行初始化操作，这一点是 `ConcurrentHashMap` 和 `HashMap` 比较大的区别，`ConcurrentHashMap` 在构造方法中不会对 `table` 进行初始化，而 `HashMap` 会在构造方法中对 `table` 进行初始化；
+- 如果 `table` 某个位置元素为空，也就是这个位置还没有元素，`put` 的内容是这个位置的第一个元素，`ConcurrentHashMap` 会通过 `CAS` 操作，将该元素放入该位置；
+- 在 `put` 过程中，有可能 `ConcurrentHashMap` 正在执行扩容操作，需要等到扩容操作，继续进行 `put` 操作；
+- 如果 `table` 某个位置元素不为空，需要使用 `synchronized `对该位置第一个元素 `f` 加锁，完成 `put` 操作；
+- 至于后面执行的操作，根据判断是链表 or 红黑树来执行不同操作，与 `HashMap` 中的操作基本是相同的。
 
 ## ConcurrentHashMap 中的 get 操作
 
