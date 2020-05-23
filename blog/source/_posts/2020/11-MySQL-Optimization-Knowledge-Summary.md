@@ -319,6 +319,7 @@ explain select * from emp where empno = 7469;
 - [MySQL优化面试](https://zhenganwen.top/posts/433a3305/)
 - [MySQL explain详解](http://tigcms.jd.com/details/HkO5QrfPQ.html)
 - [MySQL数据库开发规范](http://tigcms.jd.com/details/ryG-r2dM7.html)
+- [MySQL索引原理及慢查询优化](https://tech.meituan.com/2014/06/30/mysql-index.html)
 
 
 
