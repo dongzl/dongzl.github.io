@@ -81,8 +81,16 @@ theme: hexo-theme-skapp
 
 menu:
   home: / 
+  #zookeeper: / 
+  #netty: / 
+  #mysql: / 
+  #jvm: / 
+  #spring: / 
+  #redis: / 
+  #dsign-pattern: / 
+  #high-concurrency: / 
   archive: /archives
-  about: /about
+  #about: /about
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
