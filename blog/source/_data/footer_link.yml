@@ -5,6 +5,9 @@ friend_links:
   - name: draveness
     desc: draveness
     link: https://draveness.me/
+  - name: 美团技术团队
+    desc: 美团技术团队
+    link: https://tech.meituan.com/
 
 build_tools:
   - name: Hexo
