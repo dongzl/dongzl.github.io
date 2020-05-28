@@ -22,4 +22,18 @@ tags:
 
 序号| 文章链接 | 文章来源
 -|-|-
-01|[Java线程池实现原理及其在美团业务中的实践](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)| [美团技术团队](https://tech.meituan.com/)
+01 | [Java线程池实现原理及其在美团业务中的实践](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html) | [美团技术团队](https://tech.meituan.com/)
+02 | [从ReentrantLock的实现看AQS的原理及应用](https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html) | [美团技术团队](https://tech.meituan.com/)
+03 | [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html) | [美团技术团队](https://tech.meituan.com/)
+
+#### 其他
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [Java魔法类：Unsafe应用解析](https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html) | [美团技术团队](https://tech.meituan.com/)
+
+### 设计模式
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [设计模式在外卖营销业务中的实践](https://tech.meituan.com/2020/03/19/design-pattern-practice-in-marketing.html) | [美团技术团队](https://tech.meituan.com/)
