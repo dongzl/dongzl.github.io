@@ -284,9 +284,4 @@ cglib 实现的动态代理功能使用的是 `Enhancer` 类，其中需要定�
 
 - [JDK动态代理](https://www.cnblogs.com/liuyun1995/p/8144628.html)
 
-
-
-
-
-
-
+- [面试不再怕-说透动静态代理！](https://my.oschina.net/jiangxinJava/blog/4286243)
