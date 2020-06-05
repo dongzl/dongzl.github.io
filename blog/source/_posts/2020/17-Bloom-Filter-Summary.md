@@ -144,4 +144,6 @@ public class RedisBloomFilterTest {
 - [详细解析Redis中的布隆过滤器及其应用](https://www.cnblogs.com/heihaozi/p/12174478.html)
 - [帮你解读什么是Redis缓存穿透和缓存雪崩（包含解决方案）](https://baijiahao.baidu.com/s?id=1655304940308056733&wfr=spider&for=pc)
 - [Redis安装布隆过滤器插件 bloomfilter](https://blog.csdn.net/ChenMMo/article/details/93615438)
+- [通俗易懂讲布隆过滤器](https://juejin.im/post/5e9c110151882573793e8940)
+- [布隆过滤器究竟是什么，这篇讲的明明白白的！](https://mp.weixin.qq.com/s/Y7OJ0ntjU0pumWuwFoY8mQ)
 
