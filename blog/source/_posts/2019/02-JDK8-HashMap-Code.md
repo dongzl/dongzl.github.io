@@ -528,3 +528,4 @@ get 方法的实现思路如下：
 - [HashMap源码注解 之 静态工具方法hash()、tableSizeFor()（四）](https://blog.csdn.net/fan2012huan/article/details/51097331)
 - [由HashMap哈希算法引出的求余%和与运算&转换问题](https://www.cnblogs.com/ysocean/p/9054804.html)
 - [深入解读HashMap线程安全性问题](https://juejin.im/post/5c8910286fb9a049ad77e9a3)
+- [为什么 HashMap 的加载因子是0.75？](https://mp.weixin.qq.com/s/TTtYaNHKfaRqtKxg4bAbXw)
