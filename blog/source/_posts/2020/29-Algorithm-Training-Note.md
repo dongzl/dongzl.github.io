@@ -270,114 +270,115 @@ tags:
 
 #### 参考链接
 
-- 递归代码模板
-- 分治代码模板
-- 动态规划定义
+- [递归代码模板](https://shimo.im/docs/DjqqGCT3xqDYwPyY/)
+- [分治代码模板](https://shimo.im/docs/3xvghYh3JJPKwdvt)
+- [动态规划定义](https://en.wikipedia.org/wiki/Dynamic_programming)
 
 #### 参考链接
-- 不同路径题目
-- 不同路径 2 题目
-- 最长公共子序列题目
-- MIT 动态规划课程最短路径算法
+
+- [不同路径题目](https://leetcode-cn.com/problems/unique-paths/)
+- [不同路径 2 题目](https://leetcode-cn.com/problems/unique-paths-ii/)
+- [最长公共子序列题目](https://leetcode-cn.com/problems/longest-common-subsequence/)
+- [MIT 动态规划课程最短路径算法](https://www.bilibili.com/video/av53233912?from=search&seid=2847395688604491997)
 
 #### 实战题目
 
-- [](https://leetcode-cn.com/problems/climbing-stairs/)
-- [](https://leetcode-cn.com/problems/triangle/)
-- [](https://leetcode.com/problems/triangle/discuss/38735/Python-easy-to-understand-solutions-(top-down-bottom-up))
-- [](https://leetcode-cn.com/problems/maximum-subarray/)
-- [](https://leetcode-cn.com/problems/maximum-product-subarray/)
-- [](https://leetcode-cn.com/problems/coin-change/)
+- [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
+- [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+- [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/)
+- [120. 三角形最小路径和](https://leetcode.com/problems/triangle/discuss/38735/Python-easy-to-understand-solutions-(top-down-bottom-up))
+- [152. 乘积最大子数组](https://leetcode-cn.com/problems/maximum-product-subarray/)
+- [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
 
 #### 实战题目
 
-- https://leetcode-cn.com/problems/house-robber/
-- https://leetcode-cn.com/problems/house-robber-ii/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
-- https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/yi-ge-fang-fa-tuan-mie-6-dao-gu-piao-wen-ti-by-l-3/
+- [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+- [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/yi-ge-fang-fa-tuan-mie-6-dao-gu-piao-wen-ti-by-l-3/)
+- [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+- [123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
+- [188. 买卖股票的最佳时机 IV](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/)
+- [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+- [213. 打家劫舍 II](https://leetcode-cn.com/problems/house-robber-ii/)
+- [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+- [714. 买卖股票的最佳时机含手续费](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
 
 #### 高级 DP 实战题目
 
-- https://leetcode-cn.com/problems/perfect-squares/
-- https://leetcode-cn.com/problems/edit-distance/ （重点）
-- https://leetcode-cn.com/problems/jump-game/
-- https://leetcode-cn.com/problems/jump-game-ii/
-- https://leetcode-cn.com/problems/unique-paths/
-- https://leetcode-cn.com/problems/unique-paths-ii/
-- https://leetcode-cn.com/problems/unique-paths-iii/
-- https://leetcode-cn.com/problems/coin-change/
-- https://leetcode-cn.com/problems/coin-change-2/
+- [45. 跳跃游戏 II](https://leetcode-cn.com/problems/jump-game-ii/)
+- [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
+- [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+- [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/)
+- [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/) （重点）
+- [279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)
+- [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+- [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)
+- [980. 不同路径 III](https://leetcode-cn.com/problems/unique-paths-iii/)
 
 **注意：请大家先消化前面的实战题目，高级 DP 的方法和题解会在课程后面解锁。**
 
 #### 课后作业
 
-- https://leetcode-cn.com/problems/longest-valid-parentheses/
-- https://leetcode-cn.com/problems/minimum-path-sum/
-- https://leetcode-cn.com/problems/edit-distance/
-- https://leetcode-cn.com/problems/decode-ways
-- https://leetcode-cn.com/problems/maximal-square/
-- https://leetcode-cn.com/problems/max-sum-of-rectangle-no-larger-than-k/
-- https://leetcode-cn.com/problems/frog-jump/
-- https://leetcode-cn.com/problems/split-array-largest-sum
-- https://leetcode-cn.com/problems/student-attendance-record-ii/
-- https://leetcode-cn.com/problems/task-scheduler/
-- https://leetcode-cn.com/problems/palindromic-substrings/
-- https://leetcode-cn.com/problems/minimum-window-substring/
-- https://leetcode-cn.com/problems/burst-balloons/
+- [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+- [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+- [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+- [76. 最小覆盖子串Copy](https://leetcode-cn.com/problems/minimum-window-substring/)
+- [91. 解码方法](https://leetcode-cn.com/problems/decode-ways)
+- [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+- [312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
+- [363. 矩形区域不超过 K 的最大数值和](https://leetcode-cn.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+- [403. 青蛙过河](https://leetcode-cn.com/problems/frog-jump/)
+- [410. 分割数组的最大值](https://leetcode-cn.com/problems/split-array-largest-sum)
+- [552. 学生出勤记录 II](https://leetcode-cn.com/problems/student-attendance-record-ii/)
+- [621. 任务调度器](https://leetcode-cn.com/problems/task-scheduler/)
+- [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/)
 
 ### 第13课丨字典树和并查集
 
 #### 参考链接
 
-- 二叉树的层次遍历
-- 实现 Trie
-- Tire 树代码模板
+- [二叉树的层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
+- [实现 Trie](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+- [Tire 树代码模板](https://shimo.im/docs/Pk6vPY3HJ9hKkh33)
 
 #### 实战题目 / 课后作业
 
-- https://leetcode-cn.com/problems/implement-trie-prefix-tree/#/description
-- https://leetcode-cn.com/problems/word-search-ii/
+- [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+- [212. 单词搜索 II](https://leetcode-cn.com/problems/word-search-ii/)
 
 **分析单词搜索 2 用 Tire 树方式实现的时间复杂度，请同学们提交在第 6 周的学习总结中。**
 
 #### 参考链接
 
-- 岛屿数量
-- 并查集代码模板
+- [岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+- [并查集代码模板](https://shimo.im/docs/ydPCH33xDhK9YwWR)
 
 #### 实战题目 / 课后作业
 
-- https://leetcode-cn.com/problems/friend-circles
-- https://leetcode-cn.com/problems/number-of-islands/
-- https://leetcode-cn.com/problems/surrounded-regions/
+- [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
+- [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+- [547. 朋友圈](https://leetcode-cn.com/problems/friend-circles)
 
 ### 第14课丨高级搜索
 
 #### 参考链接
 
-- DFS 代码模板
-- BFS 代码模板
-- AlphaZero Explained
-- 棋类复杂度
+- [DFS 代码模板](https://shimo.im/docs/ddgwCccJQKxkrcTq)
+- [BFS 代码模板](https://shimo.im/docs/P8TqKHGKt3ytkYYd)
+- [AlphaZero Explained](https://nikcheerla.github.io/deeplearningschool/2018/01/01/AlphaZero-Explained/)
+- [棋类复杂度](https://en.wikipedia.org/wiki/Game_complexity)
 
 #### 实战题目
 
-- https://leetcode-cn.com/problems/climbing-stairs/
-- https://leetcode-cn.com/problems/generate-parentheses/
-- https://leetcode-cn.com/problems/n-queens
-- https://leetcode-cn.com/problems/valid-sudoku/
-- https://leetcode-cn.com/problems/sudoku-solver/
+- [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+- [36. 有效的数独](https://leetcode-cn.com/problems/valid-sudoku/)
+- [37. 解数独](https://leetcode-cn.com/problems/sudoku-solver/)
+- [51. N皇后](https://leetcode-cn.com/problems/n-queens)
+- [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
 
 #### 实战题目
 
-- https://leetcode-cn.com/problems/word-ladder/
-- https://leetcode-cn.com/problems/minimum-genetic-mutation/
+- [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
+- [433. 最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/)
 
 #### 课后作业
 
@@ -385,71 +386,72 @@ tags:
 
 #### 参考链接
 
-- A* 代码模板
-- 相似度测量方法
-- 二进制矩阵中的最短路径的 A* 解法
-- 8 puzzles 解法比较
+- [A* 代码模板](https://shimo.im/docs/CXvjHyWhpQcxXjcw)
+- [相似度测量方法](https://dataaspirant.com/2015/04/11/five-most-popular-similarity-measures-implementation-in-python/)
+- [二进制矩阵中的最短路径的 A* 解法](https://leetcode.com/problems/shortest-path-in-binary-matrix/discuss/313347/A*-search-in-Python)
+- [8 puzzles 解法比较](https://zxi.mytechroad.com/blog/searching/8-puzzles-bidirectional-astar-vs-bidirectional-bfs/)
 
 #### 实战题目
 
-- https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/
-- https://leetcode-cn.com/problems/sliding-puzzle/
-- https://leetcode-cn.com/problems/sudoku-solver/
+- [37. 解数独](https://leetcode-cn.com/problems/sudoku-solver/)
+- [773. 滑动谜题](https://leetcode-cn.com/problems/sliding-puzzle/)
+- [1091. 二进制矩阵中的最短路径](https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/)
 
 ### 第15课丨红黑树和AVL树
 
 #### 参考链接
-- 平衡树
+
+- [平衡树](https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree)
 
 ### 第16课丨位运算
 
 #### 参考链接
 
-- 如何从十进制转换为二进制
+- [如何从十进制转换为二进制](https://zh.wikihow.com/%E4%BB%8E%E5%8D%81%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6)
 
 #### 参考链接
 
-- N 皇后位运算代码示例
+- [N 皇后位运算代码示例](https://shimo.im/docs/rHTyt8hcpT6D9Tj8)
 
-####实战题目 / 课后作业
+#### 实战题目 / 课后作业
 
-- https://leetcode-cn.com/problems/number-of-1-bits/
-- https://leetcode-cn.com/problems/power-of-two/
-- https://leetcode-cn.com/problems/reverse-bits/
-- https://leetcode-cn.com/problems/n-queens/
-- https://leetcode-cn.com/problems/n-queens-ii/
-- https://leetcode-cn.com/problems/counting-bits/
+- [51. N皇后](https://leetcode-cn.com/problems/n-queens/)
+- [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
+- [190. 颠倒二进制位](https://leetcode-cn.com/problems/reverse-bits/)
+- [191. 位1的个数](https://leetcode-cn.com/problems/number-of-1-bits/)
+- [231. 2的幂](https://leetcode-cn.com/problems/power-of-two/)
+- [338. 比特位计数](https://leetcode-cn.com/problems/counting-bits/)
 
 ### 第17课丨布隆过滤器和LRU缓存
 
 #### 参考链接
 
-- 布隆过滤器的原理和实现
-- 使用布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重
-- 布隆过滤器 Python 代码示例
-- 布隆过滤器 Python 实现示例
-- 高性能布隆过滤器 Python 实现示例
-- 布隆过滤器 Java 实现示例 1
-- 布隆过滤器 Java 实现示例 2
+- [布隆过滤器的原理和实现](https://www.cnblogs.com/cpselvis/p/6265825.html)
+- [使用布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重](https://blog.csdn.net/tianyaleixiaowu/article/details/74721877)
+- [布隆过滤器 Python 代码示例](https://shimo.im/docs/xKwrcwrDxRv3QpKG)
+- [布隆过滤器 Python 实现示例](https://www.geeksforgeeks.org/bloom-filters-introduction-and-python-implementation/)
+- [高性能布隆过滤器 Python 实现示例](https://github.com/jhgg/pybloof)
+- [布隆过滤器 Java 实现示例 1](https://github.com/lovasoa/bloomfilter/blob/master/src/main/java/BloomFilter.java)
+- [布隆过滤器 Java 实现示例 2](https://github.com/Baqend/Orestes-Bloomfilter)
 
 #### 参考链接
 
-- Understanding the Meltdown exploit
-- 替换算法总揽
-- LRU Cache Python 代码示例
+- [Understanding the Meltdown exploit](https://www.sqlpassion.at/archive/2018/01/06/understanding-the-meltdown-exploit-in-my-own-simple-words/)
+- [替换算法总揽](https://en.wikipedia.org/wiki/Cache_replacement_policies)
+- [LRU Cache Python 代码示例](https://shimo.im/docs/tTxRkGwJpXG6WkGY)
 
 #### 实战题目 / 课后作业
 
-- https://leetcode-cn.com/problems/lru-cache/#/
+- [146. LRU缓存机制](https://leetcode-cn.com/problems/lru-cache/)
 
 ### 第18课丨排序算法
 
 #### 参考链接
 
-- 十大经典排序算法
-- 快速排序代码示例
-- 归并排序代码示例
-- 堆排序代码示例
+- [十大经典排序算法](https://www.cnblogs.com/onepixel/p/7674659.html)
+- [快速排序代码示例](https://shimo.im/docs/98KjvGwwGpTpYGKy)
+- [归并排序代码示例](https://shimo.im/docs/YqgG6vtdKwkXJkWx)
+- [堆排序代码示例](https://shimo.im/docs/6kRVHRphpgjHgCtx)
 - 直播课回顾: https://pan.baidu.com/s/1sFuZ8GjDCXy5mPCNLZhHxw 提取码: 2rdy
 
 #### 课后作业
@@ -458,27 +460,27 @@ tags:
 
 #### 参考链接
 
-- 十大经典排序算法
-- 9 种经典排序算法可视化动画
-- 6 分钟看完 15 种排序算法动画展示
+- [十大经典排序算法](https://www.cnblogs.com/onepixel/p/7674659.html)
+- [9 种经典排序算法可视化动画](https://www.bilibili.com/video/av25136272)
+- [6 分钟看完 15 种排序算法动画展示](https://www.bilibili.com/video/av63851336)
 
 #### 实战题目 / 课后作业
 
-- https://leetcode-cn.com/problems/relative-sort-array/
-- https://leetcode-cn.com/problems/valid-anagram/
+- [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+- [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/)
+- [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
+- [1122. 数组的相对排序](https://leetcode-cn.com/problems/relative-sort-array/)
 - https://leetcode-cn.com/problems/design-a-leaderboard/
-- https://leetcode-cn.com/problems/merge-intervals/
-- https://leetcode-cn.com/problems/reverse-pairs/
 
 ### 第19课丨高级动态规划
 
 #### 参考链接
 
-- 爬楼梯
-- 不同路径
-- 打家劫舍
-- 最小路径和
-- 股票买卖
+- [爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+- [不同路径](https://leetcode-cn.com/problems/unique-paths/)
+- [打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+- [最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+- [股票买卖](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
 #### 课后作业
 
@@ -486,89 +488,89 @@ tags:
 
 #### 参考链接
 
-- 爬楼梯
-- 使用最小花费爬楼梯
-- 编辑距离
+- [爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+- [使用最小花费爬楼梯](https://leetcode-cn.com/problems/min-cost-climbing-stairs/)
+- [编辑距离](https://leetcode-cn.com/problems/edit-distance/)
 
 #### 课后作业
 
-- https://leetcode-cn.com/problems/longest-increasing-subsequence/
-- https://leetcode-cn.com/problems/decode-ways/
-- https://leetcode-cn.com/problems/longest-valid-parentheses/
-- https://leetcode-cn.com/problems/maximal-rectangle/
-- https://leetcode-cn.com/problems/distinct-subsequences/
-- https://leetcode-cn.com/problems/race-car/
+- [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+- [85. 最大矩形](https://leetcode-cn.com/problems/maximal-rectangle/)
+- [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
+- [115. 不同的子序列](https://leetcode-cn.com/problems/distinct-subsequences/)
+- [300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+- [818. 赛车](https://leetcode-cn.com/problems/race-car/)
 
 ### 第20课丨字符串算法
 
 #### 参考链接
 
-- 不可变字符串
-- Atoi 代码示例
+- [不可变字符串](https://lemire.me/blog/2017/07/07/are-your-strings-immutable/)
+- [Atoi 代码示例](https://shimo.im/docs/KkDKkpWxjjrJXdpY)
 
 #### 字符串基础问题
 
-- https://leetcode-cn.com/problems/to-lower-case/
-- https://leetcode-cn.com/problems/length-of-last-word/
-- https://leetcode-cn.com/problems/jewels-and-stones/
-- https://leetcode-cn.com/problems/first-unique-character-in-a-string/
-- https://leetcode-cn.com/problems/string-to-integer-atoi/
+- [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+- [58. 最后一个单词的长度](https://leetcode-cn.com/problems/length-of-last-word/)
+- [387. 字符串中的第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)
+- [709. 转换成小写字母](https://leetcode-cn.com/problems/to-lower-case/)
+- [771. 宝石与石头](https://leetcode-cn.com/problems/jewels-and-stones/)
 
 #### 字符串操作问题
 
-- https://leetcode-cn.com/problems/longest-common-prefix/description/
-- https://leetcode-cn.com/problems/reverse-string
-- https://leetcode-cn.com/problems/reverse-string-ii/
-- https://leetcode-cn.com/problems/reverse-words-in-a-string/
-- https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/
-- https://leetcode-cn.com/problems/reverse-only-letters/
+- [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
+- [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+- [344. 反转字符串](https://leetcode-cn.com/problems/reverse-string)
+- [541. 反转字符串 II](https://leetcode-cn.com/problems/reverse-string-ii/)
+- [557. 反转字符串中的单词 III](https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/)
+- [917. 仅仅反转字母](https://leetcode-cn.com/problems/reverse-only-letters/)
 
 #### 异位词问题
 
-- https://leetcode-cn.com/problems/valid-anagram/
-- https://leetcode-cn.com/problems/group-anagrams/
-- https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/
+- [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
+- [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/)
+- [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
 
 #### 回文串问题
 
-- https://leetcode-cn.com/problems/valid-palindrome/
-- https://leetcode-cn.com/problems/valid-palindrome-ii/
-- https://leetcode-cn.com/problems/longest-palindromic-substring/
+- [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/)
+- [680. 验证回文字符串 Ⅱ](https://leetcode-cn.com/problems/valid-palindrome-ii/)
 
 #### 最长子串、子序列问题
 
-- https://leetcode-cn.com/problems/longest-common-subsequence/
-- https://leetcode-cn.com/problems/edit-distance/
-- https://leetcode-cn.com/problems/longest-palindromic-substring/
+- [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+- [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/)
 
-#### 字符串 +DP 问题
+#### 字符串 + DP 问题
 
-- https://leetcode-cn.com/problems/regular-expression-matching/
-- https://leetcode-cn.com/problems/regular-expression-matching/solution/ji-yu-guan-fang-ti-jie-gen-xiang-xi-de-jiang-jie-b/
-- https://leetcode-cn.com/problems/wildcard-matching/
-- https://leetcode-cn.com/problems/distinct-subsequences/
+- [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
+- [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/solution/ji-yu-guan-fang-ti-jie-gen-xiang-xi-de-jiang-jie-b/)
+- [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching/)
+- [115. 不同的子序列](https://leetcode-cn.com/problems/distinct-subsequences/)
 
 #### 参考链接
 
-- Boyer-Moore 算法
-- Sunday 算法
-- 字符串匹配暴力法代码示例
-- Rabin-Karp 代码示例
-- KMP 字符串匹配算法视频
-- 字符串匹配的 KMP 算法
+- [Boyer-Moore 算法](http://xn--https-ni33a//www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html)
+- [Sunday 算法](https://blog.csdn.net/u012505432/article/details/52210975)
+- [字符串匹配暴力法代码示例](https://shimo.im/docs/dQDxQW8yXPXxh3Hg)
+- [Rabin-Karp 代码示例](https://shimo.im/docs/KXDdkT99TVtXvTXP)
+- [KMP 字符串匹配算法视频](https://www.bilibili.com/video/av11866460?from=search&seid=17425875345653862171)
+- [字符串匹配的 KMP 算法](http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html)
 
 #### 课后作业
 
-- https://leetcode-cn.com/problems/first-unique-character-in-a-string/
-- https://leetcode-cn.com/problems/string-to-integer-atoi/
-- https://leetcode-cn.com/problems/reverse-string-ii/
-- https://leetcode-cn.com/problems/reverse-words-in-a-string/
-- https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/
-- https://leetcode-cn.com/problems/reverse-only-letters/
-- https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/
-- https://leetcode-cn.com/problems/longest-palindromic-substring/
-- https://leetcode-cn.com/problems/isomorphic-strings/
-- https://leetcode-cn.com/problems/valid-palindrome-ii/
-- https://leetcode-cn.com/problems/wildcard-matching
-- https://leetcode-cn.com/problems/longest-valid-parentheses
-- https://leetcode-cn.com/problems/distinct-subsequences/
+- [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+- [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses)
+- [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching)
+- [115. 不同的子序列](https://leetcode-cn.com/problems/distinct-subsequences/)
+- [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+- [205. 同构字符串](https://leetcode-cn.com/problems/isomorphic-strings/)
+- [387. 字符串中的第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)
+- [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
+- [541. 反转字符串 II](https://leetcode-cn.com/problems/reverse-string-ii/)
+- [557. 反转字符串中的单词 III](https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/)
+- [680. 验证回文字符串 Ⅱ](https://leetcode-cn.com/problems/valid-palindrome-ii/)
+- [917. 仅仅反转字母](https://leetcode-cn.com/problems/reverse-only-letters/)
