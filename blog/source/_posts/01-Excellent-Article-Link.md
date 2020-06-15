@@ -26,6 +26,13 @@ tags:
 02 | [从ReentrantLock的实现看AQS的原理及应用](https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html) | [美团技术团队](https://tech.meituan.com/)
 03 | [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html) | [美团技术团队](https://tech.meituan.com/)
 
+### Go
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [想系统学习GO语言(Golang)，能推荐几本靠谱的书吗?](https://www.zhihu.com/question/30461290) | 知乎
+02 | [go http 服务器编程](https://cizixs.com/2016/08/17/golang-http-server-side/) | [Cizixs Write Here](https://cizixs.com/)
+
 #### 其他
 
 序号| 文章链接 | 文章来源
