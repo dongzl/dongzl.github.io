@@ -83,17 +83,15 @@ newWorkStealingPool | - | - | - | - | - | - | -
 
 - STOP：不能接受新任务，也不处理队列中的任务，会中断正在处理任务的线程；
 
-- TIDYING：如果所有的任务都已终止了，workerCount(有效线程数)为0，线程池进入该状态后会调用 terminated() 方法进入TERMINATED状态；
+- TIDYING：如果所有的任务都已终止了，`workerCount`(有效线程数)为 `0`，线程池进入该状态后会调用 `terminated()` 方法进入 `TERMINATED` 状态；
 
-- TERMINATED：在 terminated (方法执行完后进入该状态，默认 terminated() 方法中什么也没有做。
+- TERMINATED：在 `terminated` 方法执行完后进入该状态，默认 `terminated()` 方法中什么也没有做。
 
 ## 拒绝策略
 
 - `ThreadPoolExecutor.AbortPolicy`：丢弃任务并抛出 `RejectedExecutionException` 异常；
-- `ThreadPoolExecutor.DiscardPolicy`：也是丢弃任务，但是不抛
-出异常；
-- `ThreadPoolExecutor.DiscardOldestPolicy`：丢弃队列最前面的
-任务，然后重新尝试执行任务(重复此过程)；
+- `ThreadPoolExecutor.DiscardPolicy`：也是丢弃任务，但是不抛出异常；
+- `ThreadPoolExecutor.DiscardOldestPolicy`：丢弃队列最前面的任务，然后重新尝试执行任务(重复此过程)；
 - `ThreadPoolExecutor.CallerRunsPolicy`：由调用线程处理该任务。
 
 ## ThreadPoolExecutor 源码解析
