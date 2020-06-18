@@ -154,7 +154,7 @@ MySQL 锁分类：
 
 > MySQL 中 InnoDB 存储引擎和 MyISAM 存储引擎的区别？
 
-[Mysql 中 MyISAM 和 InnoDB 的区别有哪些？](https://www.zhihu.com/question/20596402?sort=created)
+[MySQL 中 MyISAM 和 InnoDB 的区别有哪些？](https://www.zhihu.com/question/20596402?sort=created)
 
  特征| MyISAM |  InnoDB 
 -|-|-
@@ -180,7 +180,7 @@ MySQL 锁分类：
 
 - MyISAM： 保存有表的总行数，如果 select count() from table; 会直接取出出该值。
 
-- InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 wehre 条件后，MyISAM 和 InnoDB 处理的方式都一样。
+- InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 where 条件后，MyISAM 和 InnoDB 处理的方式都一样。
 
 {% pdf https://gitee.com/dongzl/article-images/raw/master/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_02.pdf %}
 
