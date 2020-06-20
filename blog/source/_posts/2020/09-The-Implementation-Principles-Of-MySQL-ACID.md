@@ -178,7 +178,7 @@ MySQL 锁分类：
 
 - InnoDB：如果没有设定主键或者非空唯一索引，就会自动生成一个6字节的主键(用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值。
 
-- MyISAM： 保存有表的总行数，如果 select count() from table; 会直接取出出该值。
+- MyISAM： 保存有表的总行数，如果 select count(*) from table; 会直接取出出该值。
 
 - InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 where 条件后，MyISAM 和 InnoDB 处理的方式都一样。
 
