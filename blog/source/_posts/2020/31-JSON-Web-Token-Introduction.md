@@ -9,7 +9,7 @@ author:
     link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 本文是 [JWT 官网](https://jwt.io/) 中对 JSON Web Token 工具英文介绍的翻译内容，旨在对 JSON Web Token 工具有一个出版认识。
+subtitle: 本文是 JWT 官网中对 JSON Web Token 工具英文介绍的翻译内容，旨在对 JSON Web Token 工具有一个出版认识。
 
 categories: 
   - web开发
