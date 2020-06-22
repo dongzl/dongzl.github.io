@@ -9,7 +9,7 @@ author:
     link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 本文是 JWT 官网中对 JSON Web Token 工具英文介绍的翻译内容，旨在对 JSON Web Token 工具有一个出版认识。
+subtitle: 本文是 JWT 官网中对 JSON Web Token 工具英文介绍的翻译内容，旨在对 JSON Web Token 工具有一个初步认识。
 
 categories: 
   - web开发
@@ -65,7 +65,7 @@ header 通常包含两部分内容：token 的类型，一般就是 JWT；另一
 }
 ```
 
-然后，将 JSON 的内容进行 Base64 编码后成为 JWT 的第一部分内容。
+然后，将 JSON 的内容进行 Base64Url 编码后成为 JWT 的第一部分内容。
 
 #### Payload
 
@@ -89,7 +89,7 @@ payload 示例如下：
 }
 ```
 
-在对 payload 内容进行 Base64 编码之后，它成为 JWT 的第二部分内容。
+在对 payload 内容进行 Base64Url 编码之后，它成为 JWT 的第二部分内容。
 
 **PS. 请注意，对于已签名的令牌，此信息尽管可以防止被篡改，但任何人都可以读取这些信息。除非将其加密，否则请勿将机密信息放入 JWT 的 header 或 payload 中。**
 
@@ -109,7 +109,7 @@ HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)
 
 #### Putting all together
 
-输出的结果是由三个以 `.` 分割的 Base64 编码后字符串组成的内容，可以在HTML 和 HTTP 环境中轻松传递这些字符串，与基于 XML 的标准（例如SAML）相比，它更紧凑。
+输出的结果是由三个以 `.` 分割的 Base64Url 编码后字符串组成的内容，可以在HTML 和 HTTP 环境中轻松传递这些字符串，与基于 XML 的标准（例如SAML）相比，它更紧凑。
 
 下图显示了一个 JWT 内容，它已对先前的 header 和 payload 进行了编码，并使用用一个密钥进行了签名。
 
