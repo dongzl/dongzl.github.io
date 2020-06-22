@@ -8,6 +8,9 @@ friend_links:
   - name: 美团技术团队
     desc: 美团技术团队
     link: https://tech.meituan.com/
+  - name: 阮一峰
+    desc: 阮一峰的个人网站
+    link: http://www.ruanyifeng.com/home.html
 
 build_tools:
   - name: Hexo
