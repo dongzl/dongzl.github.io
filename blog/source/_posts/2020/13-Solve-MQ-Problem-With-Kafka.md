@@ -113,3 +113,4 @@ tags:
 ## 参考资料
 
 - [Kafka学习之路 （三）Kafka的高可用](https://www.cnblogs.com/qingyunzong/p/9004703.html)
+- [Kafka 消息丢失与消费精确一次性](https://mp.weixin.qq.com/s/JhK8fHJRJRh32QcZ8SPmyg)
