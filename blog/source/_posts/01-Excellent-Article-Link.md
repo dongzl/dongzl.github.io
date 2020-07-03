@@ -26,6 +26,12 @@ tags:
 02 | [从ReentrantLock的实现看AQS的原理及应用](https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html) | [美团技术团队](https://tech.meituan.com/)
 03 | [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html) | [美团技术团队](https://tech.meituan.com/)
 
+### 数据库
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [Innodb中的事务隔离级别和锁的关系](https://tech.meituan.com/2014/08/20/innodb-lock.html) | [美团技术团队](https://tech.meituan.com/)
+
 ### Go
 
 序号| 文章链接 | 文章来源
