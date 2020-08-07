@@ -11,6 +11,9 @@ friend_links:
   - name: 阮一峰
     desc: 阮一峰的个人网站
     link: http://www.ruanyifeng.com/home.html
+  - name: 酷 壳–CoolShell
+    desc: 酷 壳–CoolShell
+    link: https://coolshell.cn/
 
 build_tools:
   - name: Hexo
