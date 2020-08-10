@@ -26,7 +26,7 @@ tags:
 
 现在运行的老系统，都是用的 Sping 编程式事务管理方式，没有设置事务的超时时间，使用默认值，想着通过事务的超时时间设置尝试解决这个问题，就引出了这一篇的内容。
 
-**结论：线上结论吧，其实通过设置超时时间解决这个问题有点本末倒置，如果程序在事务当中执行了一个非常耗时的操作，上不来也下不去了，卡在中间，不能提交也无法回滚，设置了事务的超时时间也是没什么作用的。**
+**结论：先上结论吧，其实通过设置超时时间解决这个问题有点本末倒置，如果程序在事务当中执行了一个非常耗时的操作，上不来也下不去了，卡在中间，不能提交也无法回滚，设置了事务的超时时间也是没什么作用的。**
 
 ### Spring 事务管理超时时间设置
 
@@ -90,9 +90,9 @@ public void updateProduct(Product product) {
 }
 ```
 
-上来就想直接这样通过 `Thread.sleep(5000L);` 等待一段时间，模拟一下事务超时，想的结果一定是抛出了异常，直接进入 `catch` 语句块整个事务回滚了，没想到模拟执行了两次，居然没有抛出超时异常，事务正常提交了，有点怀疑了，感觉是自己设置错误了，或者是事务超时设置没有生效，但是查了半天依然没有什么头绪。
+上来就想直接这样通过 `Thread.sleep(5000L);` 等待一段时间，模拟一下事务超时，想的结果一定是抛出了异常，直接进入 `catch` 语句块整个事务回滚了，没想到模拟执行了两次，居然没有抛出超时异常，事务正常提交了，有点怀疑是自己设置错误了，或者是事务超时设置没有生效，但是查了半天依然没有什么头绪。
 
-接着想调整一下代码试试，也许是代码编译有问题，就看到了如下代码：
+接着想调整一下代码试试，也许是代码编译有问题，就调整了一下代码顺序：
 
 ```java
 public void updateProduct(Product product) {
@@ -117,7 +117,7 @@ public void updateProduct(Product product) {
 }
 ```
 
-这次再一执行，不负众望，这次成功了，事务出现了超时，抛出了 `org.springframework.transaction.TransactionTimedOutException` 异常，这就有点不明白了，为什么代码只是调整了一下前后顺序，结果就完全不一样了。本来事务生效了就可以前面的问题继续查了，但是这个问题不明白心理还是一直痒痒，真是好奇心害死猪。
+这次再一执行，不负众望，这次出现了事务超时，抛出了 `org.springframework.transaction.TransactionTimedOutException` 异常，这就有点不明白了，为什么代码只是调整了一下前后顺序，结果就完全不一样了。本来事务生效了就可以前面的问题继续查了，但是这个问题不明白心理还是一直痒痒，真是好奇心害死猪。
 
 网上搜了一下，相关的知识内容不太多，但是很幸运很快搜到了一篇很有价值的文章，遇到的问题与前面情况非常类似：
 
@@ -127,7 +127,7 @@ public void updateProduct(Product product) {
 
 ### Spring 源码阅读分析
 
-通过代码分析我们可以知道 `TransactionTemplate` 类继承自 `DefaultTransactionDefinition`，`timeout` 是该类的一个属性，我们在配置的事务管理器是 `org.springframework.jdbc.datasource.DataSourceTransactionManager` 这个类，这个类是控制我们事务执行的核心类内容，在这个类的 doBegin 方法中，我们可以查到事务开始时对超时时间的设置：
+通过代码分析我们可以知道 `TransactionTemplate` 类继承自 `DefaultTransactionDefinition`，`timeout` 是该类的一个属性，我们在配置的事务管理器是 `org.springframework.jdbc.datasource.DataSourceTransactionManager` 这个类，这个类是控制我们事务执行的核心类，在这个类的 `doBegin` 方法中，我们可以查到事务开始时对超时时间的设置：
 
 ```java
 protected void doBegin(Object transaction, TransactionDefinition definition) {
@@ -317,7 +317,7 @@ private Statement prepareStatement(StatementHandler handler, Log statementLog) t
 
 其实代码跟到这里，基本上已经差不多了，`prepareStatement` 方法就是在为每条 `SQL` 语句的执行创建 `Statement` 对象，那么在每一次 `SQL` 执行的时候都会调用这个方法，同时也会判断事务的是否已经超时，如果已经超时，直接抛出异常，如果没有超时，则继续执行 `SQL` 语句。
 
-最后再分析一下 `stmt = handler.prepare(connection, transaction.getTimeout());` 这行代码的执行逻辑，我们在 `BaseStatementHandler` 类中找到了具体的代码逻辑：
+最后再分析一下 `stmt = handler.prepare(connection, transaction.getTimeout());` 这行代码的执行过程，我们在 `BaseStatementHandler` 类中找到了具体的代码逻辑：
 
 ```java
 @Override
@@ -352,7 +352,7 @@ protected void setStatementTimeout(Statement stmt, Integer transactionTimeout) t
 }
 ```
 
-StatementUtil#applyTransactionTimeout：
+**StatementUtil#applyTransactionTimeout：**
 
 ```java
 /**
@@ -389,7 +389,7 @@ public static void applyTransactionTimeout(Statement statement, Integer queryTim
 
 分析了使用 `JdbcTemplate` 和 `MyBatis` 框架的不同执行过程，虽然代码实现不同，但是最终的效果应该说是一致的。
 
-在一个事务当中如果执行多条 `SQL`，每次执行创建 `Statement` 对象时都会检查是否已经出现超时，如果未超时，则会设置 `Statement` 的 `queryTimeout` 属性，继续执行 `SQL`，如果本次执行一切 OK，则在执行下一条 `SQL` 语句时会重复上面逻辑，如果所有 `SQL` 语句全部执行成功，即使在最后设置一个耗时操作，也不会出现事务超时的，耗时操作并不会计入事务的超时时间判断；当然，如果将耗时操作执行后，还有 `SQL` 语句需要执行，那么这个耗时操作的时间是会计入到事务的超时时间当中的。
+在一个事务当中如果执行多条 `SQL`，每次执行创建 `Statement` 对象时都会检查是否已经出现超时，如果未超时，则会设置 `Statement` 的 `queryTimeout` 属性，继续执行 `SQL`，如果本次执行一切 OK，则在执行下一条 `SQL` 语句时会重复上面逻辑，如果所有 `SQL` 语句全部执行成功，即使在最后设置一个耗时操作，也不会出现事务超时的，耗时操作并不会计入事务的超时时间判断；当然，如果某个耗时操作执行完后，还有 `SQL` 语句需要执行，那么这个耗时操作的时间是会计入到事务的超时时间当中的。
 
 在上面的博客文章中，作者总结了一个公式：
 
@@ -400,3 +400,5 @@ public static void applyTransactionTimeout(Statement statement, Integer queryTim
 ### 参考资料
 
 - [Spring事务超时时间可能存在的错误认识](https://blog.csdn.net/AlbertFly/article/details/51462081)
+- [TransactionTemplate编程式事务](https://qiuyadongsite.github.io/2019/04/08/what-problems-2/)
+- [全面分析 Spring 的编程式事务管理及声明式事务管理](https://developer.ibm.com/zh/technologies/spring/articles/os-cn-spring-trans)
