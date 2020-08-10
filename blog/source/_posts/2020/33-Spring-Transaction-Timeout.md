@@ -1,7 +1,7 @@
 ---
 title: Spring 事务管理 Timeout 的一点问题研究
 date: 2020-08-04 20:23:45
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/reading_book.png
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/spring_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -383,7 +383,7 @@ public static void applyTransactionTimeout(Statement statement, Integer queryTim
 
 在这里我们也看到了也在为 `Statement` 对象设置 `queryTimeout` 属性，当然会将我们设置的 `queryTimeout` 值和 `transactionTimeout` 的值进行比较，将比较后较小的值设置为最终结果值。
 
-所以说事务超时的最后一次判断是在最后一条 `SQL` 语句开启 `Statement` 时进行的，也是与最后一条 `SQL` 语句的 `queryTimeout` 属性值有直接关系的，当然如果最后一条 `SQL` 顺序执行完毕，没有任何超时，后面如果不再执行任何 `SQL` 语句执行，即使使用 `Thread.sleep(5000L);` 停顿一段时间，整个事务也是不会出现超时的。
+所以说事务超时的判断是在每一条待执行的 `SQL` 语句开启 `Statement` 时进行的，也是与该条 `SQL` 语句的 `queryTimeout` 属性值有直接关系的。当然如果最后一条 `SQL` 顺利执行完毕，没有任何超时，后面如果不再执行任何 `SQL` 语句执行，即使使用 `Thread.sleep(5000L);` 停顿一段时间，整个事务也是不会出现超时的。
 
 ### 分析总结
 
