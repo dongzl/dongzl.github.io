@@ -25,6 +25,7 @@ tags:
 01 | [Java线程池实现原理及其在美团业务中的实践](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html) | [美团技术团队](https://tech.meituan.com/)
 02 | [从ReentrantLock的实现看AQS的原理及应用](https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html) | [美团技术团队](https://tech.meituan.com/)
 03 | [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html) | [美团技术团队](https://tech.meituan.com/)
+04 | [新一代垃圾回收器ZGC的探索与实践](https://tech.meituan.com/2020/08/06/new-zgc-practice-in-meituan.html) | [美团技术团队](https://tech.meituan.com/)
 
 ### 数据库
 
