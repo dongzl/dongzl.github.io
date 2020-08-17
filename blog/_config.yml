@@ -82,7 +82,8 @@ theme: hexo-theme-skapp
 menu:
   home: / 
   #zookeeper: / 
-  #netty: / 
+  leetcode-cookbook: https://books.halfrost.com/leetcode/
+  netty: https://dongzl.github.io/netty-handbook/
   #mysql: / 
   good-article: /2019/01/01/01-Excellent-Article-Link/
   #java: 
@@ -175,10 +176,10 @@ author:
 links:
   - svg: ./source/svg/github.svg
     url: https://github.com/dongzl
-  - svg: ./source/svg/more.svg
-    url: http://weibo.com/sanonz
-  - svg: ./source/svg/twitter.svg
-    url: https://twitter.com/sanonze
+  # - svg: ./source/svg/more.svg
+  #   url: http://weibo.com/sanonz
+  # - svg: ./source/svg/twitter.svg
+  #   url: https://twitter.com/sanonze
 
 # footer information
 about:
