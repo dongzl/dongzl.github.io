@@ -46,6 +46,7 @@ tags:
 -|-|-
 01 | [Java魔法类：Unsafe应用解析](https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html) | [美团技术团队](https://tech.meituan.com/)
 02 | [一致性哈希算法原理](https://www.cnblogs.com/lpfuture/p/5796398.html) | 
+03 | [零拷贝(Zero-Copy)](https://juejin.im/post/6844903984965091336) | 
 
 ### 设计模式
 
