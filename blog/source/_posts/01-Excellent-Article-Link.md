@@ -26,6 +26,8 @@ tags:
 02 | [从ReentrantLock的实现看AQS的原理及应用](https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html) | [美团技术团队](https://tech.meituan.com/)
 03 | [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html) | [美团技术团队](https://tech.meituan.com/)
 04 | [新一代垃圾回收器ZGC的探索与实践](https://tech.meituan.com/2020/08/06/new-zgc-practice-in-meituan.html) | [美团技术团队](https://tech.meituan.com/)
+05 | [如何设置线程池参数？美团给出了一个让面试官虎躯一震的回答。](https://www.cnblogs.com/thisiswhy/p/12690630.html) | [why技术](https://home.cnblogs.com/u/thisiswhy/)
+06 | [有的线程它死了，于是它变成一道面试题](https://mp.weixin.qq.com/s/wrTVGLDvhE-eb5lhygWEqQ) | [why技术](https://home.cnblogs.com/u/thisiswhy/)
 
 ### 数据库
 
