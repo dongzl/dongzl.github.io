@@ -46,7 +46,7 @@ alter table tableA add unique index uniq_test(test);
 
 - 以一定块大小从原表拷贝数据到临时表，拷贝过程中通过原表上的触发器在原表进行的写操作都会更新到新建的临时表，注意这里是 `Replace` 操作；
 
-- 表明替换 将原表名 `table` 修改为 `table_old`，将 `table_new` 表名修改为原表名 `table`；
+- 表名替换 将原表名 `table` 修改为 `table_old`，将 `table_new` 表名修改为原表名 `table`；
 
 - 如果有参考该表的外键，根据 `alter-foreign-keys-method` 参数的值，检测外键相关的表，做相应设置的处理；
 
