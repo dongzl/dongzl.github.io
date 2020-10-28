@@ -49,6 +49,7 @@ tags:
 01 | [Java魔法类：Unsafe应用解析](https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html) | [美团技术团队](https://tech.meituan.com/)
 02 | [一致性哈希算法原理](https://www.cnblogs.com/lpfuture/p/5796398.html) | 
 03 | [零拷贝(Zero-Copy)](https://juejin.im/post/6844903984965091336) | 
+04 | [序列化和反序列化](https://tech.meituan.com/2015/02/26/serialization-vs-deserialization.html) | [美团技术团队](https://tech.meituan.com/)
 
 ### 设计模式
 
