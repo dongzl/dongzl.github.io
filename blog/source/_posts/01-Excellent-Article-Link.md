@@ -56,3 +56,9 @@ tags:
 序号| 文章链接 | 文章来源
 -|-|-
 01 | [设计模式在外卖营销业务中的实践](https://tech.meituan.com/2020/03/19/design-pattern-practice-in-marketing.html) | [美团技术团队](https://tech.meituan.com/)
+
+### 分布式
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [详解三种主流分布式事务方案的优劣](https://www.infoq.cn/article/1jAZbrupuDrogu7PiAW9) | 技术锁话
