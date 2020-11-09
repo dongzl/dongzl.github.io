@@ -18,3 +18,57 @@ tags:
   - Apache
   - Calcite
 ---
+
+## 背景介绍
+
+`Apache Calcite` 是一个动态数据管理框架。
+
+它包括了一个典型数据库管理系统的许多组成部分，但是它却省略了一些关键功能：数据存储、处理数据的算法以及用于存储元数据的存储库。
+
+`Calcite` 故意回避存储和数据处理的业务功能。正如我们将看到的，这使它成为在应用程序与一个或多个数据存储和数据处理引擎之间进行功能优化的绝佳选择。它也是构建数据库的理想基础：只需要再添加数据就可以实现数据库的功能。
+
+为了说明这一点，让我们创建一个 `Calcite` 的空白实例，然后向其中增加一些数据。
+
+```java
+public static class HrSchema {
+  public final Employee[] emps = 0;
+  public final Department[] depts = 0;
+}
+Class.forName("org.apache.calcite.jdbc.Driver");
+Properties info = new Properties();
+info.setProperty("lex", "JAVA");
+Connection connection = DriverManager.getConnection("jdbc:calcite:", info);
+CalciteConnection calciteConnection = connection.unwrap(CalciteConnection.class);
+SchemaPlus rootSchema = calciteConnection.getRootSchema();
+Schema schema = new ReflectiveSchema(new HrSchema());
+rootSchema.add("hr", schema);
+Statement statement = calciteConnection.createStatement();
+ResultSet resultSet = statement.executeQuery("select d.deptno, min(e.empid) from hr.emps as e join hr.depts as d on e.deptno = d.deptno group by d.deptno having count(*) > 1");
+print(resultSet);
+resultSet.close();
+statement.close();
+connection.close();
+```
+
+数据库在哪里？在这里是没有数据库的。数据库连接（`connection`）一直是空白的直到通过 `new ReflectiveSchema` 方式注册一个 `Java` 对象来作为一个 `schema`，并收集到 `emps` 和 `depts` 属性注册为表（`table`）。
+
+`Calcite` 自己并不拥有数据，它甚至都没有自己定义的数据格式。这个示例使用的是内存数据库集合，并使用诸如 `groupBy` 之类的运算符对数据进行处理，并从 `linq4j` 库中进行联接操作。但是 `Calcite` 还可以处理其他格式的数据，例如 `JDBC`。在第一个示例中，替换
+
+```java
+Schema schema = new ReflectiveSchema(new HrSchema());
+```
+为
+```java
+Class.forName("com.mysql.jdbc.Driver");
+BasicDataSource dataSource = new BasicDataSource();
+dataSource.setUrl("jdbc:mysql://localhost");
+dataSource.setUsername("username");
+dataSource.setPassword("password");
+Schema schema = JdbcSchema.create(rootSchema, "hr", dataSource, null, "name");
+```
+
+`Calcite` 将在 `JDBC` 中执行相同的查询。对于应用程序，数据和 `API` 完全相同，但是背后实现逻辑却大不相同。`Calcite` 使用优化器规则将 `JOIN` 和 `GROUP BY` 操作推入源数据库去执行。
+
+前面的内存中操作和 `JDBC` 操作是两个非常相似的示例程序。`Calcite` 可以处理任何数据源内容和数据格式。如果要添加一个数据源，我们需要编写一个适配器（`adapter`），并且告知 `Calcite` 框架它应该将数据源中的哪些集合视为“表”（`table`）。
+
+为了使用一些更高级别的功能，我们可以自己编写优化器规则。优化器规则允许 `Calcite` 通过新的格式来访问数据，允许我们注册新的运算符（例如一种更好的连接（`join`）算法），并且允许 `Calcite` 进行优化如何将查询转换到到运算符上。`Calcite` 会将我们自定义的规则和运算符与内置的规则和运算符合并到一起，使用基于成本的优化器，并生成有效的执行计划。
