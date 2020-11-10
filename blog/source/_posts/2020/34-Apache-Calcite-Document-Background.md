@@ -1,5 +1,5 @@
 ---
-title: Apache Calcite 文档翻译（一）--背景介绍
+title: Apache Calcite 概览--背景介绍
 date: 2020-11-09 09:27:38
 cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
 # author information, multiple authors are set to array
@@ -83,13 +83,13 @@ Schema schema = JdbcSchema.create(rootSchema, "hr", dataSource, null, "name");
 
 ## 目前状态
 
-如下一些特征是 `Calcite` 已经完成的：
+`Calcite` 框架目前已支持如下一些特征：
 
 - 查询解析器、验证器和优化器；
 - 支持读取 `JSON` 格式的对象模型；
 - 支持许多标准函数和聚合函数；
 - 针对 `Linq4j` 和以 `JDBC` 为后端的 `JDBC` 查询；
 - `Linq4j` 作为前端；
-- SQL 特征：`SELECT`、`FROM`（包括 `JOIN` 语法）、`WHERE`、`GROUP BY`（包括 `GROUPING SETS`）、聚合函数（包括 `COUNT(DISTINCT …)` 和 `FILTER`）、`HAVING`、`ORDER BY`（包括 `NULLS FIRST / LAST`）、结合操作（`UNION`、`INTERSECT`、`MINUS`）、子查询（包括相关子查询）、窗口聚合、`LIMIT`（`Postgres` 语法）；更多更详细内容参考 [SQL reference](https://calcite.apache.org/docs/reference.html)；
-- 本地或远程的 `JDBC` 驱动；参加 [Avatica](https://calcite.apache.org/avatica/docs/index.html)；
-- 多种类型的[适配器](https://calcite.apache.org/docs/adapter.html)。
+- SQL 特征：`SELECT`、`FROM`（包括 `JOIN` 语法）、`WHERE`、`GROUP BY`（包括 `GROUPING SETS`）、聚合函数（包括 `COUNT(DISTINCT …)` 和 `FILTER`）、`HAVING`、`ORDER BY`（包括 `NULLS FIRST / LAST`）、结合操作（`UNION`、`INTERSECT`、`MINUS`）、子查询（包括相关子查询）、窗口聚合、`LIMIT`（`Postgres` 语法）；更多更详细内容参考链接 [SQL reference](https://calcite.apache.org/docs/reference.html)；
+- 本地或远程的 `JDBC` 驱动；参加链接 [Avatica](https://calcite.apache.org/avatica/docs/index.html)；
+- 支持多种类型的[适配器](https://calcite.apache.org/docs/adapter.html)。
