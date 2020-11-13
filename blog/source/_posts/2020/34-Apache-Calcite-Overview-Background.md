@@ -19,6 +19,8 @@ tags:
   - Calcite
 ---
 
+> 原文地址：https://calcite.apache.org/docs/index.html
+
 ## 背景介绍
 
 `Apache Calcite` 是一个动态数据管理框架。
