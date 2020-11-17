@@ -36,7 +36,7 @@ tags:
 - 定义一个表中记录的类型；
 - 使用 `ScannableTable` 接口，来实现一个简单的 `Table`，直接枚举所有行；
 - 使用 `FilterableTable` 接口，来实现稍微高级一些的 `Table`，可以根据简单谓词过表达式滤掉一些行；
-- 使用 `TranslatableTable` 接口，来时更高级别的 `Table`，它可以使用执行计划规则转换关系运算符。
+- 使用 `TranslatableTable` 接口，来实现更高级别的 `Table`，它可以使用执行计划规则来转换关系运算符。
 
 ## 下载 & 构建
 
@@ -74,7 +74,7 @@ sqlline> !tables
 +------------+--------------+-------------+---------------+----------+------+
 ```
 
-（`JDBC` 专家们请注意：`sqlline` 的 `!tables` 命令只是在后台执行 `DatabaseMetaData.getTables()`。它还有其他查询 `JDBC` 元数据的命令，例如：`!columns` 和 `!describe`。）
+（`JDBC` 专家们请注意：`sqlline` 的 `!tables` 命令的实现是在后台执行 `DatabaseMetaData.getTables()`。它还有其他查询 `JDBC` 元数据的命令，例如：`!columns` 和 `!describe`。）
 
 正如我们所看到的，在系统中存在 `5` 张表：`EMPS`、`DEPTS` 和 `HOBBIES` 表存在当前的 `SALES` 模式中，`COLUMNS` 和 `TABLES` 表存在系统的元数据模式中。系统表始终存在于 `Calcite` 中，但其他表由 `schema` 的特定实现提供；在这个查询结果中，`EMPS` 和 `DEPTS` 表基于 `resources/sales` 目录中的 `EMPS.csv` 和 `DEPTS.csv` 文件提供。
 
@@ -124,7 +124,7 @@ sqlline> VALUES CHAR_LENGTH('Hello, ' || 'world!');
 
 那么，`Calcite` 是如何发现这些表的呢？请记住，核心的 `Calcite` 功能并不知道有关 `CSV` 文件的任何内容。（作为“没有存储层的数据库”，`Calcite` 不知道任何文件格式。）我们是通过运行 `calcite-example-csv` 工程的代码来告知 `Calcite` 这些表的存在。
 
-在这个过程中包括几部分内容。首先，我们基于域模型文件中的 `schema` 工厂类来定义一个 `schema`。然后 `schema` 工厂会负责创建一个 `schema`，同时 `schema` 会创建几张表，每一张表都知道如何通过扫描 CSV 文件来获取数据。最后，在 `Calcite` 解析完查询操作并生成使用这些表执行计划后，`Calcite` 会在执行查询时调用这些表以读取数据。现在，让我们通过一个示例来更详细地了解这些步骤。
+在这个过程中包括几部分内容。首先，我们基于域模型文件中的 `schema` 工厂类来定义一个 `schema`。然后 `schema` 工厂会负责创建一个 `schema`，同时会为 `schema` 创建几张表，每一张表都知道如何通过扫描 `CSV` 文件来获取数据。最后，在 `Calcite` 解析完查询语句并生成使用这些表的执行计划后，`Calcite` 会在执行查询时调用这些表以读取数据。现在，让我们通过一个示例来更详细地了解这些步骤。
 
 在 `JDBC` 的连接字符串上，我们以 `JSON` 格式给出了模型的路径。这是一个模型示例：
 
@@ -145,7 +145,7 @@ sqlline> VALUES CHAR_LENGTH('Hello, ' || 'world!');
 }
 ```
 
-这个域模型定义了一个名为 ‘SALES’ 的简单 schema。这个 schema 是由 [org.apache.calcite.adapter.csv.CsvSchemaFactory](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvSchemaFactory.java) 插件类提供功能，这个插件类是 calcite-example-csv 工程的一部分代码，并且这个类实现了 [SchemaFactory](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/SchemaFactory.html) 接口，它的 create 方法实例化一个 schema，从域模型文件中传入 directory 参数：
+这个域模型定义了一个名为 `SALES` 的简单 `schema`。这个 `schema` 是由 [org.apache.calcite.adapter.csv.CsvSchemaFactory](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvSchemaFactory.java) 插件类提供功能，这个插件类是 `calcite-example-csv` 工程的一部分代码，并且这个类实现了 [SchemaFactory](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/SchemaFactory.html) 接口，它的 `create` 方法实例化一个 `schema`，从域模型文件中传入 `directory` 参数：
 
 ```java
 public Schema create(SchemaPlus parentSchema, String name, Map<String, Object> operand) {
@@ -163,7 +163,7 @@ public Schema create(SchemaPlus parentSchema, String name, Map<String, Object> o
 }
 ```
 
-在模型数据的驱动下，`schema` 工厂类会实例化一个名为 `SALES` 的简单的 `schema`。这个 `schema` 对象是一个 [`org.apache.calcite.adapter.csv.CsvSchema`](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvSchema.java) 类的实例对象，这个类同时实现了 `Calcite` 框架中的 [`Schema`](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/Schema.html) 接口。
+在模型数据的驱动下，`schema` 工厂类会实例化一个名为 `SALES` 的简单的 `schema`。这个 `schema` 对象是 [`org.apache.calcite.adapter.csv.CsvSchema`](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvSchema.java) 类的实例对象，这个类同时实现了 `Calcite` 框架中的 [`Schema`](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/Schema.html) 接口。
 
 `schema` 的作用是包含一系列的 `table`。（它也可能包括一系列的子 `schema` 和 `table` 函数，但是这些是一些高级特性，`alcite-example-csv`并不支持这些特性）。`table` 实现了 `Calcite` 框架中的 [Table](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/Table.html) 接口。`CsvSchema` 生成的 `table` 对象是 [CsvTable](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvTable.java) 及其子类的实例。
 
@@ -217,13 +217,13 @@ private Table createTable(File file) {
 }
 ```
 
-这个 `schema` 扫描了整个目录下面所有以 `.csv` 结尾的文件，并为他们创建相对应的表。根据这种情况，在 `sales` 目录下包含 `EMPS.csv` 和 `DEPTS.csv` 文件，这些文件会成为表 `EMPS` 和 `DEPTS` 的内容。
+这个 `schema` 扫描了整个目录下面所有以 `.csv` 结尾的文件，并为他们创建相对应的表。根据这个原理，在 `sales` 目录下包含 `EMPS.csv` 和 `DEPTS.csv` 文件，这些文件会成为表 `EMPS` 和 `DEPTS` 的数据内容。
 
 ## schemas 下的表和视图
 
-注意我们不需要在域模型中定义有关数据表的任何内容；schema 会自动生成这些表。
+注意：我们不需要在域模型中定义有关数据表的任何内容；`schema` 会自动生成这些表。
 
-我们可以使用 schema 中指定的数据表的属性创建除自动创建数据表以外的其他的数据表。
+我们可以使用 `schema` 中指定的数据表的属性创建除自动创建数据表以外的其他的数据表。
 
 让我们看看如何创建一种重要且有用的表类型，即视图。
 
@@ -283,7 +283,7 @@ sqlline> SELECT e.name, d.name FROM female_emps AS e JOIN depts AS d on e.deptno
 
 ## 用户自定义数据表
 
-用户自定义数据表是由用户定义的代码驱动的表。这些表不一定只存在于用户自定义的 schema 中。
+用户自定义数据表是由用户定义的代码驱动的表。这些表不一定只存在于用户自定义的 `schema` 中。
 
 下面内容是在 `model-with-custom-table.json` 文件中定义的示例：
 
@@ -326,7 +326,7 @@ sqlline> SELECT empno, name FROM custom_table.emps;
 +--------+--------+
 ```
 
-这是一个普通的 schema，在这个 schema 中包括一个由 `org.apache.calcite.adapter.csv.CsvTableFactory` 类提供的用户自定义的数据表，该类实现了 `Calcite` 框架中 `TableFactory` 接口。该类的 `create` 方法实例化 `CsvScannableTable` 对象，并从模型文件中传入 `file` 参数：
+这是一个普通的 `schema`，在这个 `schema` 中包括一个由 `org.apache.calcite.adapter.csv.CsvTableFactory` 类提供的用户自定义的数据表，该类实现了 `Calcite` 框架中 `TableFactory` 接口。该类的 `create` 方法实例化 `CsvScannableTable` 对象，并从模型文件中传入 `file` 参数：
 
 ```java
 public CsvTable create(SchemaPlus schema, String name, Map<String, Object> map, RelDataType rowType) {
@@ -364,11 +364,11 @@ public CsvTable create(SchemaPlus schema, String name, Map<String, Object> map, 
 
 到目前为止我们所看到的 `table` 的实现类都不包含大量的数据。但是如果是我们自定义的 `table`，可能包含数百列，并且包数百万的数据，我们当然希望系统不会为每个查询检索所有数据。我们希望 `Calcite` 框架与适配器协商使用并找到一种更有效的访问数据的方法。
 
-这种协商是查询优化的一种简单形式。 Calcite 框架可以通过添加计划器规则来支持查询优化。计划器规则的运行方式是在查询分析树中根据某个模式进行内容匹配（例如，某种表顶部的项目），然后用实现优化的一组新节点替换树中匹配的节点。
+这种协商是查询优化的一种简单形式。 `Calcite` 框架可以通过添加计划器规则来支持查询优化。计划器规则的运行方式是在查询分析树中根据某个模式进行内容匹配（例如，某种表顶部的项目），然后用实现优化的一组新节点替换树中匹配的节点。
 
-和模式（schema）和数据表（table）类似，计划器规则也是可扩展的。所以，如果我们希望通过 SQL 语句来访问已经存储的数据，我们首先需要自定义模式（schema）或者数据表（table），然后定义我们自己的计划器规则来提高数据的访问效率。
+和模式（`schema`）、数据表（`table`）类似，计划器规则也是可扩展的。所以，如果我们希望通过 `SQL` 语句来访问已经存储的数据，我们首先需要自定义模式（`schema`）或者数据表（`table`），然后定义我们自己的计划器规则来提高数据的访问效率。
 
-为了了解这一点，让我们使用计划器规则来访问 CSV 文件中的一部分列。让我们针对两个非常相似的 schema 运行相同的查询：
+为了了解这一点，让我们使用计划器规则来访问 `CSV` 文件中的一部分列。让我们针对两个非常相似的 `schema` 运行相同的查询：
 
 ```shell
 sqlline> !connect jdbc:calcite:model=src/test/resources/model.json admin admin
@@ -395,7 +395,7 @@ sqlline> explain plan for select name from emps;
 flavor: "translatable"
 ```
 
-这个配置会导致在创建 `CsvSchema` 对象时使用 `flavor = TRANSLATABLE` 参数，添加这个参数后在调用 `createTable` 方法创建的是 [`CsvTranslatableTable`](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvTranslatableTable.java) 类对象而不是 `CsvScannableTable` 类对象。
+这个配置会导致在创建 `CsvSchema` 对象时使用 `flavor = TRANSLATABLE` 参数，添加这个参数后在调用 `createTable` 方法创建的是 [`CsvTranslatableTable`](https://github.com/apache/calcite/blob/master/example/csv/src/main/java/org/apache/calcite/adapter/csv/CsvTranslatableTable.java) 类实例对象而不是 `CsvScannableTable` 类实例对象。
 
 <font color="red">`CsvTranslatableTable` 类实现 `TranslatableTable.toRel()` 方法来创建 `CsvTableScan` 对象。表扫描是查询运算符生成树的叶子节点。通常的实现是EnumerableTableScan 实现类，但我们创建了一个独特的子类型，该子类型将导致规则触发。</font>
 
@@ -460,25 +460,25 @@ public abstract class CsvRules {
 }
 ```
 
-在默认配置中调用的 `withOperandSupplier` 方法（在 `Config` 接口中的 `DEFAULT` 属性中调用）声明了关系表达式的一种模式，这种模式会触发规则的运行，如果计划器发现一个 LogicalProject 的唯一输入是没有任何输入的 CsvTableScan 对象，则它将触发该规则。
+在默认配置中调用的 `withOperandSupplier` 方法（在 `Config` 接口中的 `DEFAULT` 属性中调用）声明了关系表达式的一种模式，这种模式会触发规则的运行，如果计划器发现一个 `LogicalProject` 的唯一输入是没有任何输入的 `CsvTableScan` 对象，则它将触发该规则。
 
-该规则可能会出现变体。例如，另一个规则实例可能会与 CsvTableScan 上的 EnumerableProject 匹配。
+该规则可能会出现变体。例如，另一个规则实例可能会与 `CsvTableScan` 上的 `EnumerableProject` 匹配。
 
 `onMatch` 方法会自动生成一个新的关系表达式并且调用 `RelOptRuleCall.transformTo()` 方法确保规则被成功触发。
 
 ## 查询优化过程
 
-关于 `Calcite` 的查询计划器有多么聪明，我们可以列举很多内容，但是我们这里不再赘述。聪明的目的是减轻用户制定规则的负担。
+关于 `Calcite` 的查询计划器有多么智能，我们可以列举很多内容，但是我们这里不再赘述。智能的目的是减轻用户制定规则的负担。
 
-首先，`Calcite` 并不会以一定的顺序触发规则。查询优化过程遵循一棵分支树的许多分支，就像下棋程序检查许多可能的移动顺序一样。如果规则 A 和规则 B 都与查询运算符树的给定部分匹配，`Calcite` 会触发这两个规则。
+首先，`Calcite` 并不会以一定的顺序触发规则。查询优化过程遵循一棵分支树的许多分支，就像下棋程序检查许多可能的移动顺序一样。如果规则 `A` 和规则 `B` 都与查询运算符树的给定部分匹配，`Calcite` 会触发这两个规则。
 
 其次，`Calcite` 会根据使用成本在执行计划之间进行选择，但是成本模型并不能阻止规则的触发，而这在短时间内可能会消耗更大成本。
 
-许多优化器有线性优化方案。面对如上所述的规则 A 和规则 B 之间的选择，优化器必须立刻给出选择。它可能有一种策略，例如“将规则A应用于整个树，然后将规则B应用于整个树”，或者应用基于成本的策略，并使用产生成本较小的规则。
+许多优化器有线性优化方案。面对如上所述的规则 `A` 和规则 `B` 之间的选择，优化器必须立刻给出选择。它可能有一种策略，例如“将规则 `A` 应用于整个树，然后将规则 `B` 应用于整个树”，或者应用基于成本的策略，并使用产生成本较小的规则。
 
-`Calcite` 并不需要这种妥协。这使得组合各种规则变得很简单。例如，如果我们想结合使用识别物化视图的规则和要从 CSV 和 JDBC 源系统读取数据的规则，则只需给 `Calcite` 提供所有规则的集合并告诉它就可以了。
+`Calcite` 并不需要这种妥协。这使得组合各种规则变得很简单。例如，如果我们想结合使用识别物化视图的规则和要从 `CSV` 和 `JDBC` 源系统读取数据的规则，则只需给 `Calcite` 提供所有规则的集合并告诉它就可以了。
 
-`Calcite` 确实使用基于成本模型。成本模型可以决定哪一个计划会被最终使用，并且有时还可以通过修剪搜索树来防止搜索空间膨胀，但是它绝不会强迫你在规则 A 和规则 B 之间进行选择。这一点非常重要，这很重要，因为它可以避免搜索到的局部成本最小值，其实在实际搜索空间中并不是最优搜索结果的问题。
+`Calcite` 确实使用基于成本模型。成本模型可以决定哪一个计划会被最终使用，并且有时还可以通过修剪搜索树来防止搜索空间膨胀，但是它绝不会强迫你在规则 `A` 和规则 `B` 之间进行选择。这一点非常重要，这很重要，因为它可以避免搜索到的局部成本最小值，其实在实际搜索空间中并不是最优搜索结果的问题。
 
 同时成本模型是可插拔的，这一点我们也可以猜测到，基于成本模型的表和查询运算符统计信息也是如此。这可能是我们以后要讲到的内容。
 

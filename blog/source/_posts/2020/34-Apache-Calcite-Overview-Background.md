@@ -54,7 +54,7 @@ connection.close();
 
 数据库在哪里？在这里是没有数据库的。数据库连接（`connection`）一直是空白的直到通过 `new ReflectiveSchema` 方式注册一个 `Java` 对象来作为一个 `schema`，并收集到 `emps` 和 `depts` 属性注册为表（`table`）。
 
-`Calcite` 自己并不拥有数据，它甚至都没有自己定义的数据格式。这个示例使用的是内存数据库集合，并使用诸如 `groupBy` 之类的运算符对数据进行处理，并从 `linq4j` 库中进行联接操作。但是 `Calcite` 还可以处理其他格式的数据，例如 `JDBC`。在第一个示例中，替换
+`Calcite` 自己并不拥有数据，它甚至都没有自己定义的数据格式。这个示例使用的是内存数据库集合，并使用诸如 `groupBy` 之类的运算符对数据进行处理，并从 `linq4j` 库中进行连接操作。但是 `Calcite` 还可以处理其他格式的数据，例如 `JDBC`。在第一个示例中，替换
 
 ```java
 Schema schema = new ReflectiveSchema(new HrSchema());
