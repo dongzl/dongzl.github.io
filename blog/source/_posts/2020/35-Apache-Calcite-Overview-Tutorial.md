@@ -465,3 +465,113 @@ public abstract class CsvRules {
 该规则可能会出现变体。例如，另一个规则实例可能会与 CsvTableScan 上的 EnumerableProject 匹配。
 
 `onMatch` 方法会自动生成一个新的关系表达式并且调用 `RelOptRuleCall.transformTo()` 方法确保规则被成功触发。
+
+## 查询优化过程
+
+关于 `Calcite` 的查询计划器有多么聪明，我们可以列举很多内容，但是我们这里不再赘述。聪明的目的是减轻用户制定规则的负担。
+
+首先，`Calcite` 并不会以一定的顺序触发规则。查询优化过程遵循一棵分支树的许多分支，就像下棋程序检查许多可能的移动顺序一样。如果规则 A 和规则 B 都与查询运算符树的给定部分匹配，`Calcite` 会触发这两个规则。
+
+其次，`Calcite` 会根据使用成本在执行计划之间进行选择，但是成本模型并不能阻止规则的触发，而这在短时间内可能会消耗更大成本。
+
+许多优化器有线性优化方案。面对如上所述的规则 A 和规则 B 之间的选择，优化器必须立刻给出选择。它可能有一种策略，例如“将规则A应用于整个树，然后将规则B应用于整个树”，或者应用基于成本的策略，并使用产生成本较小的规则。
+
+`Calcite` 并不需要这种妥协。这使得组合各种规则变得很简单。例如，如果我们想结合使用识别物化视图的规则和要从 CSV 和 JDBC 源系统读取数据的规则，则只需给 `Calcite` 提供所有规则的集合并告诉它就可以了。
+
+`Calcite` 确实使用基于成本模型。成本模型可以决定哪一个计划会被最终使用，并且有时还可以通过修剪搜索树来防止搜索空间膨胀，但是它绝不会强迫你在规则 A 和规则 B 之间进行选择。这一点非常重要，这很重要，因为它可以避免搜索到的局部成本最小值，其实在实际搜索空间中并不是最优搜索结果的问题。
+
+同时成本模型是可插拔的，这一点我们也可以猜测到，基于成本模型的表和查询运算符统计信息也是如此。这可能是我们以后要讲到的内容。
+
+## JDBC 适配器
+
+`JDBC` 适配器可以将一个 `JDBC` 数据源中的 `schema` 映射为 `Calcite` 的 `schema`。
+
+例如，下面的 `schema` 是从 `MySQL` 的 `foodmart` 数据库中适配到的内容：
+
+```json
+{
+  version: '1.0',
+  defaultSchema: 'FOODMART',
+  schemas: [
+    {
+      name: 'FOODMART',
+      type: 'custom',
+      factory: 'org.apache.calcite.adapter.jdbc.JdbcSchema$Factory',
+      operand: {
+        jdbcDriver: 'com.mysql.jdbc.Driver',
+        jdbcUrl: 'jdbc:mysql://localhost/foodmart',
+        jdbcUser: 'foodmart',
+        jdbcPassword: 'foodmart'
+      }
+    }
+  ]
+}
+```
+
+（那些使用 `Mondrian` `OLAP` 引擎的用户都会熟悉 `FoodMart` 数据库，因为它是 `Mondrian` 的主要测试数据。要加载测试数据内容，请遵循 [Mondrian的安装说明](https://mondrian.pentaho.com/documentation/installation.php#2_Set_up_test_data)。)
+
+目前使用限制：`JDBC` 适配器目前仅能够下推数据表扫描操作；对于其它一些处理过程（过滤、连接、聚合等操作）都需要在 `Calcite` 内部完成。<font color="red">我们的目标是尽可能减少对源系统的处理，尽可能地翻译语法，数据类型和内置函数。</font>如果某个 `Calcite` 查询基于单个 `JDBC` 数据库中的表，那么原则上整个查询应转到该数据库上完成。如果查询的表来源于多个 `JDBC` 数据源，或者是 `JDBC` 数据源和非 `JDBC` 数据源的混合，则 `Calcite` 将使用它可以使用的最高效的分布式查询方法。
+
+## 克隆 JDBC 适配器
+
+克隆 `JDBC` 适配器会创建一个混合数据库。数据来源于一个 `JDBC` 数据库，但是在数据表第一次被访问时数据会被加载到内存表中。`Calcite` 根据这些内存表评估查询，实际上等同于数据库的缓存。
+
+例如，下面的示例模型是从 `MySQL` 的 `foodmart` 数据库中读取数据表内容：
+
+```json
+{
+  version: '1.0',
+  defaultSchema: 'FOODMART_CLONE',
+  schemas: [
+    {
+      name: 'FOODMART_CLONE',
+      type: 'custom',
+      factory: 'org.apache.calcite.adapter.clone.CloneSchema$Factory',
+      operand: {
+        jdbcDriver: 'com.mysql.jdbc.Driver',
+        jdbcUrl: 'jdbc:mysql://localhost/foodmart',
+        jdbcUser: 'foodmart',
+        jdbcPassword: 'foodmart'
+      }
+    }
+  ]
+}
+```
+
+另一种技术是在现有 `schema` 基础上克隆新的 `schema`。我们可以在域模型中使用 `source` 属性来引用已经存在的 `schema`，示例如下：
+
+```json
+{
+  version: '1.0',
+  defaultSchema: 'FOODMART_CLONE',
+  schemas: [
+    {
+      name: 'FOODMART',
+      type: 'custom',
+      factory: 'org.apache.calcite.adapter.jdbc.JdbcSchema$Factory',
+      operand: {
+        jdbcDriver: 'com.mysql.jdbc.Driver',
+        jdbcUrl: 'jdbc:mysql://localhost/foodmart',
+        jdbcUser: 'foodmart',
+        jdbcPassword: 'foodmart'
+      }
+    },
+    {
+      name: 'FOODMART_CLONE',
+      type: 'custom',
+      factory: 'org.apache.calcite.adapter.clone.CloneSchema$Factory',
+      operand: {
+        source: 'FOODMART'
+      }
+    }
+  ]
+}
+```
+
+我们可以使用这种方法在任何一个 `schema` 的基础上来创建一个克隆的 `schema`，而不仅仅局限于 `JDBC`。
+
+克隆适配器并非是最完美的解决方案。我们计划开发更复杂的缓存策略，以及内存表的更完整和有效的实现，但是目前，克隆 `JDBC` 适配器显示了可行的方法，并允许我们尝试我们的初始实现。
+
+## 进一步讨论
+
+当然，还有许多其他方法可以扩展 `Calcite`，在本教程中还没有一一介绍。[适配器规范](https://calcite.apache.org/docs/adapter.html)章节描述了所涉及到的 `API` 的内容。
