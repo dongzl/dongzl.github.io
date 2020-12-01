@@ -163,7 +163,7 @@ final RelNode result = builder
 
 ## 转换规则
 
-默认的 RelBuilder 会创建没有约定的逻辑 RelNode。但是我们可以通过 `adoptConvention()` 方法来切换使用不同的约定规则：adoptConvention():
+默认的 `RelBuilder` 会创建没有约定的逻辑 `RelNode`。但是我们可以通过 `adoptConvention()` 方法来切换使用不同的约定规则：
 
 ```java
 final RelNode result = builder
@@ -203,3 +203,66 @@ final RelNode result = builder
 但是通过构建器的 API，我们可以指定输入的字段。为了索引到 `SAL`，内部的属性是 `#5`，可以写做 `builder.field(2, 0, "SAL")`、`builder.field(2, "EMP", "SAL")` 或者是 `builder.field(2, 0, 5)`。含义是“两个输入，`#0` 输入中 `#5` 属性”。（为什么需要知道有两个输入？因为它们存储在堆栈中；输入 `#1` 在堆栈的顶部，输入 `#0` 在堆栈的底部。如果我们不告诉构建器这是两个输入，那么它将不知道输入 `#0` 栈有多深。）
 
 类似的，为了索引 `DNAME` 属性，内部属性是 `#9`（8 + 1），可以写做 `builder.field(2, 1, "DNAME")`、`builder.field(2, "DEPT", "DNAME")` 或者是 `builder.field(2, 1, 1)`。
+
+## 递归查询
+
+警告：当前的 `API` 是实验性的，如有更改，恕不另行通知。 `SQL` 递归查询，例如生成序列 `1、2、3，... 10`：
+
+```sql
+WITH RECURSIVE aux(i) AS (
+  VALUES (1)
+  UNION ALL
+  SELECT i+1 FROM aux WHERE i < 10
+)
+SELECT * FROM aux
+```
+
+可以使用对 `TransientTable` 和 `RepeatUnion` 的扫描操作来生成：
+
+```java
+final RelNode node = builder
+  .values(new String[] { "i" }, 1)
+  .transientScan("aux")
+  .filter(
+      builder.call(
+          SqlStdOperatorTable.LESS_THAN,
+          builder.field(0),
+          builder.literal(10)))
+  .project(
+      builder.call(
+          SqlStdOperatorTable.PLUS,
+          builder.field(0),
+          builder.literal(1)))
+  .repeatUnion("aux", true)
+  .build();
+System.out.println(RelOptUtil.toString(node));
+```
+
+输出结果：
+
+```java
+LogicalRepeatUnion(all=[true])
+  LogicalTableSpool(readType=[LAZY], writeType=[LAZY], tableName=[aux])
+    LogicalValues(tuples=[[{ 1 }]])
+  LogicalTableSpool(readType=[LAZY], writeType=[LAZY], tableName=[aux])
+    LogicalProject($f0=[+($0, 1)])
+      LogicalFilter(condition=[<($0, 10)])
+        LogicalTableScan(table=[[aux]])
+```
+
+## API 概述
+
+### 关系运算符
+
+如下的一些方法能够创建关系表达式（[RelNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/RelNode.html)），将其压入堆栈，然后返回 `RelBuilder`。
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| scan(tableName)                                  | 创建 [TableScan](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/TableScan.html) 对象。 |
+| functionScan(operator, n, expr...) </br> functionScan(operator, n, exprList) | 创建 `n` 个最新关系表达式的 [TableFunctionScan](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/TableFunctionScan.html)。|
+| transientScan(tableName [, rowType])             ||
+| values(fieldNames, value...) </br> values(rowType, tupleList)                       ||
+| filter([variablesSet, ] exprList) </br> filter([variablesSet, ] expr...)                 ||
+
+
+Creates a TableScan on a TransientTable with the given type (if not specified, the most recent relational expression’s type will be used).
