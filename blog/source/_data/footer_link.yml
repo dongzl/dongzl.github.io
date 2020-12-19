@@ -14,7 +14,10 @@ friend_links:
   - name: 酷 壳–CoolShell
     desc: 酷 壳–CoolShell
     link: https://coolshell.cn/
-
+  - name: 唐巧的博客
+    desc: 唐巧的博客
+    link: https://blog.devtang.com/
+    
 build_tools:
   - name: Hexo
     desc: Blog Framework
