@@ -2,22 +2,27 @@ friend_links:
   - name: mrdear
     desc: mrdear
     link: https://mrdear.cn/
-  - name: draveness
-    desc: draveness
-    link: https://draveness.me/
   - name: 美团技术团队
     desc: 美团技术团队
     link: https://tech.meituan.com/
-  - name: 阮一峰
-    desc: 阮一峰的个人网站
-    link: http://www.ruanyifeng.com/home.html
   - name: 酷 壳–CoolShell
     desc: 酷 壳–CoolShell
     link: https://coolshell.cn/
+    
+big_boss_blog:
+  - name: draveness
+    desc: draveness
+    link: https://draveness.me/
+  - name: 阮一峰
+    desc: 阮一峰的个人网站
+    link: http://www.ruanyifeng.com/home.html
   - name: 唐巧的博客
     desc: 唐巧的博客
     link: https://blog.devtang.com/
-    
+  - name: Hollis
+    desc: Hollis
+    link: https://www.hollischuang.com/
+
 build_tools:
   - name: Hexo
     desc: Blog Framework
