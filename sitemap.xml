@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://dongzl.github.io/2020/11/17/36-Apache-Calcite-Overview-Algebra/</loc>
+    
+    <lastmod>2021-01-02</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://dongzl.github.io/2020/12/28/38-2020-Read-Book/</loc>
     
     <lastmod>2021-01-02</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://dongzl.github.io/2020/12/26/37-2020-Personal-Year-End-Summary/</loc>
     
     <lastmod>2021-01-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/2020/11/17/36-Apache-Calcite-Overview-Algebra/</loc>
-    
-    <lastmod>2020-12-27</lastmod>
     
   </url>
   
@@ -72,14 +72,14 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/about/index_bak.html</loc>
+    <loc>https://dongzl.github.io/about/index.html</loc>
     
     <lastmod>2020-12-19</lastmod>
     
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/about/index.html</loc>
+    <loc>https://dongzl.github.io/about/index_bak.html</loc>
     
     <lastmod>2020-12-19</lastmod>
     
@@ -107,14 +107,14 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2020/06/20/31-JSON-Web-Token-Introduction/</loc>
+    <loc>https://dongzl.github.io/2020/06/08/30-Go-Knowledge-Summary/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2020/06/08/30-Go-Knowledge-Summary/</loc>
+    <loc>https://dongzl.github.io/2020/06/20/31-JSON-Web-Token-Introduction/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
@@ -324,14 +324,14 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2019/11/20/11-Hexo-Environment-Building/</loc>
+    <loc>https://dongzl.github.io/2019/11/19/10-MySQL-InnoDB-Transaction/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2019/11/19/10-MySQL-InnoDB-Transaction/</loc>
+    <loc>https://dongzl.github.io/2019/11/20/11-Hexo-Environment-Building/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
@@ -380,14 +380,14 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2019/10/08/04-redis-distributed-lock/</loc>
+    <loc>https://dongzl.github.io/2019/09/14/03-json-lib-bug-with-long-type/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/2019/09/14/03-json-lib-bug-with-long-type/</loc>
+    <loc>https://dongzl.github.io/2019/10/08/04-redis-distributed-lock/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
@@ -452,7 +452,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/Map/</loc>
+    <loc>https://dongzl.github.io/tags/JSON/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -466,14 +466,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/JSON/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/tags/ZooKeeper/</loc>
+    <loc>https://dongzl.github.io/tags/Map/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -494,7 +487,35 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/Hexo/</loc>
+    <loc>https://dongzl.github.io/tags/ZooKeeper/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/JVM/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/Full-GC/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/MAT/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/%E4%BA%8B%E5%8A%A1/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -508,7 +529,14 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/%E4%BA%8B%E5%8A%A1/</loc>
+    <loc>https://dongzl.github.io/tags/Hexo/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/Lombok/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -543,13 +571,6 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/Lombok/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://dongzl.github.io/tags/Guava/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
@@ -558,34 +579,6 @@
   
   <url>
     <loc>https://dongzl.github.io/tags/EventBus/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/tags/JVM/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/tags/Full-GC/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/tags/MAT/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://dongzl.github.io/tags/MySQL/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -607,6 +600,13 @@
   
   <url>
     <loc>https://dongzl.github.io/tags/synchronized/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/MySQL/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -655,13 +655,6 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/maven/</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://dongzl.github.io/tags/ThreadPoolExecutor/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
@@ -670,6 +663,13 @@
   
   <url>
     <loc>https://dongzl.github.io/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://dongzl.github.io/tags/maven/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -697,7 +697,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/JWT/</loc>
+    <loc>https://dongzl.github.io/tags/Go/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -725,7 +725,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/tags/Go/</loc>
+    <loc>https://dongzl.github.io/tags/JWT/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -755,7 +755,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/categories/java%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://dongzl.github.io/categories/web%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -769,7 +769,7 @@
   </url>
   
   <url>
-    <loc>https://dongzl.github.io/categories/web%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://dongzl.github.io/categories/java%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
