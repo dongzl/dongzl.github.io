@@ -1,7 +1,7 @@
 ---
 title: 2020年个人总结
 date: 2020-12-26 10:32:56
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/2020_summary.png
 # author information, multiple authors are set to array
 # single author
 author:
