@@ -260,9 +260,122 @@ LogicalRepeatUnion(all=[true])
 | :----------------------------------------------- | :--------------------------------------------- |
 | scan(tableName)                                  | 创建 [TableScan](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/TableScan.html) 对象。 |
 | functionScan(operator, n, expr...) </br> functionScan(operator, n, exprList) | 创建 `n` 个最新关系表达式的 [TableFunctionScan](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/TableFunctionScan.html)。|
-| transientScan(tableName [, rowType])             ||
-| values(fieldNames, value...) </br> values(rowType, tupleList)                       ||
-| filter([variablesSet, ] exprList) </br> filter([variablesSet, ] expr...)                 ||
+| transientScan(tableName [, rowType])             |使用指定的类型在 [TransientTable](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/TransientTable.html) 对象上创建 [TableScan](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/TableScan.html) 对象，（如果没有指定类型，将会使用最近使用到的关系表达式类型）|
+| values(fieldNames, value...) </br> values(rowType, tupleList) |创建 [Values](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Values.html) 对象|
+| filter([variablesSet, ] exprList) </br> filter([variablesSet, ] expr...) |在给定谓词的 AND 上创建 [Filter](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Filter.html)；如果指定了变量集合，则谓词可以引用到这些变量|
+| project(expr...) </br> project(exprList [, fieldNames]) | 创建一个 [Project](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Project.html) 对象。如果要覆盖默认名称，需要使用别名包装表达式，或指定 fieldNames 参数。|
+| projectPlus(expr...) </br> projectPlus(exprList) | 保留原始字段并附加给定表达式的项目变体。|
+| projectExcept(expr...) </br> projectExcept(exprList) | 保留原始字段并删除给定表达式的项目变体。|
+| permute(mapping) | 创建一个 [Project](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Project.html) 对象，并使用 mapping 参数排列属性。|
+| convert(rowType [, rename]) | 创建一个将字段转换为给定类型的 [Project](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Project.html)，还可以重命名它们。|
+| aggregate(groupKey, aggCall...) </br> aggregate(groupKey, aggCallList) | 创建一个 [Aggregate](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Aggregate.html)。|
+| distinct() | 创建一个可以消除重复记录的 [Aggregate](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Aggregate.html) 对象。|
+| pivot(groupKey, aggCalls, axes, values) | 添加枢轴操作，该操作是通过为带有度量和值的每种组合列生成一个聚合来实现。 |
+| sort(fieldOrdinal...) </br> sort(expr...) </br> sort(exprList) | 创建一个 [Sort](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Sort.html) 对象。</br> 在第一种形式中，字段序号从0开始，负序号表示下降。例如，-2表示字段1降序。</br> 在其他形式中，可以将表达式包装为nullsFirst或nullsLast。 |
+| sortLimit(offset, fetch, expr...) </br> sortLimit(offset, fetch, exprList) | 创建一个具备 offset 和 limit 功能的 [Sort](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Sort.html) 对象|
+| limit(offset, fetch) | 创建一个不带排序功能的 [Sort](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Sort.html) 对象，只具备 offset 和 limit 功能。 |
+| exchange(distribution) | 创建一个 [Exchange](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Exchange.html)。 |
+| sortExchange(distribution, collation) | 创建一个 [SortExchange](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/SortExchange.html) 对象|
+| correlate(joinType, correlationId, requiredField...) </br> correlate(joinType, correlationId, requiredFieldList) | 创建两个最新关系表达式的 [Correlate](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Correlate.html)，其中变量名称和左关系必需的字段表达式。 |
+| join(joinType, expr...) </br> join(joinType, exprList) </br> join(joinType, fieldName...) | 创建两个最新关系表达式的 [Join](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Join.html)。</br> 第一种形式联接一个布尔表达式（使用 AND 组合多个条件）。</br> 最后一种形式连接在命名属性上；连接每一边都必须有所有的属性。 |
+| semiJoin(expr) | 使用 SEMI 连接类型创建两个最新关系表达式的 [Join](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Join.html)。|
+| antiJoin(expr) | 使用 ANTI 连接类型创建两个最新关系表达式的 [Join](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Join.html)。|
+| union(all [, n]) | 创建 n（默认是两个） 个最新关系表达式的 [Union](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Union.html)。|
+| intersect(all [, n]) | 创建 n（默认是两个） 个最新关系表达式的 [Intersect](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Intersect.html) |
+| minus(all) | 创建两个最新关系表达式的 [Minus](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Minus.html) |
+| repeatUnion(tableName, all [, n]) | 创建与两个最新关系表达式的 [TransientTable](https://calcite.apache.org/javadocAggregate/org/apache/calcite/schema/TransientTable.html) 关联的 [RepeatUnion](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/RepeatUnion.html)，最大迭代次数为n（默认为-1，即无限制）。|
+| snapshot(period) | 创建给定快照周期的 [Snapshot](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Snapshot.html)。|
+| match(pattern, strictStart, strictEnd, patterns, measures, after, subsets, allRows, partitionKeys, orderKeys, interval) | 创建一个 [Match](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/Match.html)。 |
 
+### 参数类型
 
-Creates a TableScan on a TransientTable with the given type (if not specified, the most recent relational expression’s type will be used).
+- `expr`, `interval` [RexNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexNode.html)
+
+- `expr...`, `requiredField...` [RexNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexNode.html) 数组
+
+- `exprList`, `measureList`, `partitionKeys`, `orderKeys`, `requiredFieldList` 可迭代的 [RexNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexNode.html)
+
+- `fieldOrdinal` 其行内字段的序数（从0开始）
+
+- `fieldName` 属性的名称，在其行内是唯一的
+
+- `fieldName...` 字符串类型数组
+
+- `fieldNames` 可迭代的字符串
+
+- `rowType` [RelDataType](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/type/RelDataType.html)
+
+- `groupKey` [RelBuilder.GroupKey](https://calcite.apache.org/javadocAggregate/org/apache/calcite/tools/RelBuilder.GroupKey.html)
+
+- `aggCall...` [RelBuilder.AggCall](https://calcite.apache.org/javadocAggregate/org/apache/calcite/tools/RelBuilder.AggCall.html) 的数组
+
+- `aggCallList` 可迭代的 [RelBuilder.AggCall](https://calcite.apache.org/javadocAggregate/org/apache/calcite/tools/RelBuilder.AggCall.html)
+
+- `value...` 对象数组
+
+- `value` 对象
+
+- `tupleList` 可迭代的 List 集合的 [RexLiteral](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexLiteral.html)
+
+- `all`, `distinct`, `strictStart`, `strictEnd`, `allRows` boolean
+
+- `alias` 字符串
+
+- `correlationId` [CorrelationId](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/CorrelationId.html)
+
+- `variablesSet` 可迭代的 [CorrelationId](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/CorrelationId.html)
+
+- `varHolder` [RexCorrelVariable](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexCorrelVariable.html) 对象中的 [Holder](https://calcite.apache.org/javadocAggregate/org/apache/calcite/util/Holder.html)
+
+- `patterns` 一个 Map 对象，key 是字符串，value 是 [RexNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexNode.html) 对象
+
+- `subsets` 一个 Map 对象，key 是字符串，value 是排序好的字符串集合。
+
+- `distribution` [RelDistribution](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/RelDistribution.html)
+
+- `collation` [RelCollation](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/RelCollation.html)
+
+- `operator` [SqlOperator](https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlOperator.html)
+
+- `joinType` [JoinRelType](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/core/JoinRelType.html)
+
+构建器方法执行各种优化，包括：
+
+- `project` 如果要求按顺序投影所有列，则返回其输入
+
+- `filter` 展平条件（因此 AND 和 OR 可能有两个以上的孩子结点），简化了（将 x = 1 AND TRUE 转换为 x = 1）
+
+- 如果我们应用 `sort` 然后又使用了 `limit`，则效果就像您调用了 `sortLimit`。
+
+有一些注释方法可以将信息添加到堆栈的顶部关系表达式中：
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| as(alias) | 将表别名分配给堆栈上的顶级关系表达式 |
+| variable(varHolder) | 创建一个引用顶部关系表达式的相关变量 |
+
+### 堆栈方法
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| build() | 将最新创建的关系表达式弹出堆栈 |
+| push(rel) | 将关系表达式压入堆栈。上面的诸如 scan 之类的关系方法会调用此方法，但是用户代码通常不会 |
+| pushAll(collection) | 将关系表达式的集合推入堆栈 |
+| peek() | 返回最近放入堆栈的关系表达式，但不删除它 |
+
+### 标量表达式方法
+
+如下一些方法将返回标量表达式 [RexNode](https://calcite.apache.org/javadocAggregate/org/apache/calcite/rex/RexNode.html)
+
+它们中的许多方法会使用堆栈的内容。例如，`field("DEPTNO")`返回对刚刚添加到堆栈中的关系表达式的 `DEPTNO` 字段的引用。
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| literal(value) | 常量 |
+| field(fieldName) | 按名称引用栈顶部的关系表达式的字段 |
+| field(fieldOrdinal) | 按序引用栈顶部的关系表达式的字段 |
+| field(inputCount, inputOrdinal, fieldName) | 按名称引用第（inputCount - inputOrdinal）个关系表达式的字段 |
+| field(inputCount, inputOrdinal, fieldOrdinal) | 按顺序引用第（inputCount - inputOrdinal）个关系表达式的字段 |
+| field(inputCount, alias, fieldName) | 通过表别名和字段名称引用从堆栈顶部开始的最多的 inputCount - 1 个元素 |
+| field(alias, fieldName) | 通过表别名和字段名称引用最顶层关系表达式的字段 |
+| field(expr, fieldName) | 按名称引用记录值表达式的字段 |
