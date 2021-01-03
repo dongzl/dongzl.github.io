@@ -359,7 +359,7 @@ LogicalRepeatUnion(all=[true])
 |  方法                                             | 描述                                           |
 | :----------------------------------------------- | :--------------------------------------------- |
 | build() | 将最新创建的关系表达式弹出堆栈 |
-| push(rel) | 将关系表达式压入堆栈。上面的诸如 scan 之类的关系方法会调用此方法，但是用户代码通常不会 |
+| push(rel) | 将关系表达式压入堆栈。上面的诸如 `scan` 之类的关系方法会调用此方法，但是用户代码通常不会 |
 | pushAll(collection) | 将关系表达式的集合推入堆栈 |
 | peek() | 返回最近放入堆栈的关系表达式，但不删除它 |
 
@@ -374,18 +374,18 @@ LogicalRepeatUnion(all=[true])
 | literal(value) | 常量 |
 | field(fieldName) | 按名称引用栈顶部的关系表达式的字段 |
 | field(fieldOrdinal) | 按序引用栈顶部的关系表达式的字段 |
-| field(inputCount, inputOrdinal, fieldName) | 按名称引用第（inputCount - inputOrdinal）个关系表达式的字段 |
-| field(inputCount, inputOrdinal, fieldOrdinal) | 按顺序引用第（inputCount - inputOrdinal）个关系表达式的字段 |
-| field(inputCount, alias, fieldName) | 通过表别名和字段名称引用从堆栈顶部开始的最多的 inputCount - 1 个元素 |
+| field(inputCount, inputOrdinal, fieldName) | 按名称引用第（`inputCount - inputOrdinal`）个关系表达式的字段 |
+| field(inputCount, inputOrdinal, fieldOrdinal) | 按顺序引用第（`inputCount - inputOrdinal`）个关系表达式的字段 |
+| field(inputCount, alias, fieldName) | 通过表别名和字段名称引用从堆栈顶部开始的最多的 `inputCount - 1` 个元素 |
 | field(alias, fieldName) | 通过表别名和字段名称引用最顶层关系表达式的字段 |
 | field(expr, fieldName) | 按名称引用记录值表达式的字段 |
 | field(expr, fieldOrdinal) | 按属性顺序引用记录值表达式的字段 |
 | fields(fieldOrdinalList) | 按顺序引用输入字段的表达式列表 |
 | fields(mapping) | 通过给定映射引用输入字段的表达式列表 |
-| fields(collation) | 表达式列表，exprList，这样 sort(exprList) 将复制排序规则 |
+| fields(collation) | 表达式列表，`exprList`，这样 `sort(exprList)` 将复制排序规则 |
 | call(op, expr...) </br> call(op, exprList) | 调用函数或运算符 |
-| and(expr...) </br> and(exprList) | 逻辑与。展平嵌套的 AND，并优化涉及 TRUE 和 FALSE 的情况。 |
-| or(expr...) </br> or(exprList) | 逻辑或。展平嵌套的 OR，并优化涉及 TRUE 和 FALSE 的情况。 |
+| and(expr...) </br> and(exprList) | 逻辑与。展平嵌套的 `AND`，并优化涉及 `TRUE` 和 `FALSE` 的情况。 |
+| or(expr...) </br> or(exprList) | 逻辑或。展平嵌套的 `OR`，并优化涉及 `TRUE` 和 `FALSE` 的情况。 |
 | not(expr) | 逻辑非 |
 | equals(expr, expr) | 等于 |
 | isNull(expr) | 检测某个表达式是否为空 |
@@ -416,8 +416,8 @@ LogicalRepeatUnion(all=[true])
 |  方法                                             | 描述                                           |
 | :----------------------------------------------- | :--------------------------------------------- |
 | groupKey(fieldName...) </br> groupKey(fieldOrdinal...) </br> groupKey(expr...) </br> groupKey(exprList) | 创建给定表达式的 group key |
-| groupKey(exprList, exprListList) | 创建具有分组集的给定表达式的 group key |
-| groupKey(bitSet [, bitSets]) | 创建给定输入列的 group key，如果指定了 `bitSets` 参数，则具有多个分组集 |
+| groupKey(exprList, exprListList) | 创建具有分组集的给定表达式的 `group key` |
+| groupKey(bitSet [, bitSets]) | 创建给定输入列的 `group key`，如果指定了 `bitSets` 参数，则具有多个分组集 |
 
 ### 聚合方法
 
