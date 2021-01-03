@@ -415,7 +415,7 @@ LogicalRepeatUnion(all=[true])
 
 |  方法                                             | 描述                                           |
 | :----------------------------------------------- | :--------------------------------------------- |
-| groupKey(fieldName...) </br> groupKey(fieldOrdinal...) </br> groupKey(expr...) </br> groupKey(exprList) | 创建给定表达式的 group key |
+| groupKey(fieldName...) </br> groupKey(fieldOrdinal...) </br> groupKey(expr...) </br> groupKey(exprList) | 创建给定表达式的 `group key` |
 | groupKey(exprList, exprListList) | 创建具有分组集的给定表达式的 `group key` |
 | groupKey(bitSet [, bitSets]) | 创建给定输入列的 `group key`，如果指定了 `bitSets` 参数，则具有多个分组集 |
 
