@@ -379,3 +379,66 @@ LogicalRepeatUnion(all=[true])
 | field(inputCount, alias, fieldName) | 通过表别名和字段名称引用从堆栈顶部开始的最多的 inputCount - 1 个元素 |
 | field(alias, fieldName) | 通过表别名和字段名称引用最顶层关系表达式的字段 |
 | field(expr, fieldName) | 按名称引用记录值表达式的字段 |
+| field(expr, fieldOrdinal) | 按属性顺序引用记录值表达式的字段 |
+| fields(fieldOrdinalList) | 按顺序引用输入字段的表达式列表 |
+| fields(mapping) | 通过给定映射引用输入字段的表达式列表 |
+| fields(collation) | 表达式列表，exprList，这样 sort(exprList) 将复制排序规则 |
+| call(op, expr...) </br> call(op, exprList) | 调用函数或运算符 |
+| and(expr...) </br> and(exprList) | 逻辑与。展平嵌套的 AND，并优化涉及 TRUE 和 FALSE 的情况。 |
+| or(expr...) </br> or(exprList) | 逻辑或。展平嵌套的 OR，并优化涉及 TRUE 和 FALSE 的情况。 |
+| not(expr) | 逻辑非 |
+| equals(expr, expr) | 等于 |
+| isNull(expr) | 检测某个表达式是否为空 |
+| isNotNull(expr) | 检测某个表达式是否非空 |
+| alias(expr, fieldName) | 重命名表达式（仅作为 `project` 的参数有效）|
+| cast(expr, typeName) </br> cast(expr, typeName, precision) </br> cast(expr, typeName, precision, scale) | 转换一个表达式为指定类型 |
+| desc(expr) | 将排序方向更改为降序（仅作为 `sort` 或 `sortLimit` 的参数有效） |
+| nullsFirst(expr) | 将排序顺序更改为 `null first`（仅作为 `sort` 或 `sortLimit` 的参数有效）|
+| nullsLast(expr) | 将排序顺序更改为 `null last`（仅作为 `sort` 或 `sortLimit` 的参数有效）|
+| cursor(n, input) | 引用具有 `n` 个输入的 `TableFunctionScan` 的 `input`（从 `0` 开始）关系输入（请参见 `functionScan`）|
+
+### 模式方法
+
+如下方法返回用于匹配的模式。
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| patternConcat(pattern...) | 级联模式 |
+| patternAlter(pattern...) | 备用模式 |
+| patternQuantify(pattern, min, max) | 量化模式 |
+| patternPermute(pattern...) | 排列模式 |
+| patternExclude(pattern) | 排除模式 |
+
+### key 分组方法
+
+如下的方法将返回 [RelBuilder.GroupKey](https://calcite.apache.org/javadocAggregate/org/apache/calcite/tools/RelBuilder.GroupKey.html) 对象。
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| groupKey(fieldName...) </br> groupKey(fieldOrdinal...) </br> groupKey(expr...) </br> groupKey(exprList) | 创建给定表达式的 group key |
+| groupKey(exprList, exprListList) | 创建具有分组集的给定表达式的 group key |
+| groupKey(bitSet [, bitSets]) | 创建给定输入列的 group key，如果指定了 `bitSets` 参数，则具有多个分组集 |
+
+### 聚合方法
+
+如下方法将会返回 [RelBuilder.AggCall](https://calcite.apache.org/javadocAggregate/org/apache/calcite/tools/RelBuilder.AggCall.html) 对象。
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| aggregateCall(op, expr...) </br> aggregateCall(op, exprList)| 创建对给定聚合函数的调用 |
+| count([ distinct, alias, ] expr...) </br> count([ distinct, alias, ] exprList)| 创建一个对 `COUNT` 聚合函数的调用 |
+| countStar(alias) | 创建一个对 `COUNT(*)` 聚合函数的调用 |
+| sum([ distinct, alias, ] expr) | 创建一个对 `SUM` 聚合函数的调用 |
+| min([ alias, ] expr) | 创建一个对 `MIN` 聚合函数的调用 |
+| max([ alias, ] expr) | 创建一个对 `MAX` 聚合函数的调用 |
+
+要进一步修改 `AggCall`，需要调用其方法：
+
+|  方法                                             | 描述                                           |
+| :----------------------------------------------- | :--------------------------------------------- |
+| approximate(approximate) | 允许近似值作为 `approximate` 的聚合结果 |
+| as(alias) | 为该表达式指定列别名（请参见 `SQL` `AS`） |
+| distinct() | 在执行聚合操作前消除重复值（参见 `SQL` `DISTINCT`） |
+| distinct(distinct) | 如果 distinct 为 true，在执行聚合操作前消除重复记录 |
+| filter(expr) | 在执行聚合操作前过滤行记录（参见 `SQL` `FILTER` `(WHERE ...)`） |
+| sort(expr...) </br> sort(exprList) | 在执行聚合操作前排序行记录（参见 `SQL` `WITHIN` `GROUP`）|
