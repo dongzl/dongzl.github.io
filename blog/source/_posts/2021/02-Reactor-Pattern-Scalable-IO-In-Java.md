@@ -22,7 +22,7 @@ tags:
 
 周末随便学习一些东西，在[屈定](https://mrdear.cn/)老兄的博客上看到更新了一篇文章[《Netty -- Reactor模型的应用》](https://mrdear.cn/posts/framework-netty-reactor-model.html)，内容分析的很到位，对于 `Reactor` 模式，我了解到的主要还是在 `Netty` 框架中的线程模式使用的是 `Reactor` 模式，有时会想这个东西在在我们的业务系统中会有什么样的应用场景，是不是有机会在某些功能中落地到我们的项目中，而不是一直高高在上，为此还和屈定老兄交流了一下。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-01.jpeg"/>
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-01.jpeg" style="width:300px"/>
 
 看来这个东西也只是“此曲只应天上有，人间能得几回闻”，业务系统落地机会看来不多，也可能还需要慢慢探索，不过还是想在学习一下，不要只是肤浅的理解。
 
