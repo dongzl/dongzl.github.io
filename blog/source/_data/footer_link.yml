@@ -8,6 +8,9 @@ friend_links:
   - name: 酷 壳–CoolShell
     desc: 酷 壳–CoolShell
     link: https://coolshell.cn/
+  - name: 有赞技术团队
+    desc: 有赞技术团队
+    link: https://tech.youzan.com/
     
 big_boss_blog:
   - name: draveness
