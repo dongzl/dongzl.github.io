@@ -1,7 +1,7 @@
 ---
 title: Reactor 模式--Scalable IO in Java
 date: 2021-01-09 19:23:58
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/netty_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -26,7 +26,7 @@ tags:
 
 看来这个东西也只是“此曲只应天上有，人间能得几回闻”，业务系统落地机会看来不多，也可能还需要慢慢探索，不过还是想在学习一下，不要只是肤浅的理解。
 
-如果在谷歌上搜索 Reactor 模式的知识，搜索结果里面一定会有 Doug Lea 大师《Scalable IO in Java》文档内容，看这个文档内容应该是一次知识分享的 PPT 内容，而且很多分析 Reactor 模式的博客文章大部分在引用里面都会提到《Scalable IO in Java》内容，这次的学习也集中在这个文档的内容。
+如果在谷歌上搜索 `Reactor` 模式的知识，搜索结果里面一定会有 `Doug Lea` 大师《Scalable IO in Java》文档内容，看这个文档内容应该是一次知识分享的 `PPT` 内容，而且很多分析 `Reactor` 模式的博客文章大部分在引用里面都会提到《Scalable IO in Java》内容，这次的学习也集中在这个文档的内容。
 
 ## 目录
 
@@ -36,25 +36,25 @@ tags:
 
 ### 网络服务
 
-在这一节中，Doug Lea 大师总结了在 web 应用服务、分布式服务中一般包括如下一些基本的处理流程：
+在这一节中，`Doug Lea` 大师总结了在 `web` 应用服务、分布式服务中一般包括如下一些基本的处理流程：
 
-- Read request（读请求，比如说 web 请求中的 HttpRequest）
+- `Read request`（读请求，比如说 `web` 请求中的 `HttpRequest`）
 
-- Decode request（解析 Request 数据）
+- `Decode request`（解析 `Request` 数据）
 
-- Process service （业务逻辑处理）
+- `Process service` （业务逻辑处理）
 
-- Encode reply （包装响应数据）
+- `Encode reply` （包装响应数据）
 
-- Send reply（发送响应结果，比如说 web 请求中的 HttpReponse）
+- `Send reply`（发送响应结果，比如说 `web` 请求中的 `HttpReponse`）
 
-这个处理流程中不同的是每次需要进行的 XML 解析，文件传输、web 网页生成，服务计算等内容... ...
+这个处理流程中不同的是每次需要进行的 `XML` 解析，文件传输、`web` 网页生成，服务计算等内容... ...
 
 ### 经典服务设计
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-03.png"/>
 
-每一个 handler 处理流程可能会启动一个自己独享的线程。
+每一个 `handler` 处理流程可能会启动一个自己独享的线程。
 
 ```java
 class Server implements Runnable {
@@ -99,11 +99,11 @@ class Server implements Runnable {
 //注意：代码示例中的异常处理内容都被忽略掉了
 ```
 
-### 可扩展行目标
+### 可扩展性目标
 
-- 负载增加时的平稳降级（更多客户端）
+- 负载增加时的平稳降级（支持更多客户端连接）
 
-- 通过增加资源（CPU，内存，磁盘，带宽）进行持续改进
+- 通过增加资源（`CPU`，内存，磁盘，带宽）进行持续改进
 
 - 同时满足可用性和性能目标
 
@@ -119,7 +119,7 @@ class Server implements Runnable {
 
 将整个处理流程分割成为一些小的任务，每个任务执行一个动作而不会产生阻塞。
 
-当某个时刻任务被启用时，开始执行这个任务；在整个过程中，IO 事件作为任务启用的触发器。
+当某个时刻任务被启用时，开始执行这个任务；在整个过程中，`IO` 事件作为任务启用的触发器。
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-06.png"/>
 
@@ -143,13 +143,13 @@ class Server implements Runnable {
 
 - 调度可能会变慢：必须手动将动作与事件绑定到一起
 
-
 事件驱动的设计通常比替代方案程序实现更加复杂：
 
 - 必须分解成简单的非阻塞动作
   
-  - 类似于GUI事件驱动的操作
-  - 无法消除所有阻塞：GC，页面错误等
+  - 类似于 `GUI` 事件驱动的操作
+
+  - 无法消除所有阻塞：`GC`，页面错误等
 
 - 必须跟踪逻辑服务状态
 
@@ -157,15 +157,15 @@ class Server implements Runnable {
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-07.png"/>
 
-事件驱动的IO使用相似的想法，但设计不同
+事件驱动的 `IO` 使用相似的想法，但设计不同
 
 ## Reactor 模式
 
-Reactor 通过调度适当的处理程序来响应 IO 事件（和 AWT 中的线程作用非常类似）
+`Reactor` 通过调度适当的处理程序来响应 `IO` 事件（和 `AWT` 中的线程作用非常类似）
 
-Handler 用于完成非阻塞的动作（和 AWT 中 ActionListeners 作用类似）
+`Handler` 用于完成非阻塞的动作（和 `AWT` 中 `ActionListeners` 作用类似）
 
-通过将处理程序绑定到事件进行管理（和 AWT 中 addActionListener 作用类似）
+通过将处理程序绑定到事件进行管理（和 `AWT` 中 `addActionListener` 作用类似）
 
 > 参见：Schmidt et al, Pattern-Oriented Software Architecture, Volume 2 (POSA2)
 > 或者 Richard Stevens 的网络编程书籍, Matt Welsh 的 SEDA 框架书籍等内容。
@@ -174,17 +174,17 @@ Handler 用于完成非阻塞的动作（和 AWT 中 ActionListeners 作用类�
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-04.png"/>
 
-单线程版本
+单线程版本实现
 
 ### java.nio 支持
 
-- Channels：Channel 用于实现非阻塞读操作，可以连接到文件、Socket等；
+- `Channels`：`Channel` 用于实现非阻塞读操作，可以连接到文件、`Socket` 等；
 
-- Buffers：Buffer 类似于对象数组，能够直接通过 Channel 进行读写操作；
+- `Buffers`：`Buffer` 类似于对象数组，能够直接通过 `Channel` 进行读写操作；
 
-- Selectors：判断一组 Channel 中的哪些发生了 IO 事件；
+- `Selectors`：判断一组 `Channel` 中的哪些发生了 `IO` 事件；
 
-- SelectionKeys：维护 IO 事件状态和绑定状态
+- `SelectionKeys`：维护 `IO` 事件状态和绑定状态
 
 ### Reactor 模式第一步：启动
 
@@ -324,7 +324,7 @@ void send() throws IOException {
 
 ### 单个状态处理程序
 
-GoF 中状态模式的简单应用：重新绑定适当的处理程序作为附件
+`GoF` 中状态模式的简单应用：重新绑定适当的处理程序作为附件
 
 ```java
 class Handler { // ...
@@ -357,19 +357,27 @@ class Handler { // ...
 
 - 工作线程：
   
-  - Reactor 能够快速的触发 Handler 执行：处理程序处理会减慢 Reactor 的速度
+  - `Reactor` 能够快速的触发 Handler 执行：处理程序处理会减慢 `Reactor` 的速度
 
-  - 将非 IO 处理程序由其他线程来完成
+  - 将非 `IO` 处理程序由其他线程来完成
 
-- 多个 Reactor 线程
+- 多个 `Reactor` 线程
   
-  - Reactor 堆线程可以充分利用系统 IO 操作
+  - `Reactor` 堆线程可以充分利用系统 `IO` 操作
 
-  - 将负载分配给其他 Reactor 线程：负载均衡以匹配 CPU 和 IO 利用率
+  - 将负载分配给其他 `Reactor` 线程：负载均衡以匹配 `CPU` 和 `IO` 利用率
 
 ### 工作线程
 
+- 卸载非 `IO` 处理以加速 `Reactor` 线程：与 POSA2 Proactor 设计类似
 
+PS. 工作线程用于处理 IO 事件，`Reactor` 线程不用关心 `IO` 事件，这样可以提升 `Reactor` 线程 处理速度
+
+- 比将计算绑定处理重新加工成事件驱动的形式更简单：应该仍然是纯非阻塞计算，足够的处理胜过开销
+
+- 但是很难将处理与 `IO` 重叠：最好某个时刻可以先将所有输入读入缓冲区
+
+- 使用线程池，因此可以进行调整和控制：通常需要比客户端少的线程
 
 ### 工作线程池
 
@@ -409,14 +417,27 @@ class Handler { // ...
 
 ### 协调任务
 
-- Handoffs：每个任务都会启用，触发或调用下一个任务
-通常最快，但可能很脆弱
+- `Handoffs`
+  
+  - 每个任务都会启用，触发或调用下一个任务
+  
+  - 通常最快，但可能很脆弱
 
-- Callbacks：回调到每个处理程序的调度程序设置状态，附件等GoF Mediator模式的变体
+- `Callbacks`：回调每个处理程序的调度程序
 
-- Queues：例如，跨阶段传递缓冲区
+  - 设置状态，附件等
 
-- Futures：当每个任务产生结果时，协作位于联接或等待/通知之上
+  - `GoF` `Mediator` 模式的变体
+
+- `Queues`
+
+  - 例如，跨阶段传递缓冲区
+
+- `Futures`
+
+  - 当每个任务产生结果时
+  
+  - 协作位于联接或等待 / 通知之上
 
 
 ### 使用线程池执行器
@@ -439,15 +460,15 @@ class Handler { // ...
 
   - 饱和策略：阻止，掉落，生产者运行等
 
-### 多个 Reactor 线程
+### 多个 Reactor 线程模式
 
-使用 Reactor 对象池
+使用 `Reactor` 对象池
 
-用于匹配CPU和IO速率
+- 用于匹配 `CPU` 和 `IO` 速率
 
-静态或动态构造：每个都有自己的选择器，线程，分派循环
+- 静态或动态构造：每个 `Reactor` 线程都有自己的选择器，线程，分派循环
 
-主受体分配给其他反应堆
+主 `acceptor` 负责分配到其他的 `Reactor`
 
 ```java
 Selector[] selectors; // also create threads
@@ -471,47 +492,47 @@ class Acceptor { // ...
 
 ### 使用其他的 java.nio 特性
 
-- 每个 Reactor 支持多个 Selector
+- 每个 `Reactor` 支持多个 `Selector`
 
-  - 将不同的处理程序绑定到不同的IO事件
+  - 将不同的处理程序绑定到不同的 `IO` 事件
 
-  - 可能需要仔细同步以进行协调
+  - 需要仔细处理同步操作来进行协调
 
 - 文件传输
 
-  - 自动化的文件到网络或网络到文件的复制
+  - 自动完成文件到网络或网络到文件的复制操作
 
 - 内存映射文件
 
-  - 通过 buffer 访问文件
+  - 通过 `buffer` 访问文件
 
 - 直接缓冲
 
   - 有时可以实现零拷贝传输
 
-  - 但是有设置和完成的开销
+  - 但是启动和完成会产生额外的开销
 
-  - 最适合连接寿命长的应用
+  - 最适合连接时间较长的应用
 
 ### 基于连接的扩展
 
-- 而不是单个服务请求
+- 非单个服务请求处理
 
   - 客户端连接
 
-  - 客户端发送一系列的消息/请求
+  - 客户端发送一系列的消息 / 请求
 
   - 断开客户端连接
 
-- 示例
+- 示例场景
 
   - 数据库和事务监听
 
   - 多人游戏，聊天等
 
-- 可以扩展基本的网络服务模式
+- 可扩展的基础网络服务模式
   
-  - 处理许多相对长期的客户
+  - 处理许多存活时间相对较长的客户端请求
 
   - 跟踪客户端和会话状态（包括丢弃）
 
@@ -519,23 +540,23 @@ class Acceptor { // ...
 
 ## API 练习
 
-- Buffer
+- `Buffer`
 
-- ByteBuffer：CharBuffer，LongBuffer 等其他一些未列举。
+- `ByteBuffer`：`CharBuffer`，`LongBuffer` 等其他一些未列举。
 
-- Channel
+- `Channel`
 
-- SelectableChannel
+- `SelectableChannel`
 
-- SocketChannel
+- `SocketChannel`
 
-- ServerSocketChannel
+- `ServerSocketChannel`
 
-- FileChannel
+- `FileChannel`
 
-- Selector
+- `Selector`
 
-- SelectionKey
+- `SelectionKey`
 
 ### Buffer
 
@@ -757,3 +778,7 @@ abstract class SelectionKey {
     Object attachment();
 }
 ```
+
+## 参考链接
+
+- [Scalable IO in Java](http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf)
