@@ -19,7 +19,7 @@ tags:
 
 ## 背景介绍
 
-对于业务线上的一名研发来说，`Java` 的 `SPI` 机制使用还是不多的，反而倒是在很多的开源框架中，`Java` 的 `SPI` 机制被大量的应用，比如 `Apache duboo` 框架，其内部很多的模块的扩展机制，比如注册中心、配置中心、负载均衡策略，都是通过 `Java` 的 `SPI` 机制来实现的，还比如笔者一直参与的开源框架 `Apache ShardingSphere` 的，在最新的 `5.X` 版本中实现的微内核、可插拔的机制，同样是通过 `Java` 的 `SPI` 机制来完成的。
+对于业务线上的一名研发来说，`Java` 的 `SPI` 机制使用还是不多的，反而倒是在很多的开源框架中，`Java` 的 `SPI` 机制被大量的应用，比如 `Apache Duboo` 框架，其内部很多的模块的扩展机制，比如注册中心、配置中心、负载均衡策略，都是通过 `Java` 的 `SPI` 机制来实现的，还比如笔者一直参与的开源框架 `Apache ShardingSphere` 的，在最新的 `5.X` 版本中实现的微内核、可插拔的机制，同样是通过 `Java` 的 `SPI` 机制来完成的。
 
 [Dubbo 2.7 --> 开发指南 --> SPI 扩展实现](http://dubbo.apache.org/zh/docs/v2.7/dev/impls/)
 
@@ -297,7 +297,7 @@ public static <S> ServiceLoader<S> loadInstalled(Class<S> service) {
 
 `load()` 方法和 `loadInstalled()` 方法最大的区别是使用类的加载器不同，`load()` 方法使用 `Thread.currentThread().getContextClassLoader()` 作为类加载器；而 `loadInstalled()` 方法在 `while` 循环内部，通过逐级向上查找最顶级的父 `ClassLoader` 来作为 `ServiceLoader` 的类加载器，最终使用类加载器是按照如下顺序来完成的：
 
-ExtClassLoader --> SysClassLoader --> Bootstrap ClassLoader（注释有描述，代码感觉没体现）
+ExtClassLoader --> SysClassLoader --> Bootstrap ClassLoader
 
 那么这个方法的操作存在的意义是什么呢？在注释中也有一段描述：
 
