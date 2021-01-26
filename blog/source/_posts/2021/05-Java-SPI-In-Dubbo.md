@@ -9,7 +9,7 @@ author:
     link: http://dubbo.apache.org/
 
 # post subtitle in your index page
-subtitle: 本文旨在对 Java 中 SPI 机制进行介绍并结合源码分析一下实现原理。
+subtitle: 本文转载自 Apache Dubbo 官网文章，旨在通过源码对 Dubbo 可扩展机制进行深入分析。
 
 categories: 
   - java开发
@@ -19,7 +19,7 @@ tags:
 
 ## 背景介绍
 
-在上一篇文章 [Java SPI 使用及原理分析](https://dongzl.github.io/2021/01/16/04-Java-Service-Provider-Interface/) 中我们通过对一些著名的 `Java` 开源框架可扩展机制的实现原理分析，引出了 `Java` `SPI` 机制，同时通过一个小的实战案例演示了 `Java` `SPI` 机制的使用方式，并结合 JDK 源码，对 `Java` `SPI` 实现原理进行了分析，最后还总结了使用原生的 `Java` `SPI` 机制可能存在的一些不足；这一篇文章中再结合 Apache Dubbo 开源框架，来分析一下 `Java` `SPI` 在实践场景中的应用，我们知道 Java SPI 机制还是存在一些不足的，那这些不足在 Apache Dubbo 框架又是如何解决的呢？
+在上一篇文章 [Java SPI 使用及原理分析](https://dongzl.github.io/2021/01/16/04-Java-Service-Provider-Interface/) 中我们通过对一些著名的 `Java` 开源框架可扩展机制的实现原理分析，引出了 `Java` `SPI` 机制，同时通过一个小的实战案例演示了 `Java` `SPI` 机制的使用方式，并结合 JDK 源码，对 `Java` `SPI` 实现原理进行了分析，最后还总结了使用原生的 `Java` `SPI` 机制可能存在的一些不足；这一篇文章中再结合 `Apache Dubbo` 开源框架，来分析一下 `Java` `SPI` 在实践场景中的应用，我们知道 Java SPI 机制还是存在一些不足的，那这些不足在 `Apache Dubbo` 框架又是如何解决的呢？
 
 PS. 这一篇文章的内容并非原创，而是来源于 [Apache Dubbo](http://dubbo.apache.org/) 官网的博客文章，文章的版权属于 `Apache Dubbo`，本人只对原文部分内容进行排版和美化。
 
@@ -31,27 +31,27 @@ PS. 这一篇文章的内容并非原创，而是来源于 [Apache Dubbo](http:/
 
 ## Dubbo的扩展机制
 
-在 `Dubbo` 的官网上，`Dubbo` 描述自己是一个高性能的 `RPC` 框架。今天我想聊聊 `Dubbo` 的另一个很棒的特性, 就是它的可扩展性。 如同罗马不是一天建成的，任何系统都一定是从小系统不断发展成为大系统的，想要从一开始就把系统设计的足够完善是不可能的，相反的，我们应该关注当下的需求，然后再不断地对系统进行迭代。在代码层面，要求我们适当的对关注点进行抽象和隔离，在软件不断添加功能和特性时，依然能保持良好的结构和可维护性，同时允许第三方开发者对其功能进行扩展。在某些时候，软件设计者对扩展性的追求甚至超过了性能。
+在 `Dubbo` 的官网上，`Dubbo` 描述自己是一个高性能的 `RPC` 框架。今天我想聊聊 `Dubbo` 的另一个很棒的特性，就是它的可扩展性。 如同罗马不是一天建成的，任何系统都一定是从小系统不断发展成为大系统的，想要从一开始就把系统设计的足够完善是不可能的；相反的，我们应该关注当下的需求，然后再不断地对系统进行迭代。在代码层面，要求我们适当的对关注点进行抽象和隔离，在软件不断添加功能和特性时，依然能保持良好的结构和可维护性，同时允许第三方开发者对其功能进行扩展。在某些时候，软件设计者对扩展性的追求甚至超过了性能。
 
-在谈到软件设计时，可扩展性一直被谈起，那到底什么才是可扩展性，什么样的框架才算有良好的可扩展性呢？它必须要做到以下两点:
+在谈到软件设计时，可扩展性一直被谈起，那到底什么才是可扩展性，什么样的框架才算有良好的可扩展性呢？它必须要做到以下两点：
 
 - 作为框架的维护者，在添加一个新功能时，只需要添加一些新代码，而不用大量的修改现有的代码，即符合开闭原则；
 
 - 作为框架的使用者，在添加一个新功能时，不需要去修改框架的源码，在自己的工程中添加代码即可。
 
-`Dubbo` 很好的做到了上面两点。这要得益于 `Dubbo` 的**微内核** + **插件**的机制。接下来的章节中我们会慢慢揭开 `Dubbo` 扩展机制的神秘面纱。
+`Dubbo` 很好的做到了上面两点。这要得益于 `Dubbo` 的 **微内核** + **插件** 的机制。接下来的章节中我们会慢慢揭开 `Dubbo` 扩展机制的神秘面纱。
 
 ## 可扩展的几种解决方案
 
-通常可扩展的实现有下面几种:
+通常可扩展的实现有下面几种：
 
-- Factory模式
+- Factory 模式
 
-- IoC容器
+- IOC 容器
 
-- OSGI容器
+- OSGI 容器
 
-`Dubbo` 作为一个框架，不希望强依赖其他的 `IOC` 容器，比如 `Spring`，`Guice`。`OSGI` 也是一个很重的实现，不适合 `Dubbo`。最终 `Dubbo` 的实现参考了 `Java` 原生的 `SPI` 机制，但对其进行了一些扩展，以满足 `Dubbo` 的需求。
+`Dubbo` 作为一个框架，不希望强依赖其他的 `IOC` 容器，比如 `Spring`、`Guice`。`OSGI` 也是一个很重的实现，不适合 `Dubbo`。最终 `Dubbo` 的实现参考了 `Java` 原生的 `SPI` 机制，但对其进行了一些扩展，以满足 `Dubbo` 的需求。
 
 ## Dubbo 的 SPI 机制
 
@@ -59,19 +59,19 @@ PS. 这一篇文章的内容并非原创，而是来源于 [Apache Dubbo](http:/
 
 - 需要遍历所有的实现，并实例化，然后我们在循环中才能找到我们需要的实现；
 
-- 配置文件中只是简单的列出了所有的扩展实现，而没有给他们命名。导致在程序中很难去准确的引用它们；
+- 配置文件中只是简单的列出了所有的扩展实现，而没有给他们命名，导致在程序中很难去准确的引用它们；
 
 - 扩展如果依赖其他的扩展，做不到自动注入和装配；
 
 - 不提供类似于 `Spring` 的 `IOC` 和 `AOP` 功能；
 
-- 扩展很难和其他的框架集成，比如扩展里面依赖了一个 `Spring` `bean`，原生的 `Java` `SPI` 不支持
+- 扩展很难和其他的框架集成，比如扩展里面依赖了一个 `Spring` `bean`，原生的 `Java` `SPI` 不支持。
 
-所以 `Java` `SPI` 应付一些简单的场景是可以的，但对于 `Dubbo`，它的功能还是比较弱的。`Dubbo` 对原生 `SPI` 机制进行了一些扩展。接下来，我们就更深入地了解下 `Dubbo` 的 `SPI` 机制。
+所以 `Java` `SPI` 应付一些简单的场景是可以的，但对于 `Dubbo`，它的功能还是比较弱的。`Dubbo` 对原生 `SPI` 机制进行了一些扩展，接下来，我们就更深入地了解下 `Dubbo` 的 `SPI` 机制。
 
 ## Dubbo 扩展点机制基本概念
 
-在深入学习 `Dubbo` 的扩展机制之前，我们先明确 `Dubbo` `SPI` 中的一些基本概念。在接下来的内容中，我们会多次用到这些术语。
+在深入学习 `Dubbo` 的扩展机制之前，我们先明确 `Dubbo` `SPI` 中的一些基本概念，在接下来的内容中，我们会多次用到这些术语。
 
 ### 扩展点 (Extension Point)
 
@@ -91,15 +91,15 @@ PS. 这一篇文章的内容并非原创，而是来源于 [Apache Dubbo](http:/
 
 - `Dubbo` 中的配置有两种，一种是固定的系统级别的配置，在 `Dubbo` 启动之后就不会再改了。还有一种是运行时的配置，可能对于每一次的 `RPC`，这些配置都不同。比如在 `XML` 文件中配置了超时时间是 `10` 秒钟，这个配置在 `Dubbo` 启动之后，就不会改变了。但针对某一次的 `RPC` 调用，可以设置它的超时时间是 `30` 秒钟，以覆盖系统级别的配置。对于 `Dubbo` 而言，每一次的 `RPC` 调用的参数都是未知的。只有在运行时，根据这些参数才能做出正确的决定。
 
-- 很多时候，我们的类都是一个单例的，比如 `Spring` 的 `bean`，在 `Spring` `bean` 都实例化时，如果它依赖某个扩展点，但是在 `bean` 实例化时，是不知道究竟该使用哪个具体的扩展实现的。这时候就需要一个代理模式了，它实现了扩展点接口，方法内部可以根据运行时参数，动态的选择合适的扩展实现。而这个代理就是自适应实例。 自适应扩展实例在 `Dubbo` 中的使用非常广泛，`Dubbo` 中，每一个扩展都会有一个自适应类，如果我们没有提供，`Dubbo` 会使用字节码工具为我们自动生成一个。所以我们基本感觉不到自适应类的存在。后面会有例子说明自适应类是怎么工作的。
+- 很多时候，我们的类都是一个单例的，比如 `Spring` 的 `bean`，在 `Spring` `bean` 都实例化时，如果它依赖某个扩展点，但是在 `bean` 实例化时，是不知道究竟该使用哪个具体的扩展实现的。这时候就需要一个代理模式了，它实现了扩展点接口，方法内部可以根据运行时参数，动态的选择合适的扩展实现。而这个代理就是自适应实例。自适应扩展实例在 `Dubbo` 中的使用非常广泛，`Dubbo` 中，每一个扩展都会有一个自适应类，如果我们没有提供，`Dubbo` 会使用字节码工具为我们自动生成一个。所以我们基本感觉不到自适应类的存在。后面会有例子说明自适应类是怎么工作的。
 
 ### @SPI
 
-`@SPI` 注解作用于扩展点的接口上，表明该接口是一个扩展点。可以被 `Dubbo` 的 `ExtentionLoader` 加载。如果没有此 `ExtensionLoader` 调用会异常。
+`@SPI` 注解作用于扩展点的接口上，表明该接口是一个扩展点。可以被 `Dubbo` 的 `ExtentionLoader` 加载。如果没有此注解 `ExtensionLoader` 调用会异常。
 
 ### @Adaptive
 
-`@Adaptive` 注解用在扩展接口的方法上。表示该方法是一个自适应方法。`Dubbo` 在为扩展点生成自适应实例时，如果方法有 `@Adaptive` 注解，会为该方法生成对应的代码。方法内部会根据方法的参数，来决定使用哪个扩展。 `@Adaptive`注解用在类上代表实现一个装饰类，类似于设计模式中的装饰模式，它主要作用是返回指定类，目前在整个系统中 `AdaptiveCompiler`、 `AdaptiveExtensionFactory` 这两个类拥有该注解。
+`@Adaptive` 注解用在扩展接口的方法上。表示该方法是一个自适应方法。`Dubbo` 在为扩展点生成自适应实例时，如果方法有 `@Adaptive` 注解，会为该方法生成对应的代码。方法内部会根据方法的参数，来决定使用哪个扩展。 `@Adaptive` 注解用在类上代表实现一个装饰类，类似于设计模式中的装饰模式，它主要作用是返回指定类，目前在整个系统中 `AdaptiveCompiler`、 `AdaptiveExtensionFactory` 这两个类拥有该注解。
 
 ### ExtentionLoader
 
@@ -130,7 +130,7 @@ roundrobin=com.alibaba.dubbo.rpc.cluster.loadbalance.RoundRobinLoadBalance
 
 在了解了 `Dubbo` 的一些基本概念后，让我们一起来看一个 `Dubbo` 中实际的扩展点，对这些概念有一个更直观的认识。
 
-我们选择的是 `Dubbo` 中的 `LoadBalance` 扩展点。`Dubbo` 中的一个服务，通常有多个 `Provider`，`consumer` 调用服务时，需要在多个 `Provider` 中选择一个。这就是一个 `LoadBalance`。我们一起来看看在 `Dubbo` 中，`LoadBalance` 是如何成为一个扩展点的。
+我们选择的是 `Dubbo` 中的 `LoadBalance` 扩展点。`Dubbo` 中的一个服务，通常有多个 `Provider`，`consumer` 调用服务时，需要在多个 `Provider` 中选择一个，这就是一个 `LoadBalance`。我们一起来看看在 `Dubbo` 中，`LoadBalance` 是如何成为一个扩展点的。
 
 ### LoadBalance 接口
 
@@ -158,7 +158,7 @@ consistenthash=com.alibaba.dubbo.rpc.cluster.loadbalance.ConsistentHashLoadBalan
 
 <img src="https://gitee.com/dongzl/article-images/raw/master/2021/05-Java-SPI-In-Dubbo/dubbo-loadbalance.png" style="width:800px"/>
 
-- `@Adaptive(“loadbalance”)`：`@Adaptive` 注解修饰 `select` 方法，表明方法 `select` 方法是一个可自适应的方法。`Dubbo` 会自动生成该方法对应的代码。当调用 `select` 方法时，会根据具体的方法参数来决定调用哪个扩展实现的 `select` 方法。`@Adaptive` 注解的参数 `loadbalance` 表示方法参数中的 `loadbalance` 的值作为实际要调用的扩展实例。 但奇怪的是，我们发现 `select` 的方法中并没有 `loadbalance` 参数，那怎么获取 `loadbalance` 的值呢？`select` 方法中还有一个 `URL` 类型的参数，`Dubbo` 就是从 `URL` 中获取 `loadbalance` 的值的。这里涉及到 `Dubbo` 的 `URL` 总线模式，简单说，`URL` 中包含了 `RPC` 调用中的所有参数。`URL` 类中有一个 `Map<String, String> parameters` 字段，`parameters` 中就包含了 `loadbalance`。
+- `@Adaptive(“loadbalance”)`：`@Adaptive` 注解修饰 `select` 方法，表明方法 `select` 方法是一个可自适应的方法。`Dubbo` 会自动生成该方法对应的代码，当调用 `select` 方法时，会根据具体的方法参数来决定调用哪个扩展实现的 `select` 方法。`@Adaptive` 注解的参数 `loadbalance` 表示方法参数中的 `loadbalance` 的值作为实际要调用的扩展实例。 但奇怪的是，我们发现 `select` 的方法中并没有 `loadbalance` 参数，那怎么获取 `loadbalance` 的值呢？`select` 方法中还有一个 `URL` 类型的参数，`Dubbo` 就是从 `URL` 中获取 `loadbalance` 的值的。这里涉及到 `Dubbo` 的 `URL` 总线模式，简单说，`URL` 中包含了 `RPC` 调用中的所有参数。`URL` 类中有一个 `Map<String, String> parameters` 字段，`parameters` 中就包含了 `loadbalance`。
 
 ### 获取 LoadBalance 扩展
 
@@ -216,22 +216,23 @@ demo=com.dubbo.spi.demo.consumer.DemoLoadBalance
 DemoLoadBalance: Select the first invoker...
 ```
 
-日志。说明 `Dubbo` 的确是使用了我们自定义的 `LoadBalance`。
+日志，说明 `Dubbo` 的确是使用了我们自定义的 `LoadBalance`。
 
 ## 总结
+
 到此，我们从 `Java` `SPI` 开始，了解了 `Dubbo` `SPI` 的基本概念，并结合了 `Dubbo` 中的 `LoadBalance` 加深了理解。最后，我们还实践了一下，创建了一个自定义 `LoadBalance`，并集成到 `Dubbo` 中。相信通过这里理论和实践的结合，大家对 `Dubbo` 的可扩展有更深入的理解。 总结一下，`Dubbo` `SPI` 有以下的特点：
 
 - 对 `Dubbo` 进行扩展，不需要改动 `Dubbo` 的源码；
 
 - 自定义的 `Dubbo` 的扩展点实现，是一个普通的 `Java` 类，`Dubbo` 没有引入任何 `Dubbo` 特有的元素，对代码侵入性几乎为零；
 
-- 将扩展注册到 `Dubbo` 中，只需要在 `ClassPath` 中添加配置文件，使用简单，而且不会对现有代码造成影响，符合开闭原则。
+- 将扩展注册到 `Dubbo` 中，只需要在 `ClassPath` 中添加配置文件，使用简单，而且不会对现有代码造成影响，符合开闭原则；
 
-- `Dubbo` 的扩展机制设计默认值：`@SPI(“dubbo”)` 代表默认的 `SPI` 对象
+- `Dubbo` 的扩展机制设计默认值：`@SPI(“dubbo”)` 代表默认的 `SPI` 对象；
 
-- `Dubbo` 的扩展机制支持 `IOC`，`AOP` 等高级功能
+- `Dubbo` 的扩展机制支持 `IOC`、`AOP` 等高级功能；
 
-- `Dubbo`的扩展机制能很好的支持第三方 `IOC` 容器，默认支持 `Spring` `Bean`，可自己扩展来支持其他容器，比如 `Google` 的 `Guice`。
+- `Dubbo`的扩展机制能很好的支持第三方 `IOC` 容器，默认支持 `Spring` `Bean`，可自己扩展来支持其他容器，比如 `Google` 的 `Guice`；
 
 - 切换扩展点的实现，只需要在配置文件中修改具体的实现，不需要改代码，使用方便。
 
@@ -239,7 +240,7 @@ DemoLoadBalance: Select the first invoker...
 
 ## ExtensionLoader
 
-`ExtensionLoader` 是最核心的类，负责扩展点的加载和生命周期管理。我们就以这个类开始吧。 `ExtensionLoader` 的方法比较多，比较常用的方法有：
+`ExtensionLoader` 是最核心的类，负责扩展点的加载和生命周期管理，我们就以这个类开始吧。 `ExtensionLoader` 的方法比较多，比较常用的方法有：
 
 - `public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type)`
 
@@ -308,7 +309,7 @@ public T getExtension(String name) {
 }
 ```
 
-`getExtension` 方法中做了一些判断和缓存，主要的逻辑在 `createExtension` 方法中。我们继续看 `createExtension` 方法。
+`getExtension` 方法中做了一些判断和缓存，主要的逻辑在 `createExtension` 方法中，我们继续看 `createExtension` 方法。
 
 ```java
 private T createExtension(String name) {
@@ -317,7 +318,7 @@ private T createExtension(String name) {
     
     T instance = (T) EXTENSION_INSTANCES.get(clazz);
     if (instance == null) {
-          // 使用反射调用nesInstance来创建扩展类的一个示例
+        // 使用反射调用nesInstance来创建扩展类的一个示例
         EXTENSION_INSTANCES.putIfAbsent(clazz, (T) clazz.newInstance());
         instance = (T) EXTENSION_INSTANCES.get(clazz);
     }
@@ -336,13 +337,13 @@ private T createExtension(String name) {
 
 `createExtension` 方法做了以下事情：
 
-1. 先根据 `name` 来得到对应的扩展类。从 `ClassPath` 下 `META-INF` 文件夹下读取扩展点配置文件。
+- 先根据 `name` 来得到对应的扩展类，从 `ClassPath` 下 `META-INF` 文件夹下读取扩展点配置文件；
 
-2. 使用反射创建一个扩展类的实例
+- 使用反射创建一个扩展类的实例；
 
-3. 对扩展类实例的属性进行依赖注入，即 `IOC`。
+- 对扩展类实例的属性进行依赖注入，即 `IOC`；
 
-4. 如果有 `wrapper`，添加 `wrapper`，即 `AOP`。
+- 如果有 `wrapper`，添加 `wrapper`，即 `AOP`。
 
 下面我们来重点看下这 `4` 个过程
 
@@ -393,11 +394,11 @@ private Map<String, Class<?>> loadExtensionClasses() {
 
 - `META-INF/services`
 
-2. 使用反射创建扩展实例 这个过程很简单，使用 `clazz.newInstance()` 来完成。创建的扩展实例的属性都是空值。
+2. 使用反射创建扩展实例：这个过程很简单，使用 `clazz.newInstance()` 来完成。创建的扩展实例的属性都是空值。
 
-3. 扩展实例自动装配 在实际的场景中，类之间都是有依赖的。扩展实例中也会引用一些依赖，比如简单的 `Java` 类，另一个 `Dubbo` 的扩展或一个 `Spring` `Bean` 等。依赖的情况很复杂，`Dubbo` 的处理也相对复杂些。我们稍后会有专门的章节对其进行说明，现在，我们只需要知道，`Dubbo` 可以正确的注入扩展点中的普通依赖，`Dubbo` 扩展依赖或 `Spring` 依赖等。
+3. 扩展实例自动装配：在实际的场景中，类之间都是有依赖的。扩展实例中也会引用一些依赖，比如简单的 `Java` 类，另一个 `Dubbo` 的扩展或一个 `Spring` `Bean` 等。依赖的情况很复杂，`Dubbo` 的处理也相对复杂些。我们稍后会有专门的章节对其进行说明，现在，我们只需要知道，`Dubbo` 可以正确的注入扩展点中的普通依赖，`Dubbo` 扩展依赖或 `Spring` 依赖等。
 
-4. 扩展实例自动包装 自动包装就是要实现类似于 `Spring` 的 `AOP` 功能。`Dubbo` 利用它在内部实现一些通用的功能，比如日志，监控等。关于扩展实例自动包装的内容，也会在后面单独讲解。
+4. 扩展实例自动包装：自动包装就是要实现类似于 `Spring` 的 `AOP` 功能。`Dubbo` 利用它在内部实现一些通用的功能，比如日志，监控等。关于扩展实例自动包装的内容，也会在后面单独讲解。
 
 经过上面的 `4` 步，`Dubbo` 就创建并初始化了一个扩展实例。这个实例的依赖被注入了，也根据需要被包装了。到此为止，这个扩展实例就可以被使用了。
 
@@ -424,7 +425,7 @@ private T injectExtension(T instance) {
 }
 ```
 
-要实现对扩展实例的依赖的自动装配，首先需要知道有哪些依赖，这些依赖的类型是什么。`Dubbo` 的方案是查找 `Java` 标准的 `setter` 方法。即方法名以set开始，只有一个参数。如果扩展类中有这样的 `set` 方法，`Dubbo` 会对其进行依赖注入，类似于 `Spring` 的 `set` 方法注入。 但是 `Dubbo` 中的依赖注入比 `Spring` 要复杂，因为 `Spring` 注入的都是 `Spring` `bean`，都是由 `Spring` 容器来管理的。而 `Dubbo` 的依赖注入中，需要注入的可能是另一个 `Dubbo` 的扩展，也可能是一个 `Spring` `Bean`，或是 `Google` `guice` 的组件，或其他任何一个框架中的组件。`Dubbo` 需要能够从任何一个场景中加载扩展。在 `injectExtension` 方法中，是用 `Object object = objectFactory.getExtension(pt, property)` 来实现的。`objectFactory` 是 `ExtensionFactory` 类型的，在创建 `ExtensionLoader` 时被初始化：
+要实现对扩展实例的依赖的自动装配，首先需要知道有哪些依赖，这些依赖的类型是什么。`Dubbo` 的方案是查找 `Java` 标准的 `setter` 方法。即方法名以 `set` 开始，只有一个参数。如果扩展类中有这样的 `set` 方法，`Dubbo` 会对其进行依赖注入，类似于 `Spring` 的 `set` 方法注入。 但是 `Dubbo` 中的依赖注入比 `Spring` 要复杂，因为 `Spring` 注入的都是 `Spring` `bean`，都是由 `Spring` 容器来管理的。而 `Dubbo` 的依赖注入中，需要注入的可能是另一个 `Dubbo` 的扩展，也可能是一个 `Spring` `Bean`，或是 `Google` `guice` 的组件，或其他任何一个框架中的组件。`Dubbo` 需要能够从任何一个场景中加载扩展。在 `injectExtension` 方法中，是用 `Object object = objectFactory.getExtension(pt, property)` 来实现的。`objectFactory` 是 `ExtensionFactory` 类型的，在创建 `ExtensionLoader` 时被初始化：
 
 ```java
 private ExtensionLoader(Class<?> type) {
@@ -521,7 +522,7 @@ try {
 }
 ```
 
-这段代码的意思是，如果扩展类有复制构造函数，就把该类存起来，供以后使用。有复制构造函数的类就是Wrapper类。通过 `clazz.getConstructor(type)` 来获取参数是扩展点接口的构造函数。注意构造函数的参数类型是扩展点接口，而不是扩展类。 以 `Protocol` 为例。配置文件 `dubbo-rpc/dubbo-rpc-api/src/main/resources/META-INF/dubbo/internal/org.apache.dubbo.rpc.Protocol` 中定义了 `filter=org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper`。 `ProtocolFilterWrapper`代码如下：
+这段代码的意思是，如果扩展类有复制构造函数，就把该类存起来，供以后使用。有复制构造函数的类就是 `Wrapper` 类。通过 `clazz.getConstructor(type)` 来获取参数是扩展点接口的构造函数。注意构造函数的参数类型是扩展点接口，而不是扩展类。 以 `Protocol` 为例。配置文件 `dubbo-rpc/dubbo-rpc-api/src/main/resources/META-INF/dubbo/internal/org.apache.dubbo.rpc.Protocol` 中定义了 `filter=org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper`。 `ProtocolFilterWrapper`代码如下：
 
 ```java
 public class ProtocolFilterWrapper implements Protocol {
@@ -581,7 +582,7 @@ private Class<?> getAdaptiveExtensionClass() {
 }
 ```
 
-继续看 `createAdaptiveExtensionClass` 方法，绕了一大圈，终于来到了具体的实现了。看这个 `createAdaptiveExtensionClass` 方法，它首先会生成自适应类的 `Java` 源码，然后再将源码编译成Java的字节码，加载到 `JVM` 中。
+继续看 `createAdaptiveExtensionClass` 方法，绕了一大圈，终于来到了具体的实现了。看这个 `createAdaptiveExtensionClass` 方法，它首先会生成自适应类的 `Java` 源码，然后再将源码编译成 `Java` 的字节码，加载到 `JVM` 中。
 
 
 ```java
