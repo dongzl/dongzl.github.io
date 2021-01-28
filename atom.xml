@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dongzl.github.io/"/>
-  <updated>2021-01-25T09:31:44.865Z</updated>
+  <updated>2021-01-28T02:02:23.011Z</updated>
   <id>https://dongzl.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《平凡的世界》经典语录摘抄</title>
+    <link href="https://dongzl.github.io/2021/01/27/06-Ping-Fan-De-Shi-Jie/"/>
+    <id>https://dongzl.github.io/2021/01/27/06-Ping-Fan-De-Shi-Jie/</id>
+    <published>2021-01-27T12:56:58.000Z</published>
+    <updated>2021-01-28T02:02:23.011Z</updated>
+    
+    <content type="html"><![CDATA[<p>兰香什么话也没说，悄悄提了个猪食桶，出去喂猪去了。懂事的孩子知道，家里这么大的事她帮不了什么忙，最好做点实际的事，好给烦乱的大人省些麻烦。–《卷一·第六章》</p><p>玉厚看玉亭这样没出息，才知道他半辈子辛劳，企图给孙家造就一个光宗耀祖人物的指望落空了。但他心平气静，并不为此而过分地懊悔。是啊，这是命运。正如辛劳一年营务的庄稼，还没等收获，就被冰雹打光了，难道能懊悔自己曾经付出的力气吗？–《卷一·第八章》</p><p>就这样，他那虽然贫穷但充满无限欢乐的日月过去了。他从此便开始了一个农村孩子的第一堂主课——劳动。–《卷一·第十一章》</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;兰香什么话也没说，悄悄提了个猪食桶，出去喂猪去了。懂事的孩子知道，家里这么大的事她帮不了什么忙，最好做点实际的事，好给烦乱的大人省些麻烦。–《卷一·第六章》&lt;/p&gt;
+&lt;p&gt;玉厚看玉亭这样没出息，才知道他半辈子辛劳，企图给孙家造就一个光宗耀祖人物的指望落空了。但他心平气静，并
+      
+    
+    </summary>
+    
+    
+      <category term="读书笔记" scheme="https://dongzl.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="读书笔记" scheme="https://dongzl.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>Apache Dubbo 可扩展机制分析</title>
@@ -517,35 +544,6 @@
     
     
       <category term="Map" scheme="https://dongzl.github.io/tags/Map/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>《OKR 工作法》读书笔记</title>
-    <link href="https://dongzl.github.io/2020/04/29/24-OKR-Work-Method/"/>
-    <id>https://dongzl.github.io/2020/04/29/24-OKR-Work-Method/</id>
-    <published>2020-04-29T11:17:33.000Z</published>
-    <updated>2020-12-19T02:58:46.572Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>OKR：Objective and Key Results，目标与关键结果。</p></blockquote><h3 id="确定目标，确保团队聚焦到重要目标上"><a href="#确定目标，确保团队聚焦到重要目标上" class="headerlink" title="确定目标，确保团队聚焦到重要目标上"></a>确定目标，确保团队聚焦到重要目标上</h3><h6 id="管理方法的三个步骤："><a href="#管理方法的三个步骤：" class="headerlink" title="管理方法的三个步骤："></a>管理方法的三个步骤：</h6><ul><li>首先，设置有挑战、可衡量的阶段性目标。</li><li>其次，确保你和你的团队一直朝着这个目标前进，不要被其他事情干扰。</li><li>最后，把握节奏，所有成员一直明确需要努力达成的目标，并相互支持、相互鼓励。</li></ul><h3 id="讨论关键结果，复盘OKR实施过程中的问题"><a href="#讨论关键结果，复盘OKR实施过程中的问题" class="headerlink" title="讨论关键结果，复盘OKR实施过程中的问题"></a>讨论关键结果，复盘OKR实施过程中的问题</h3><ul><li><strong>目标</strong>：向餐厅供应商证明我们所提供的优质茶叶的价值。</li><li><strong>关键结果1</strong>：客户重复订购率达到70%。</li><li><strong>关键结果2</strong>：50%的重复订购客户能自助完成重复订购。</li><li><strong>关键结果3</strong>：完成25万美元的交易额。</li></ul><h3 id="评估-OKR-实施成果"><a href="#评估-OKR-实施成果" class="headerlink" title="评估 OKR 实施成果"></a>评估 OKR 实施成果</h3><ul><li>季度末成果盘点</li><li>半年末成果盘点</li><li>一年后成果盘点</li></ul><h3 id="影响目标达成的关键因素"><a href="#影响目标达成的关键因素" class="headerlink" title="影响目标达成的关键因素"></a>影响目标达成的关键因素</h3><ul><li>因素1：没有给目标设置优先级<br><strong>如果所有事情都同等重要，就意味着它们也同等不重要。</strong></li><li>因素2：缺乏充分沟通，导致没能准确理解目标<br><strong>当你说得不想再说了，人们就开始听进去了。——领英首席执行官 杰夫·韦纳</strong></li><li>因素3：没有做好计划</li><li>因素4：没有把时间花在重要的事情上<br><strong>重要的事通常不紧急，紧急的事通常不重要。——德怀特·艾森豪威尔</strong></li><li>因素5：轻易放弃<br><strong>幸福的家庭都是一样的，不幸的家庭各有各的不幸。——列夫·托尔斯泰</strong></li></ul><h6 id="设定目标遵循的原则"><a href="#设定目标遵循的原则" class="headerlink" title="设定目标遵循的原则"></a>设定目标遵循的原则</h6><ul><li>原则1：目标要明确方向并且鼓舞人心</li><li>原则2：目标要有时间期限</li><li>原则3：由独立的团队来执行目标</li></ul><h3 id="OKR-使用的六大场景"><a href="#OKR-使用的六大场景" class="headerlink" title="OKR 使用的六大场景"></a>OKR 使用的六大场景</h3><ul><li>场景1：如何开季度 OKR 会议</li><li>场景2：服务部门的 OKR 要和公司目标关联</li><li>场景3：OKR 会议的7个步骤<ul><li>所有员工提交他们认为这个季度公司需要实现的目标。</li><li>管理层用半天时间讨论 OKR。</li><li>管理层作业：向各自主管的部门介绍公司季度OKR，并完成每个部门的OKR设置。</li><li>首席执行官确认部门 OKR。</li><li>自上而下关联。</li><li>个人 OKR（可选）。</li><li>全体会议。</li></ul></li><li>场景4：为最小化可行产品使用OKR</li><li>场景5：使用 OKR 改进周报</li><li>场景6：避开 OKR 常见的坑<ul><li>设置了多个目标</li><li>设置的 OKR 周期过短–一周或者一个月</li><li>用绩效指标来驱动目标开发</li><li>没有设置信息指数</li><li>没有追踪信息指数的变化</li><li>把周一的会议当作汇报例会，而不是谈话</li><li>周五过于严肃</li></ul></li></ul><h3 id="最后的建议"><a href="#最后的建议" class="headerlink" title="最后的建议"></a>最后的建议</h3><h4 id="使用-OKR-的最后建议"><a href="#使用-OKR-的最后建议" class="headerlink" title="使用 OKR 的最后建议"></a>使用 OKR 的最后建议</h4><ul><li><p>只设置一个公司级别的 OKR，除非公司有多条业务线。这就是聚焦。</p></li><li><p>给自己三个月的时间去挑战 OKR，一周内可以完成的目标绝对称不上有挑战。</p></li><li><p>目标里不要有传统的绩效考核指标，目标需要能够鼓舞人心。</p></li><li><p>在每周盘点进度时，先从公司 OKR 开始，然后沟通部门级别的，不需要在会议上沟通个人 OKR，个人 OKR 只要一对一交流就可以了。每周必须确认 OKR 的进度。</p></li><li><p>OKR 是自上而下关联的。先设定公司的 OKR，然后是部门的，最后是个人的。</p></li><li><p>OKr 不是唯一一件你需要做的事情，而是你必须要的一件事。要相信大家可以保证事情顺利进行，不要把每个任务都塞进你的 OKR 里。</p></li><li><p>周一的 OKR 进度确认是一次谈话，而不是汇报或指示。务必要讨论信心指数、状态指标和优先级的变化。</p></li><li><p>鼓励员工对公司 OKR 提出意见和建议。OKR 不只是自上而下的实施，也要有自下而上的成分，要让所有人都能参与其中。</p></li><li><p>把 OKR 公之于众，谷歌把它们放在了公司的内网上。</p></li><li><p>周五的庆祝活动对于周一严酷的业务来说是一种调剂，可以让团队保持乐观积极的态度。</p></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;OKR：Objective and Key Results，目标与关键结果。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;确定目标，确保团队聚焦到重要目标上&quot;&gt;&lt;a href=&quot;#确定目标，确保团队聚焦到重要目标上&quot; class=&quot;head
-      
-    
-    </summary>
-    
-    
-      <category term="读书笔记" scheme="https://dongzl.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
-    
-    
-      <category term="读书笔记" scheme="https://dongzl.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
