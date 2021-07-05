@@ -24,7 +24,7 @@ tags:
 
 ## 思维导图
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-01.png" style="width:300px"/>
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-01.png" style="width:400px"/>
 
 ## 知识汇总
 
