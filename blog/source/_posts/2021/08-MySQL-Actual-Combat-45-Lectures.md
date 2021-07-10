@@ -24,6 +24,8 @@ tags:
 
 <!-- ![](https://static001.geekbang.org/resource/image/b7/c2/b736f37014d28199c2457a67ed669bc2.jpg) -->
 
+<hr/>
+
 # 基础篇
 
 ## 01 | 基础架构：一条SQL查询语句是如何执行的？
@@ -68,6 +70,8 @@ MySQL 基本架构示意图：
 2、为什么权限检查不是在分析器阶段，而是要到执行器之前检查？
 
 执行过程中可能会有触发器这种在运行时才能确定的过程，分析器工作结束后的 precheck 是不能对这种运行时涉及到的表进行权限校验的，所以需要在执行器阶段进行权限检查。
+
+<hr/>
 
 ## 02 | 日志系统：一条SQL更新语句是如何执行的？
 
@@ -131,6 +135,8 @@ redo log 日志的写入采用两阶段提交方式，写入 redo log 但是处�
 
 好处是“最长恢复时间”更短。在一天一备的模式里，最坏情况下需要应用一天的 binlog。比如，你每天 0 点做一次全量备份，而要恢复出一个到昨天晚上 23 点的备份。一周一备最坏情况就要应用一周的 binlog 了。系统的对应指标就是 @尼古拉斯·赵四 @慕塔 提到的 RTO（恢复目标时间）。当然这个是有成本的，因为更频繁全量备份需要消耗更多存储空间，所以这个 RTO 是成本换来的，就需要你根据业务重要性来评估了。
 
+<hr/>
+
 ## 03 | 事务隔离：为什么你改了我还看不见？
 
 在 MySQL 中事务是在引擎层实现的，MySQL 是一个支持多引擎的数据库系统，但是不是所有的引擎都支持事务。
@@ -163,7 +169,6 @@ SQL 标准隔离级别：读未提交（read uncommitted）、读提交（read c
 如何查询数据库长事务？
 
 ```SQL
-
 select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx_started))>60
 ```
 
@@ -191,6 +196,8 @@ select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx
   - Percona 的 pt-kill 这个工具不错，推荐使用；
   - 在业务功能测试阶段要求输出所有的 general_log，分析日志行为提前发现问题；
   - 如果使用的是 MySQL 5.6 或者更新版本，把 innodb_undo_tablespaces 设置成 2（或更大的值）。如果真的出现大事务导致回滚段过大，这样设置后清理起来更方便。
+
+<hr/>
 
 ## 04 | 深入浅出索引（上）
 
@@ -303,3 +310,4 @@ N 叉树中非叶子节点存放的是索引信息，索引包含 Key 和 Point 
 
 - [InnoDB一棵B+树可以存放多少行数据？](https://www.cnblogs.com/leefreeman/p/8315844.html)
 
+<hr/>
