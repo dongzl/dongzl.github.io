@@ -34,19 +34,19 @@ MySQL 基本架构示意图：
 
 <img src="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" style="width:400px"/>
 
-- MySQL 分为 Server 层和存储引擎层；
-- Server 层包括连接器、查询缓存、分析器、优化器、执行器等，存储引擎层负责数据的存储和提取；
-- 不同的存储引擎共用一个 Server 层；
+- `MySQL` 分为 `Server` 层和存储引擎层；
+- `Server` 层包括连接器、查询缓存、分析器、优化器、执行器等，存储引擎层负责数据的存储和提取；
+- 不同的存储引擎共用一个 `Server` 层；
 
 ### 连接器
 
 - 负责跟客户端建立连接、获取权限、维持和管理连接；
-- wait_timeout=8小时，连接器自动断开没动静的客户端连接。
+- `wait_timeout = 8`小时，连接器自动断开没动静的客户端连接。
 
 ### 查询缓存
 
 - 查询缓存往往弊大于利：表上有更新操作就会导致查询缓存失效；
-- MySQL 8.0 版本已经移除查询缓存功能。
+- `MySQL 8.0` 版本已经移除查询缓存功能。
 
 ### 分析器
 
@@ -59,11 +59,11 @@ MySQL 基本架构示意图：
 
 ### 执行器
 
-- 执行 SQL 语句；
+- 执行 `SQL` 语句；
 
 ### 问题整理
 
-1、如果表 T 中没有字段 k，而你执行了这个语句 select * from T where k=1, 那肯定是会报“不存在这个列”的错误： “Unknown column ‘k’ in ‘where clause’”。
+1、如果表 `T` 中没有字段 `k`，而你执行了这个语句 `select * from T where k = 1`, 那肯定是会报“不存在这个列”的错误： “`Unknown column ‘k’ in ‘where clause’`”。
 
 这个是在分析器阶段报出的错误。
 
@@ -75,21 +75,21 @@ MySQL 基本架构示意图：
 
 ## 02 | 日志系统：一条SQL更新语句是如何执行的？
 
-WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。
+`WAL` 的全称是 `Write-Ahead Logging`，它的关键点就是先写日志，再写磁盘。
 
-InnoDB 的 redo log 是固定大小的，从头开始写，写到末尾就又回到开头循环写。
+`InnoDB` 的 `redo log` 是固定大小的，从头开始写，写到末尾就又回到开头循环写。
 
 <img src="https://static001.geekbang.org/resource/image/16/a7/16a7950217b3f0f4ed02db5db59562a7.png" style="width:400px"/>
 
-有了 redo log，InnoDB 就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力成为 cash-safe。
+有了 `redo log`，`InnoDB` 就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力成为 `cash-safe`。
 
-redo log -- MySQL InnoDB 存储引擎特有的
+`redo log` -- `MySQL InnoDB` 存储引擎特有的
 
-binlog -- MySQL Server 层日志（归档日志）
+`binlog` -- `MySQL Server` 层日志（归档日志）
 
-先有 MySQL Server 层，先有 binlog，binlog 无法做到 cash-safe；InnoDB 存储引擎后出现，通过 redo log 实现 cash-safe。
+先有 `MySQL Server` 层，先有 `binlog`，`binlog` 无法做到 `cash-safe`；`InnoDB` 存储引擎后出现，通过 `redo log` 实现 `cash-safe`。
 
-MySQL binlog 和 InnoDB redo log 的区别：
+`MySQL binlog` 和 `InnoDB redo log` 的区别：
 
 - redo log 是 InnoDB 引擎特有的；binlog 是 MySQL 的 Server 层实现的，所有引擎都可以使用。
 
