@@ -11,6 +11,9 @@ friend_links:
   - name: 有赞技术团队
     desc: 有赞技术团队
     link: https://tech.youzan.com/
+  - name: Thoughtworks洞见
+    desc: Thoughtworks洞见
+    link: https://insights.thoughtworks.cn
     
 big_boss_blog:
   - name: draveness
@@ -25,6 +28,9 @@ big_boss_blog:
   - name: Hollis
     desc: Hollis
     link: https://www.hollischuang.com/
+  - name: 武哥漫谈IT
+    desc: 武哥漫谈IT
+    link: http://coder5.cn/
 
 build_tools:
   - name: Hexo
