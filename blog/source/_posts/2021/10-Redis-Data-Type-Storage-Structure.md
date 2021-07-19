@@ -38,7 +38,7 @@ tags:
 
 - `sorted set` 类型，集合类型，用于存储集合元素，元素内容不可以重复，可以为每一个元素设置一个分值，可以根据分值进行排序。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-01.png" style="width:800px"/>
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-01.png" style="width:500px"/>
 
 在 `Redis` 中我们可以 `type` 命令查看某个 `Key` 对应的数据结构的类型。
 
@@ -58,7 +58,7 @@ set
 ### 存储结构总结
 在 `Redis` 中，对于某种数据类型，底层会使用多种存储结构来实现，如下图：
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-02.png" style="width:800px"/>
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-02.png" style="width:500px"/>
 
 ### 实现方案优势分析
 
@@ -272,4 +272,4 @@ public static void main(String[] args) throws Exception {
 
 ## 参考链接
 
-- [Redis开发与运维](https://book.douban.com/subject/26971561/)
+- [《Redis开发与运维》](https://book.douban.com/subject/26971561/)
