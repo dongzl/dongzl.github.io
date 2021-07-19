@@ -28,17 +28,17 @@ tags:
 
 对于目前的项目开发中，我们常用的数据结构有如下几种：
 
-- string 类型，用于存储：字符串、整形、浮点型数据；
+- `string` 类型，用于存储：字符串、整形、浮点型数据；
 
-- hash 类型，用于存储 Key-Field-Value 类型数据；
+- `hash` 类型，用于存储 Key-Field-Value 类型数据；
 
-- list 类型，集合类型，用于存储集合元素，元素内容可以重复，按元素添加顺序排序；
+- `list` 类型，集合类型，用于存储集合元素，元素内容可以重复，按元素添加顺序排序；
 
-- set 类型，集合类型，用于存储集合元素，元素内容不可以重复，元素之间无序；
+- `set` 类型，集合类型，用于存储集合元素，元素内容不可以重复，集合元素无序；
 
-- zset 类型，集合类型，用于存储集合元素，元素内容不可以重复，为每一个元素设置一个分值，可以根据分值进行排序。
+- `sorted set` 类型，集合类型，用于存储集合元素，元素内容不可以重复，可以为每一个元素设置一个分值，可以根据分值进行排序。
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@图片@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-01.png" style="width:800px"/>
 
 在 `Redis` 中我们可以 `type` 命令查看某个 `Key` 对应的数据结构的类型。
 
@@ -58,29 +58,29 @@ set
 ### 存储结构总结
 在 `Redis` 中，对于某种数据类型，底层会使用多种存储结构来实现，如下图：
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-02.png" style="width:800px"/>
 
 ### 实现方案优势分析
 
 对于某种数据类型，在底层使用多种存储结构来实现，会有如下好处：
 
-- 可以随时改进内部存储结构的编码实现，而对外的数据结构和命令全都没有影响，这样一旦开发出更优秀的内部存储结构，无需改动外部的数据结构和命令，例如 Redis 3.2 中提供了 quicklist 存储结构，结合了 ziplist 和 linkedlist 两者的优势，为 list 类型数据结构提供了一种更为优秀的内部编码实现，而对外部用户来说基本感知不到。
+- 可以随时改进内部存储结构的编码实现，而对外的数据结构和命令全都没有影响，这样一旦开发出更优秀的内部存储结构，无需改动外部的数据结构和命令，例如 `Redis 3.2` 中提供了 `quicklist` 存储结构，结合了 `ziplist` 和 `linkedlist` 两者的优势，为 `list` 类型数据结构提供了一种更为优秀的内部编码实现，而对外部用户来说基本感知不到。
 
-- 多种内部编码实现可以在不同场景下发挥各自的优势，例如 ziplist 比较节省内存，但是在 list 元素比较多的情况下，性能会有所下降，这时候 Redis 会根据配置选项将 list 类型内部存储结构转换为 linkedlist。
+- 多种内部编码实现可以在不同场景下发挥各自的优势，例如 `ziplist` 比较节省内存，但是在 `hash` 元素比较多的情况下，性能会有所下降，这时候 `Redis` 会根据配置选项将 `hash` 类型内部存储结构转换为 `hashtable`。
 
 ### 存储结构详细分析
 
 #### string 类型存储结构
 
-string 类型的内部存储结构有 3 种：
+`string` 类型的内部存储结构有 `3` 种：
 
-- int：`8` 个字节的长整型；
+- `int`：`8` 个字节的长整型；
 
-- embstr：小于等于 `39` 个字节的字符串；
+- `embstr`：小于等于 `39` 个字节的字符串；
 
-- raw：大于 `39` 个字节的字符串。
+- `raw`：大于 `39` 个字节的字符串。
 
-Redis 会根据当前值的类型和长度决定使用哪种存储结构来实现。
+`Redis` 会根据当前值的类型和长度决定使用哪种存储结构来实现。
 
 ```shell
 127.0.0.1:6379> set test 6379
@@ -103,9 +103,9 @@ OK
 
 `hash` 类型底层的存储结构有如下两种：
 
-- ziplist（压缩列表）：当哈希类型元素个数小于 `hash-max-ziplist-entries` 配置（默认 `512` 个）、同时所有值都小于 `hash-max-ziplist-value` 配置（默认 `64` 字节）时，`Redis` 会使用 `ziplist` 作为哈希的内部实现，`ziplist` 使用更加紧凑的结构实现多个元素的连续存储，所以在节省内存方面比 `hashtable` 更加优秀。
+- `ziplist`（压缩列表）：当哈希类型元素个数小于 `hash-max-ziplist-entries` 配置（默认 `512` 个）、同时所有值都小于 `hash-max-ziplist-value` 配置（默认 `64` 字节）时，`Redis` 会使用 `ziplist` 作为哈希的内部实现，`ziplist` 使用更加紧凑的结构实现多个元素的连续存储，所以在节省内存方面比 `hashtable` 更加优秀。
 
-- hashtable（哈希表）：当哈希类型无法满足 `ziplist` 的条件时，`Redis` 会使用 `hashtable` 作为哈希的内部实现，因为此时 `ziplist` 的读写效率会下降，而 `hashtable` 的读写时间复杂度为 `O(1)`。
+- `hashtable`（哈希表）：当哈希类型无法满足 `ziplist` 的条件时，`Redis` 会使用 `hashtable` 作为哈希的内部实现，因为此时 `ziplist` 的读写效率会下降，而 `hashtable` 的读写时间复杂度为 `O(1)`。
 
 1、当 `field` 个数比较少且没有大的 `value` 时，存储结构为 `ziplist`：
 
@@ -146,9 +146,9 @@ public static void main(String[] args) throws Exception {
 
 `list` 类型底层的存储结构有如下两种：
 
-- ziplist（压缩列表）：当列表的元素个数小于 `list-max-ziplist-entries` 配置（默认 `512` 个），同时列表中每个元素的值都小于 `list-max-ziplist-value` 配置时（默认 `64` 字节），`Redis` 会选用 `ziplist` 来作为列表的内部实现来减少内存的使用。
+- `ziplist`（压缩列表）：当列表的元素个数小于 `list-max-ziplist-entries` 配置（默认 `512` 个），同时列表中每个元素的值都小于 `list-max-ziplist-value` 配置时（默认 `64` 字节），`Redis` 会选用 `ziplist` 来作为列表的内部实现来减少内存的使用。
 
-- linkedlist（链表）：当列表类型无法满足 `ziplist` 的条件时，`Redis` 会使用 `linkedlist` 作为列表的内部实现。
+- `linkedlist`（链表）：当列表类型无法满足 `ziplist` 的条件时，`Redis` 会使用 `linkedlist` 作为列表的内部实现。
 
 1、当元素个数较少且没有大元素时，内部编码为 `ziplist`：
 
@@ -257,3 +257,19 @@ public static void main(String[] args) throws Exception {
 127.0.0.1:6379> object encoding test
 "skiplist"
 ```
+
+## 总结
+
+`Redis` 是一个高性能的 `Key-Value` 型内存数据库，它给我们提供了丰富的数据结构来满足不同业务场景的需要，针对不同的数据结构 `Redis` 底层也设计了多种不同的存储实现，其实主要的目的总结起来主要就是两点：
+
+- 灵活可扩展；
+
+- 高性能，节约内存。
+
+所有的设计我认为都是基于以上两点展开的，针对不同数据类型采用多种存储结构，可以灵活改进内部存储结构的编码实现，而对外的数据结构和命令全都没有影响，这样一旦开发出更优秀的内部存储结构，无需改动外部的数据结构和命令；同时多种内部编码实现可以在不同场景下发挥各自的优势，例如针对 `hash` 数据结构，`Redis` 底层设计了 `ziplist` 和 `hashtable` 两种存储结构，当哈希类型元素个数比较少时（小于 `hash-max-ziplist-entries`）并且所有元素 `Value` 值都小于 `hash-max-ziplist-value` 字节时，使用 `ziplist` 存储结构，这种存储结构更加紧凑，多个元素可以联系存储，比较节省内存；但是一旦元素个数过多，或者存储 `Value` 值比较大，这时 `ziplist` 的读写效率会下降，性能会变差，`Redis` 会自动转换为 `hashtable` 存储结构，这种存储结构虽然会浪费一些内存空间，但是读写效率会比较高。
+
+所以，我们也可以体会到，实现一个优秀的软件架构其实就是一个不断 `Trade-Off` 的过程。
+
+## 参考链接
+
+- [Redis开发与运维](https://book.douban.com/subject/26971561/)
