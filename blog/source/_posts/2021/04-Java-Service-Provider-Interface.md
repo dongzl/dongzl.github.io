@@ -336,3 +336,5 @@ ServiceLoader<IRegistry> serviceLoader = ServiceLoader.loadInstalled(IRegistry.c
 - [ServiceLoader使用及原理分析](https://blog.csdn.net/a910626/article/details/78811273?utm_source=blogxgwz9)
 
 - [Java SPI机制：ServiceLoader实现原理及应用剖析](https://juejin.cn/post/6844903891746684941)
+
+- [某厂面试：如何优雅使用 SPI 机制](https://mp.weixin.qq.com/s/0sFQ88Qiop-ElizcxA9huA)
