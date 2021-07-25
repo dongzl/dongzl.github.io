@@ -150,7 +150,7 @@ public static void main(String[] args) throws Exception {
 
 - `linkedlist`（链表）：当列表类型无法满足 `ziplist` 的条件时，`Redis` 会使用 `linkedlist` 作为列表的内部实现。
 
-1、当元素个数较少且没有大元素时，内部编码为 `ziplist`：
+**由于我测试使用的版本是 `Redis-6.3.2`，上述两个关于 `list` 类型数据结构的参数已经被废弃，同时对于 list 数据结构底层的存储实现统一使用 `quicklist` 存储结构，示例如下：**
 
 ```shell
 127.0.0.1:6379> rpush test e1 e2 e3 e4
@@ -163,6 +163,21 @@ public static void main(String[] args) throws Exception {
 "quicklist"
 127.0.0.1:6379>
 ```
+
+在 `Redis 3.2` 版本之后，`Redis` 统一使用 `quicklist` 存储结构实现了 `list` 类型数据结构，同时设置了两个参数来满足不同应用场景下使用需求：
+
+- `list-max-ziplist-size`：该配置参数取正值时表示 `quicklist` 节点 `ziplist` 包含的数据项。取负值表示按照占用字节来限定 `quicklist` 节点 `ziplist` 的长度。
+  - `-5`: 每个 `quicklist` 节点上的 `ziplist` 大小不能超过 `64Kb`；
+  - `-4`: 每个 `quicklist` 节点上的 `ziplist` 大小不能超过 `32Kb`；
+  - `-3`: 每个 `quicklist` 节点上的 `ziplist` 大小不能超过 `16Kb`；
+  - `-2`: 每个 `quicklist` 节点上的 `ziplist` 大小不能超过 `8Kb`；（默认配置）
+  - `-1`: 每个 `quicklist` 节点上的 `ziplist` 大小不能超过 `4Kb`。
+
+- `list-compress-depth`：`list` 数据结构最容易被访问的是列表两端的数据，中间的访问频率很低，如果符合这个场景，`list` 可以通过配置参数设置对中间节点进行压缩，进一步节省内存。配置如下：
+  - `0`: 是个特殊值，表示都不压缩；（默认配置）
+  - `1`: 表示 `quicklist` 两端各有 `1` 个节点不压缩，中间的节点压缩；
+  - `2`: 表示 `quicklist` 两端各有 `2` 个节点不压缩，中间的节点压缩；
+  - 以此类推。
 
 ### set 类型存储结构
 
