@@ -36,9 +36,11 @@ tags:
 
 <img src="https://static001.geekbang.org/resource/image/59/35/5975c57d9ac404fe3a774ea28a7ac935.jpg?wh=2238x811" style="width:500px"/>
 
+<hr/>
+
 ## 01 | 带你快速攻略Redis源码的整体架构
 
-Redis 源码学习需要掌握的两方面内容：
+`Redis` 源码学习需要掌握的两方面内容：
 
 - **代码的目录结构和目录划分**，目的是理解 `Redis` 代码的整体架构，以及所包含的代码功能类别；
 
@@ -46,19 +48,23 @@ Redis 源码学习需要掌握的两方面内容：
 
 ### Redis 目录结构
 
-- deps 目录：Redis 依赖的第三方代码库；
+- `deps` 目录：`Redis` 依赖的第三方代码库；
 
 <img src="https://static001.geekbang.org/resource/image/42/c7/4278463fb96f165bf41d6a97ff3216c7.jpg?wh=1945x726" style="width:500px"/>
 
-- src 目录：Redis 所有功能模块的代码文件，也是 Redis 源码的重要组成部分；
+- `src` 目录：`Redis` 所有功能模块的代码文件，也是 `Redis` 源码的重要组成部分；
 
 <img src="https://static001.geekbang.org/resource/image/d7/26/d7ac6b01af49047409db5d9e16b6e826.jpg?wh=2187x487" style="width:500px"/>
 
-- tests 目录：单元测试（unit 子目录），Redis Cluster 功能测试（cluster 子目录）、哨兵功能测试（sentinel 子目录）、主从复制功能测试（integration 子目录）；
+- `tests` 目录：
+  - 单元测试（`unit` 子目录）
+  - `Redis Cluster` 功能测试（`cluster` 子目录）
+  - 哨兵功能测试（`sentinel` 子目录）
+  - 主从复制功能测试（`integration` 子目录）；
 
 <img src="https://static001.geekbang.org/resource/image/cc/5e/ccb2feae193e4911cc68a0ccb755ac5e.jpg?wh=2250x1111" style="width:500px"/>
 
-- utils 目录：
+- `utils` 目录：
 
 <img src="https://static001.geekbang.org/resource/image/3b/b2/3b7933e5f1740ccdc3870ee554faf4b2.jpg?wh=2250x1039" style="width:500px"/>
 
@@ -119,3 +125,4 @@ Redis 源码学习需要掌握的两方面内容：
 - 通知（notify.c）
 - 基准性能（redis-benchmark.c）
 
+<hr/>
