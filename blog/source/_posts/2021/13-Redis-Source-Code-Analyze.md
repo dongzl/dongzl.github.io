@@ -1,7 +1,7 @@
 ---
 title: 《Redis 源码剖析与实战》学习笔记
 date: 2021-07-27 20:35:25
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_source.png
 
 # single author
 author:
