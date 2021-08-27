@@ -176,3 +176,5 @@ if data == NULL {
 - [redis缓存使用中的热key问题](https://www.jianshu.com/p/81c9500756e1)
 
 - [有赞透明多级缓存解决方案（TMC）](https://tech.youzan.com/tmc/)
+
+- [一文详解Redis中BigKey、HotKey的发现与处理](https://mp.weixin.qq.com/s/FPYE1B839_8Yk1-YSiW-1Q)
