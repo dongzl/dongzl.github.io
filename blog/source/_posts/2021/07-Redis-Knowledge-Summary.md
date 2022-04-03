@@ -62,6 +62,8 @@ tags:
 
 系统梳理 Redis 中 RDB 和 AOF 两种数据持久化方式的特征和使用方式。
 
+<img src="https://gitee.com/dongzl/article-images/raw/master/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-02.png" style="width:400px"/>
+
 ### Redis 高可用架构
 
 - Redis 主从复制

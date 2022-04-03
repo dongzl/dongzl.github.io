@@ -227,3 +227,108 @@ SDS 设计了 `sdshdr5`、`sdshdr8`、`sdshdr16`、`sdshdr32` 和 `sdshdr64` 五
 如果当前表的已用空间大小为 `size`，那么就将表扩容到 `size * 2` 的大小。
 
 #### 渐进式 rehash 如何实现？
+
+<hr/>
+
+## 04 | 内存友好的数据结构该如何细化设计？
+
+`Redis` 提升内存使用效率的思想：
+
+- 数据结构的优化设计与使用；
+- 内存数据按一定规则淘汰。
+
+`Redis` 数据结构在面向内存使用效率方面的优化：
+
+- 内存友好的数据结构设计；
+- 内存友好的数据使用方式。
+
+### 内存友好的数据结构
+
+#### SDS 的内存友好设计
+
+`SDS` 设计了不同类型的结构头，包括 `sdshdr8`、`sdshdr16`、`sdshdr32` 和 `sdshdr64`。这些不同类型的结构头可以适配不同大小的字符串，从而避免了内存浪费。
+
+#### redisObject 结构体与位域定义方法
+
+`redisObject` 结构体是在 `server.h` 文件中定义的，主要功能是用来保存键值对中的值。这个结构一共定义了 `4` 个元数据和一个指针。
+
+- `type`：`redisObject` 的数据类型，是应用程序在 `Redis` 中保存的数据类型，包括 `String`、`List`、`Hash` 等。
+- `encoding`：`redisObject` 的编码类型，是 `Redis` 内部实现各种数据类型所用的数据结构。
+- `lru`：`redisObject` 的 `LRU` 时间。
+- `refcount`：`redisObject` 的引用计数。
+- `ptr`：指向值的指针。
+
+```c
+typedef struct redisObject {
+    unsigned type:4; //redisObject的数据类型，4个bits
+    unsigned encoding:4; //redisObject的编码类型，4个bits
+    unsigned lru:LRU_BITS;  //redisObject的LRU时间，LRU_BITS为24个bits
+    int refcount; //redisObject的引用计数，4个字节
+    void *ptr; //指向值的指针，8个字节
+} robj;
+```
+
+**变量后使用冒号和数值的定义方法**。这实际上是 C 语言中的**位域定义方法**，可以用来有效地节省内存开销。
+
+#### 嵌入式字符串
+
+<img src="https://static001.geekbang.org/resource/image/f6/23/f6be6811ea3618a8aae047b29b0bfa23.jpg?wh=1909x749" style="width:500px"/>
+
+**Redis 创建字符串的过程**：
+
+<img src="https://static001.geekbang.org/resource/image/92/ba/92ba6c70129843d7e48a7c074a5737ba.jpg?wh=2000x940" style="width:500px"/>
+
+#### 压缩列表和整数集合的设计
+
+压缩列表本身就是一块连续的内存空间，它通过使用不同的编码来保存数据。
+
+在创建一个新的 ziplist 后，列表的内存布局如下，此时列表中还没有任何数据：
+
+<img src="https://static001.geekbang.org/resource/image/a0/10/a09c893fe8bbafca9ec61b38165f3810.jpg?wh=2000x349" style="width:500px"/>
+
+当我们往 ziplist 中插入数据时，ziplist 就会根据数据是字符串还是整数，以及它们的大小进行不同的编码。这种根据数据大小进行相应编码的设计思想，正是 Redis 为了节省内存而采用的。
+
+ziplist 列表项包括三部分内容：
+
+- 前一项的长度（prevlen）；
+- 当前项长度信息的编码结果（encoding）；
+- 当前项的实际数据（data）。
+
+<img src="https://static001.geekbang.org/resource/image/86/d5/864539a743ab9911fde71366463fc8d5.jpg?wh=2000x749" style="width:500px"/>
+
+<img src="https://static001.geekbang.org/resource/image/eb/fc/eb734ed4a3718b28404ba90fdbe1a5fc.jpg?wh=2000x723" style="width:500px"/>
+
+### 节省内存的数据访问
+
+**共享对象**：把一些常用数据创建为共享对象，当上层应用需要访问它们时，直接读取就行。
+
+```c
+
+void createSharedObjects(void) {
+   …
+   //常见回复信息
+   shared.ok = createObject(OBJ_STRING,sdsnew("+OK\r\n"));
+   shared.err = createObject(OBJ_STRING,sdsnew("-ERR\r\n"));
+   …
+   //常见报错信息
+ shared.nokeyerr = createObject(OBJ_STRING,sdsnew("-ERR no such key\r\n"));
+ shared.syntaxerr = createObject(OBJ_STRING,sdsnew("-ERR syntax error\r\n"));
+   //0到9999的整数
+   for (j = 0; j < OBJ_SHARED_INTEGERS; j++) {
+        shared.integers[j] =
+          makeObjectShared(createObject(OBJ_STRING,(void*)(long)j));
+        …
+    }
+   …
+}
+```
+
+### 总结
+
+节省内存的数据结构实现思路：
+
+- 使用连续的内存空间，避免内存碎片开销；
+- 针对不同长度的数据，采用不同大小的元数据，以避免使用统一大小的元数据，造成内存空间的浪费。
+
+使用**共享对象**可以避免重复创建冗余的数据，也可以有效地节省内存空间。
+

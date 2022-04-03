@@ -29,6 +29,12 @@ tags:
 05 | [如何设置线程池参数？美团给出了一个让面试官虎躯一震的回答。](https://www.cnblogs.com/thisiswhy/p/12690630.html) | [why技术](https://home.cnblogs.com/u/thisiswhy/)
 06 | [有的线程它死了，于是它变成一道面试题](https://mp.weixin.qq.com/s/wrTVGLDvhE-eb5lhygWEqQ) | [why技术](https://home.cnblogs.com/u/thisiswhy/)
 
+### spring
+
+序号| 文章链接 | 文章来源
+-|-|-
+01 | [聊聊spring事务失效的12种场景，太坑了](https://mp.weixin.qq.com/s/4M4rePjjy8-UBVvCzHchTQ) | 微信公众号：苏三说技术
+
 ### 数据库
 
 序号| 文章链接 | 文章来源
