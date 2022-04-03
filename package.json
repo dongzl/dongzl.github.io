@@ -10,7 +10,6 @@
     "hexo": "^6.1.0",
     "hexo-addlink": "^1.0.4",
     "hexo-asset-image": "git+https://github.com/CodeFalling/hexo-asset-image.git",
-    "hexo-autoprefixer": "^2.0.0",
     "hexo-deployer-git": "^3.0.0",
     "hexo-filter-cleanup": "^1.2.2"
   }
