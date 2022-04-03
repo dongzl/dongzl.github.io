@@ -18,7 +18,7 @@ tags:
   - Reactor
 ---
 
-## 背景介绍
+## 背景介绍介绍介绍
 
 周末随便学习一些东西，在[屈定](https://mrdear.cn/)老兄的博客上看到更新了一篇文章[《Netty -- Reactor模型的应用》](https://mrdear.cn/posts/framework-netty-reactor-model.html)，内容分析的很到位，对于 `Reactor` 模式，我了解到的主要还是在 `Netty` 框架中的线程模式使用的是 `Reactor` 模式，有时会想这个东西在在我们的业务系统中会有什么样的应用场景，是不是有机会在某些功能中落地到我们的项目中，而不是一直高高在上，为此还和屈定老兄交流了一下。
 
