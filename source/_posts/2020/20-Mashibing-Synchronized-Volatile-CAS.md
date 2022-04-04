@@ -1,7 +1,7 @@
 ---
 title: (转) Java 中锁实现原理以及锁升级过程
 date: 2020-04-03 21:55:43
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:
@@ -387,7 +387,7 @@ inflate方法：膨胀为重量级锁
 
 ### JDK8 markword实现表：
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/20-Mashibing-Synchronized-Volatile-CAS/Mashibing-Synchronized-Volatile-CAS-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/20-Mashibing-Synchronized-Volatile-CAS/Mashibing-Synchronized-Volatile-CAS-01.png">
 
 new - 偏向锁 - 轻量级锁 （无锁, 自旋锁，自适应自旋）- 重量级锁
 

@@ -1,7 +1,7 @@
 ---
 title: cread 系统畅读卡同步 action 使用 Spring 单例作用域引起的问题
 date: 2019-12-10 20:38:18
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:

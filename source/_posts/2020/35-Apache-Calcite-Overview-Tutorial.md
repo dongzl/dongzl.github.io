@@ -1,7 +1,7 @@
 ---
 title: Apache Calcite 概览(二)--使用教程
 date: 2020-11-10 12:00:08
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/calcite_study.png
 # author information, multiple authors are set to array
 # single author
 author:

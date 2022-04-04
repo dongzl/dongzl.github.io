@@ -1,7 +1,7 @@
 ---
 title: 论“茴”字的四种写法：一道面试题总结线程间通信的几种方式
 date: 2020-03-07 21:35:58
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -23,7 +23,7 @@ tags:
 
 > 用两个线程，一个输出字母，一个输出数字，交替输出：1A2B3C4D5E...26Z。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/07-Several-Methods-Of-Communication-Between-Thread/Several-Methods-Of-Communication-Between-Thread.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/07-Several-Methods-Of-Communication-Between-Thread/Several-Methods-Of-Communication-Between-Thread.png">
 
 这是一道典型的线程间通信的面试题，两个线程交替**运行-暂停**，并且当一个线程运行后需要暂停，同时要通知另外一个线程运行；另外一个线程得到通知后开始运行，运行后暂停并通知对方线程运行，彼此交替运行，直至打印完整结果。对于这个问题有很多中解法，下面我们就一一分析这些方法。
 

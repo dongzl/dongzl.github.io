@@ -1,7 +1,7 @@
 ---
 title: Spring 事务管理 Timeout 的一点问题研究
 date: 2020-08-04 20:23:45
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/spring_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/spring_study.png
 # author information, multiple authors are set to array
 # single author
 author:

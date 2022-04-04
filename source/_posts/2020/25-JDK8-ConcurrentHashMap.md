@@ -1,7 +1,7 @@
 ---
 title: 对比源码分析 ConcurrentHashMap 是如何成为一个线程安全的 HashMap
 date: 2020-05-13 13:39:36
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:
@@ -224,7 +224,7 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
 }
 ```
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/25-JDK8-ConcurrentHashMap/JDK8-ConcurrentHashMap-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/25-JDK8-ConcurrentHashMap/JDK8-ConcurrentHashMap-01.png">
 
 通过对代码分析，我们可以了解到，在执行 `put` 操作时会进行如下操作：
 

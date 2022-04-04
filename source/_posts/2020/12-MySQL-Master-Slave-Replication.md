@@ -1,7 +1,7 @@
 ---
 title: MySQL 主从复制原理及配置
 date: 2020-03-15 11:04:01
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -64,7 +64,7 @@ MySQL 主从复制是指数据可以从一个 MySQL 数据库服务器主节点�
 
 - master 和 slave 两节点间时间需同步。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/12-MySQL-Master-Slave-Replication/MySQL-Master-Slave-Replication-01.jpeg">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/12-MySQL-Master-Slave-Replication/MySQL-Master-Slave-Replication-01.jpeg">
 
 **具体步骤**：
 
@@ -92,7 +92,7 @@ MySQL 主从复制是指数据可以从一个 MySQL 数据库服务器主节点�
 
 - 级联复制
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/12-MySQL-Master-Slave-Replication/MySQL-Master-Slave-Replication-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/12-MySQL-Master-Slave-Replication/MySQL-Master-Slave-Replication-02.png">
 
 ### MySQL 主从复制延时分析
 

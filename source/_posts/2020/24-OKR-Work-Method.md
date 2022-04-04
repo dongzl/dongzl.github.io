@@ -1,7 +1,7 @@
 ---
 title: 《OKR 工作法》读书笔记
 date: 2020-04-29 19:17:33
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/reading_book.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/reading_book.png
 # author information, multiple authors are set to array
 # single author
 author:

@@ -1,7 +1,7 @@
 ---
 title: 极客时间 《数据结构与算法之美》 学习笔记
 date: 2020-03-05 09:36:44
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithms.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/algorithms.png
 
 # single author
 author:

@@ -1,7 +1,7 @@
 ---
 title: JVM 相关面试题汇总（附简要答案）
 date: 2020-04-17 22:48:34
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/jvm_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/jvm_study.png
 # author information, multiple authors are set to array
 # single author
 author:

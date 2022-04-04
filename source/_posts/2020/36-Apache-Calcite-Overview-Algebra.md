@@ -1,7 +1,7 @@
 ---
 title: Apache Calcite 概览(三)--代数
 date: 2020-11-17 10:32:56
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/calcite_study.png
 # author information, multiple authors are set to array
 # single author
 author:

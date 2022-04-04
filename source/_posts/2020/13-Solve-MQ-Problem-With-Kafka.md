@@ -1,7 +1,7 @@
 ---
 title: Kafka 是如何解决使用 MQ 中容易出现的一些问题
 date: 2020-03-16 20:58:08
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/kafka_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/kafka_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -38,7 +38,7 @@ tags:
 
 在 `Kafka 0.8` 以后，提供了 `HA` 机制，就是 `replica` 副本机制。每个 `partition` 上的数据都会同步到其它机器，形成自己的多个 `replica` 副本。所有 `replica` 会选举一个 `leader` 出来，消息的生产者和消费者都跟这个 `leader` 打交道，其他 `replica` 作为 `follower`。写的时候，`leader` 会负责把数据同步到所有 `follower` 上去，读的时候就直接读 `leader` 上的数据即可。`Kafka` 负责均匀的将一个 `partition` 的所有 `replica` 分布在不同的机器上，这样才可以提高容错性。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-01.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-01.png" width="800px">
 
 拥有了 `replica` 副本机制，如果某个 `broker` 宕机了，这个 `broker` 上的 `partition` 在其他机器上还存在副本。如果这个宕机的 `broker` 上面有某个 `partition` 的 `leader`，那么此时会从其 `follower` 中重新选举一个新的 `leader` 出来，这个新的 `leader` 会继续提供读写服务，这就有达到了所谓的高可用性。
 
@@ -46,7 +46,7 @@ tags:
 
 消费数据的时候，消费者只会从 `leader` 节点去读取消息，但是只有当一个消息已经被所有 `follower` 都同步成功返回 `ack` 的时候，这个消息才会被消费者读到。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-02.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-02.png" width="800px">
 
 ## 使用 Kafka，如何保证消息不被重复消费
 
@@ -68,7 +68,7 @@ tags:
 
 对于保证消息的可靠传输，其实就是如何解决消息丢失的问题；那么我们首先需要弄明白消息为什么会丢失，对于一个消息队列，会有 `生产者`、`MQ`、`消费者` 这三个角色，在这三个角色数据处理和传输过程中，都有可能会出现消息丢失，
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-03.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/13-Solve-MQ-Problem-With-Kafka/Solve-MQ-Problem-With-Kafka-03.png" width="800px">
 
 下面我们就结合 `Kafka` 来分析一下消息丢失的原因以及解决办法：
 

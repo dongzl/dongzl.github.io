@@ -1,7 +1,7 @@
 ---
 title: 算法中的 DFS 和 BFS
 date: 2020-05-23 11:20:31
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithm_training.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/algorithm_training.png
 
 # single author
 author:
@@ -287,7 +287,7 @@ class Solution {
 
 该题目本来是一道典型的 `BFS` 题目，但是在输出结果上有特殊的要求，所以要在循环队列时记录当前的层次，这样才能满足结果输出。
 
-{% pdf https://gitee.com/dongzl/article-images/raw/master/2020/27-Algorithm-DFS-BFS/27-Algorithm-DFS-BFS-01.pdf %}
+{% pdf https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/27-Algorithm-DFS-BFS/27-Algorithm-DFS-BFS-01.pdf %}
 
 ## 参考资料
 

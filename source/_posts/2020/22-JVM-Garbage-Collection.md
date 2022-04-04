@@ -1,7 +1,7 @@
 ---
 title: 如何用一句话证明你的 JVM 水平很牛
 date: 2020-04-13 18:37:06
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/jvm_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/jvm_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -40,7 +40,7 @@ tags:
 
 ### 标记--清除算法（Mark-Sweep）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-01.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-01.png" width="600px">
 
 优点：
 
@@ -53,7 +53,7 @@ tags:
 
 ### 标记--复制算法（Copying）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-02.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-02.png" width="600px">
 
 优点：
 
@@ -66,7 +66,7 @@ tags:
 
 ### 标记--整理算法（Mark-Compack）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-03.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-03.png" width="600px">
 
 优点：
 
@@ -88,11 +88,11 @@ tags:
   - 垃圾对象少
   - 使用 Mark-Compack 算法
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-04.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-04.png" width="600px">
 
 ## HotSpot 虚拟机垃圾收集器
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-05.jpg" width="600px">
 
 ### Serial
 
@@ -102,7 +102,7 @@ tags:
 - 简单而高效，额外的内存消耗最小；
 - 可以管理较小内存（几十兆到一两百兆内存）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
 
 Serial/Serial Old收集器运行示意图
 
@@ -112,7 +112,7 @@ Serial/Serial Old收集器运行示意图
 
 Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-06.jpg" width="600px">
 
 ### Parallel Scavenge
 
@@ -143,7 +143,7 @@ $$吞吐量=\frac{运行用户代码时间}{运行用户代码时间+运行垃�
 
 - ParNew 收集器默认开启的收集线程数与处理器核心数量相同，在处理器核心非常多的环境中，可以使用 `-XX:ParallelGCThreads` 参数来限制垃圾收集的线程数。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-08.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-08.jpg" width="600px">
 
 ParNew/Serial Old收集器运行示意图
 
@@ -151,7 +151,7 @@ ParNew/Serial Old收集器运行示意图
 
 Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-09.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-09.jpg" width="600px">
 
 Parallel Scavenge/Parallel Old收集器运行示意图
 
@@ -169,7 +169,7 @@ CMS 垃圾收集四个步骤：
 
 - 并发清除（CMS concurrent sweep）：并发清除阶段，清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-10.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-10.jpg" width="600px">
 
 Concurrent Mark Sweep收集器运行示意图
 
@@ -185,7 +185,7 @@ CMS 垃圾收集器不足：
 
 ### Garbage First
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-11.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-11.png" width="600px">
 
 - G1是一款主要面向服务端应用的垃圾收集器。
 
@@ -203,7 +203,7 @@ G1 收集器工作步骤：
 - 最终标记（Final Marking）
 - 筛选回收（Live Data Counting and Evacuation）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-12.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-12.jpg" width="600px">
 
 ### Shenandoah
 
@@ -227,7 +227,7 @@ Shenandoah 收集器工作过程：
 
 - 并发清理（Concurrent Cleanup）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-13.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-13.png" width="600px">
 
 Shenandoah 收集器的工作过程
 
@@ -245,7 +245,7 @@ ZGC 也是采用基于Region的堆内存布局，ZGC 的 Region 具有动态性�
 
 - 大型 Region（Large Region）：容量不固定，可以动态变化，但必须为2MB的整数倍，用于放置4MB或以上的大对象。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-14.jpg" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/22-JVM-Garbage-Collection/JVM-Garbage-Collection-14.jpg" width="600px">
 
 ZGC 执行过程：
 

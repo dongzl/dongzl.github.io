@@ -1,7 +1,7 @@
 ---
 title: Lombok 框架使用总结
 date: 2019-11-30 20:38:18
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:

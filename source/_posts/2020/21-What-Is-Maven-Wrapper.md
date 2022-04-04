@@ -1,7 +1,7 @@
 ---
 title: Maven Wrapper 工具在开源项目中的使用
 date: 2020-04-08 17:11:54
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/maven_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/maven_study.png
 
 # single author
 author:

@@ -1,7 +1,7 @@
 ---
 title: Google Guava EventBus 在 ShardingShere 中的应用
 date: 2020-02-01 18:02:52
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/google_guava.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/google_guava.png
 
 # single author
 author:
@@ -28,7 +28,7 @@ Guava 的 EventBus 可以简化生产/消费模型。EventBus 通过非常简单
 
 <!-- more -->
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/01-Google-Guava-EventBus-ShardingSphere/Google-Guava-EventBus.png" width="600px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/01-Google-Guava-EventBus-ShardingSphere/Google-Guava-EventBus.png" width="600px">
 
 通过阅读 Guava 的 EventBus 源码，EventBus 支持的操作如下：
 

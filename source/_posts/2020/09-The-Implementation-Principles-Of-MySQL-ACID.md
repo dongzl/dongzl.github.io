@@ -1,7 +1,7 @@
 ---
 title: MySQL 数据库事务 ACID 的实现原理
 date: 2020-03-13 21:39:26
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -52,7 +52,7 @@ tags:
 
 - 日志恢复技术（保证事务的原子性和持久性，防止事务故障或系统故障破坏数据一致性）
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_01.png">
 
 ### 事务的实现原理
 
@@ -182,7 +182,7 @@ MySQL 锁分类：
 
 - InnoDB： 没有保存表的总行数，如果使用 select count(*) from table; 就会遍历整个表，消耗相当大，但是在加了 where 条件后，MyISAM 和 InnoDB 处理的方式都一样。
 
-{% pdf https://gitee.com/dongzl/article-images/raw/master/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_02.pdf %}
+{% pdf https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/09-The-Implementation-Principles-Of-MySQL-ACID/The-Implementation-Principles-Of-MySQL-ACID_02.pdf %}
 
 - 参考资料
 

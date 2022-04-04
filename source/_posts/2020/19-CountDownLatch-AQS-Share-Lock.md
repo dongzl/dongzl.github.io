@@ -1,7 +1,7 @@
 ---
 title: CountDownLatch 基于 AQS 共享锁模式实现原理分析
 date: 2020-04-01 21:34:19
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:
@@ -62,9 +62,9 @@ class WorkerRunnable implements Runnable {
 
 `CountDownLatch` 的核心实现原理是基于 `AQS`，`AQS` 全称 `AbstractQueuedSynchronizer`，是 `java.util.concurrent` 中提供的一种高效且可扩展的同步机制；它是一种提供了原子式管理同步状态、阻塞和唤醒线程功能以及队列模型的简单框架。除了 `CountDownLatch` 工具类，JDK 当中的 `Semaphore`、`ReentrantLock` 等工具类都是基于 `AQS` 来实现的。下面我们用 `CountDownLatch` 来分析一下 `AQS` 的实现。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/19-CountDownLatch-AQS-Share-Lock/CountDownLatch-AQS-Share-Lock-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/19-CountDownLatch-AQS-Share-Lock/CountDownLatch-AQS-Share-Lock-01.png">
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/19-CountDownLatch-AQS-Share-Lock/CountDownLatch-AQS-Share-Lock-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/19-CountDownLatch-AQS-Share-Lock/CountDownLatch-AQS-Share-Lock-02.png">
 
 其实，如果我们阅读 `CountDownLatch` 的源码实现，发现其实它的代码实现非常简单，算上注释也才 300+ 行代码，如果去掉注释的话代码不到 100 行，大部分方法实现都是调用的 `Sync` 这个静态内部类的实现，而 `Sync` 就是继承自 `AbstractQueuedSynchronizer`。
 

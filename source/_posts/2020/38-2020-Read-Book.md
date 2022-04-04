@@ -1,7 +1,7 @@
 ---
 title: 2020年读过的那些书
 date: 2020-12-28 16:54:14
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/reading_book.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/reading_book.png
 # author information, multiple authors are set to array
 # single author
 author:

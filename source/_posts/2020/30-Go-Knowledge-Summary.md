@@ -1,7 +1,7 @@
 ---
 title: Go 语言编程知识学习总结（持续更新中）
 date: 2020-06-08 11:08:31
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/go_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/go_study.png
 
 # single author
 author:

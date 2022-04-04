@@ -1,7 +1,7 @@
 ---
 title: （译）JSON Web Token 介绍
 date: 2020-06-20 11:08:31
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/jwt_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/jwt_study.png
 
 # single author
 author:
@@ -113,11 +113,11 @@ HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)
 
 下图显示了一个 JWT 内容，它已对先前的 header 和 payload 进行了编码，并使用用一个密钥进行了签名。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-01.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-01.png" width="800px">
 
 如果我们想使用 JWT 并将这些概念付诸实践，我们可以使用 [jwt.io Debugger](https://jwt.io/#debugger-io) 工具解码，验证和生成 JWT 内容。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-02.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-02.png" width="800px">
 
 ### 如何使用 JSON Web Tokens
 
@@ -139,7 +139,7 @@ Authorization: Bearer <token>
 
 下面的流程图显示如何获取一个 JWT 并使用它来访问 API 或者其他资源内容：
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-03.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-03.png" width="800px">
 
 - 应用系统或者是其他客户端向授权服务器请求授权信息。这是通过其中的一种授权流程来完成的。例如：典型的符合 [OpenID Connect](https://openid.net/connect/) 的 Web 应用程序将使用授权认证代码访问 `/oauth/authorize` 端点来完成。
 
@@ -161,7 +161,7 @@ JSON 解析器在大多数编程语言中都很常见，因为它们直接映射
 
 关于用法，JWT 是在 Internet 上规模使用的。这强调了在多个平台（尤其是移动平台）上对 JSON Web Token 进行客户端处理的简便性。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-04.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-04.png" width="800px">
 
 编码的 JWT 和编码的 SAML 的长度比较
 
@@ -169,4 +169,4 @@ JSON 解析器在大多数编程语言中都很常见，因为它们直接映射
 
 ### 原文内容
 
-{% pdf https://gitee.com/dongzl/article-images/raw/master/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-05.pdf %}
+{% pdf https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/31-JSON-Web-Token-Introduction/JSON-Web-Token-Introduction-05.pdf %}

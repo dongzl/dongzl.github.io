@@ -1,7 +1,7 @@
 ---
 title: 多看电子书规范扩展开放计划
 date: 2020-08-01 20:26:44
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/reading_book.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/reading_book.png
 # author information, multiple authors are set to array
 # single author
 author:

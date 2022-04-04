@@ -1,7 +1,7 @@
 ---
 title: PT-OSC 添加唯一索引导致数据丢失问题分析
 date: 2020-05-27 15:26:22
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study_2.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study_2.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -54,7 +54,7 @@ alter table tableA add unique index uniq_test(test);
 
 **PS. 这个流程我并没有在官网找到详细的描述，来源于网上的二手资料，不过可以说明问题了，后续找到官网的详细描述再更新。**
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-01.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-01.png" width="800px">
 
 从网上摘抄一个 `pt-osc` 工具实际运行过程日志输出，公司内部日志输出也是类似的，涉及具体线上业务，就不截图我们线上的内容了。
 
@@ -99,7 +99,7 @@ Successfully altered `test_db`.`tmp_task_user`.
 
 不过看这个问题的最终状态是在 `3.0.3` 版本已经被修复，看问题评论，修复的方式是新增了 `use-insert-ignore` 参数，这个参数的作用是控制是否在 `INSERT` 数据时使用 `IGNORE` 参数。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-02.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-02.png" width="800px">
 
 我当时联系了 DBA，找他求证了一下线上生产环境使用的 `pt-osc` 工具版本，并和求证了一下线上是否开启了这个参数，`DBA` 回复说现在线上使用比较多的版本还是 `2.2.20`，当时内心是万马奔腾啊，不过他马上在自己本地环境的 `3.0.5` 版本上查了一下这个参数使用：
 
@@ -111,7 +111,7 @@ Successfully altered `test_db`.`tmp_task_user`.
 
 最后只能出大招了，撸源码。首先先在 `github` 上面搜索了一下 `use-insert-ignore` 这个参数，找到了 `bug` 修改记录中有记录这个内容，这个配置是添加在 `/bin/pt-online-schema-change` shell 脚本中，从 `github` 上 `clone` 了一份 `percona-toolkit` 代码，从最新代码的 `pt-online-schema-change` 文件中没有搜到这个 `use-insert-ignore` 参数，然后翻了一遍 `pt-online-schema-change` 脚本的修改记录，根据 `3.0.3` 大致发布的时间，终于找到了提交记录，在 `2017-04-21 02:31` 的提交记录中添加了这个参数，也找到了这个提交的 `PR` [PT-116 pt-online-schema change eats data on adding a unique index](https://github.com/percona/percona-toolkit/pull/206)，没问题，这个参数一定是存在过的，不过为什么现在最新的是没有这个参数的，究竟在哪里又被去掉了呢？继续翻记录，还好在不远处的提交就找到了原因，在 `2017-06-20 06:16` 的一次提交，将上一次的提交直接 `revert` 掉了，而且没有写什么原因，这次 `revert` 貌似没有 `github` 的 `PR` 记录，本来想到 `github` 上面提个 `issue` 问一下这个问题，在进到代码库地址，重点到了，居然不能提 `issue`，好了，就到这里了，这个参数也只就是昙花一现了。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-03.png" width="800px">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/28-PT-OSC-Add-Unique-Index/PT-OSC-Add-Unique-Index-03.png" width="800px">
 
 ## 事故总结
 

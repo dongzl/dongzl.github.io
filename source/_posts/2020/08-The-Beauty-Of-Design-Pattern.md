@@ -1,7 +1,7 @@
 ---
 title: 极客时间 《设计模式之美》 学习笔记
 date: 2019-12-26 21:35:58
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/design_pattern.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/design_pattern.png
 # author information, multiple authors are set to array
 # single author
 author:

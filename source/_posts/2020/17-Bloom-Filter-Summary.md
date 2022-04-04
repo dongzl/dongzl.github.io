@@ -1,7 +1,7 @@
 ---
 title: BloomFilter 实现原理及使用
 date: 2020-03-21 21:10:04
-# cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+# cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -25,7 +25,7 @@ tags:
 - 如果用平衡 BST（如 AVL树、红黑树）存储，时间复杂度为 O(logn)；
 - 如果用哈希表存储，并用链地址法与平衡 BST 解决哈希冲突（参考 JDK8 的 HashMap 实现方法），时间复杂度也要有O[log(n/m)]，m 为哈希分桶数。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-01.png">
 
 如果采用上面提到的一些方法，需要将实际数据都要存储到集合中，才能真正判断元素是否存在，会占用很大的内存空间，而且对于上面计算的时间复杂度，如果集合中元素非常多时，查找效率并不高。Bloom Filter 就是为了解决这些问题应运而生的。
 
@@ -39,7 +39,7 @@ Bloom Filter 是由一个长度为 m 的比特位数组（bit array）与 k 个�
 
 下图示出一个 m=18, k=3 的 Bloom Filter 示例。集合中的 x、y、z 三个元素通过 3 个不同的哈希函数散列到位数组中。当查询元素 w 时，因为有一个比特为0，因此 w 不在该集合中。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-02.png">
 
 ## Bloom Filter 的优缺点与用途
 
@@ -134,7 +134,7 @@ public class RedisBloomFilterTest {
 }
 ```
 
-{% pdf https://gitee.com/dongzl/article-images/raw/master/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-03.pdf %}
+{% pdf https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/17-Bloom-Filter-Summary/Bloom-Filter-Summary-03.pdf %}
 
 ## 参考资料
 

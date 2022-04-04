@@ -1,7 +1,7 @@
 ---
 title: 计算机中常用数学公式汇总
 date: 2020-02-17 22:04:54
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithms.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/algorithms.png
 
 # single author
 author:

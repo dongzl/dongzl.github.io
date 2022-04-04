@@ -1,7 +1,7 @@
 ---
 title: JDK ThreadPoolExecutor 源码解析
 date: 2020-03-18 22:02:59
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -32,18 +32,18 @@ tags:
 
 ## 线程池工作原理
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-04.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-04.png">
 
 线程池执行所提交的任务过程: 
 - 先判断线程池中核心线程池所有的线程是否都在执行任务。如果不是，则新创建一个线程执行刚提交的任务，否则，核心线程池中所有的线程都在执行任务，则进入第2步;
 - 判断当前阻塞队列是否已满，如果未满，则将提交的任务放置在阻塞队列中；否则，则进入第3步；
 - 判断线程池中所有的线程是否都在执行任务，如果没有，则创建一个新的线程来执行任务，否则，则交给饱和策略进行处理。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-05.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-05.png">
 
 ## JDK 自带线程池实现
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-01.png">
 
 <div style="width:100%; overflow-y: scroll;">
     <table>
@@ -141,11 +141,11 @@ tags:
 
 ## JDK 自带阻塞队列实现
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-02.png">
 
 ## 线程池的生命周期
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-03.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/15-ThreadPoolExecutor-Source-Code/ThreadPoolExecutor-Source-Code-03.png">
 
 - RUNNING：能接受新提交的任务，并且也能处理阻塞队列中的任务；
 

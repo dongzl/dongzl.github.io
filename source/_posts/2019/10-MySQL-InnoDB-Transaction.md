@@ -1,7 +1,7 @@
 ---
 title: 10-MySQL-InnoDB-Transaction
 date: 2019-11-19 19:08:31
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 
 # single author
 author:

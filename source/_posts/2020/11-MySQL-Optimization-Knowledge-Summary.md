@@ -1,7 +1,7 @@
 ---
 title: MySQL 数据库优化知识总结
 date: 2020-03-14 22:06:18
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 # author information, multiple authors are set to array
 # single author
 author:

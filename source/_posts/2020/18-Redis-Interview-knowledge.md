@@ -1,7 +1,7 @@
 ---
 title: Redis 面试常见问题知识点总结
 date: 2020-03-22 21:24:37
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:
@@ -32,7 +32,7 @@ Redis 中的热点数据集中过期导致 MySQL 在某一时刻承受很大的�
   
 - Redis 宕机问题：a、设置多级缓存，b、搭建 Redis 集群，防止单点问题。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-01.jpg">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-01.jpg">
 
 ### 缓存穿透
 
@@ -47,7 +47,7 @@ Redis 中有一条热点数据，过期之后，MySQL 承接了大量的请求�
 
 一般这种情况在实际工作中出现较少，很少会只有一条热点数据。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-03.jpg">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-03.jpg">
 
 ### 分布式锁
 
@@ -57,7 +57,7 @@ Redis 实现分布式锁的一些问题：
 
 - 资源浪费。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/18-Redis-Interview-knowledge/Redis-Interview-knowledge-02.png">
 
 ## 参考资料
 

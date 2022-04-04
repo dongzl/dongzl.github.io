@@ -1,7 +1,7 @@
 ---
 title: 极客时间 《深入浅出计算机组成原理》 学习笔记
 date: 2020-02-21 20:54:33
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/computer_composition.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/computer_composition.png
 
 # single author
 author:

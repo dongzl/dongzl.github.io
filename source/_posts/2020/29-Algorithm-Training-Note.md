@@ -1,7 +1,7 @@
 ---
 title: 《算法训练营》课堂笔记 & 习题
 date: 2020-06-04 14:27:31
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/algorithm_training.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/algorithm_training.png
 
 # single author
 author:

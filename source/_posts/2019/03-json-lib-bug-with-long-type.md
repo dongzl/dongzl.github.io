@@ -1,7 +1,7 @@
 ---
 title: json-lib 解析 Long 类型数据 Bug 排查
 date: 2019-09-14 08:10:17
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 
 # single author
 author:

@@ -1,7 +1,7 @@
 ---
 title: MySQL 数据库索引的实现原理
 date: 2020-03-14 13:52:04
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -26,7 +26,7 @@ tags:
 
 ## MySQL 架构
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-03.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-03.png">
 
 ## 索引的分类
 
@@ -75,7 +75,7 @@ B 树缺点：
 
 - 当存储的数据量很大的时候会导致深度较大，增大查询时磁盘 IO 次数，进而影响查询性能。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-01.png">
 
 **MySQL B+ 树索引格式实现原理**
 
@@ -95,7 +95,7 @@ B+ 树是在 B 树的基础上做的一种优化，优化如下：
 
 **MySQL MyISAM--B+ 树，叶子节点存储表中数据的地址**
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/10-The-Implementation-Principles-Of-MySQL-Index/The-Implementation-Principles-Of-MySQL-Index-02.png">
 
 ## MySQL 索引的一些其他内容
 

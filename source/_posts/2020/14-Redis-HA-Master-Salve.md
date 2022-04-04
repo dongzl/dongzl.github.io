@@ -1,7 +1,7 @@
 ---
 title: Redis 高可用之主从复制
 date: 2020-03-17 18:39:21
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:
@@ -40,7 +40,7 @@ PS. 如果采用了主从架构，那么建议必须开启 master node 的持久
 
 当启动一个 slave node 的时候，它会发送一个 `PSYNC` 命令给 master node。如果这是 slave node 初次连接到 master node，那么会触发一次 `full resynchronization` 全量复制。此时 master 会启动一个后台线程，开始生成一份 RDB 快照文件，同时还会将客户端 client 新收到的所有写命令缓存在内存中。RDB 文件生成完毕后， master 会将这个 RDB 文件发送给 slave，slave 会先写入本地磁盘，然后再从本地磁盘加载到内存中，接着 master 会将内存中缓存的写命令发送到 slave，slave 也会同步这些数据。slave node 如果跟 master node 有网络故障，断开了连接，会自动重连，连接之后 master node 仅会复制给 slave 部分缺少的数据。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-01.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-01.png">
 
 ### 主从复制的断点续传
 
@@ -71,7 +71,7 @@ slave node 启动时，会在自己本地保存 master node 的信息，包括 m
 
 slave node 内部有个定时任务，每秒检查是否有新的 master node 要连接和复制，如果发现，就跟 master node 建立 `socket` 网络连接。然后 slave node 发送 `ping` 命令给 master node。如果 master 设置了 `requirepass`，那么 slave node 必须发送 `masterauth` 的口令过去进行认证。master node 第一次执行全量复制，将所有数据发给 slave node。而在后续，master node 持续将写命令，异步复制给 slave node。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-02.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-02.png">
 
 ### 全量复制
 
@@ -91,9 +91,9 @@ client-output-buffer-limit slave 256MB 64MB 60
 
 - 如果 slave node 开启了 `AOF`，那么会立即执行 `BGREWRITEAOF`，重写 `AOF`。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-03.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-03.png">
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-04.png">
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2020/14-Redis-HA-Master-Salve/Redis-HA-Master-Salve-04.png">
 
 ### 增量复制
 

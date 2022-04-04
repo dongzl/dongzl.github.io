@@ -1,7 +1,7 @@
 ---
 title: Hexo 环境搭建 & 常用插件集成
 date: 2019-11-20 19:12:09
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/hexo_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/hexo_study.png
 
 # single author
 author:
