@@ -1,7 +1,7 @@
 ---
 title: Redis 常用数据结构及其底层存储实现总结
 date: 2021-07-18 10:38:46
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:
@@ -38,7 +38,7 @@ tags:
 
 - `sorted set` 类型，集合类型，用于存储集合元素，元素内容不可以重复，可以为每一个元素设置一个分值，可以根据分值进行排序。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-01.png" style="width:500px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-01.png" style="width:500px"/>
 
 在 `Redis` 中我们可以 `type` 命令查看某个 `Key` 对应的数据结构的类型。
 
@@ -58,7 +58,7 @@ set
 ### 存储结构总结
 在 `Redis` 中，对于某种数据类型，底层会使用多种存储结构来实现，如下图：
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-02.png" style="width:500px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/10-Redis-Data-Type-Storage-Structure/Redis-Data-Type-Storage-Structure-02.png" style="width:500px"/>
 
 ### 实现方案优势分析
 

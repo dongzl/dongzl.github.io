@@ -1,7 +1,7 @@
 ---
 title: Redis 热 Key 发现以及解决办法
 date: 2021-01-14 07:03:30
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:
@@ -26,7 +26,7 @@ tags:
 
 ## 目录
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/03-Redis-Hot-Key/Redis-Hot-Key-01.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/03-Redis-Hot-Key/Redis-Hot-Key-01.png" style="width:800px"/>
 
 ## 热 Key 带来问题
 
@@ -72,7 +72,7 @@ tags:
 
 如果所有的 `Redis` 请求都经过 `Proxy`（代理）的话，可以考虑改动 `Proxy` 代码进行收集，思路与客户端基本类似。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/03-Redis-Hot-Key/Redis-Hot-Key-02.png" style="width:500px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/03-Redis-Hot-Key/Redis-Hot-Key-02.png" style="width:500px"/>
 
 - 优点：对使用方完全透明，能够解决客户端 `SDK` 的语言异构和版本升级问题；
 

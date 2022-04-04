@@ -1,7 +1,7 @@
 ---
 title: 《平凡的世界》经典语录摘抄
 date: 2021-01-27 20:56:58
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/reading_book.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/reading_book.png
 # author information, multiple authors are set to array
 # single author
 author:

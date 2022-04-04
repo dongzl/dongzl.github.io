@@ -1,7 +1,7 @@
 ---
 title: 2021生活沉思录
 date: 2021-01-01 21:17:45
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/life_meditations.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/life_meditations.png
 
 # single author
 author:

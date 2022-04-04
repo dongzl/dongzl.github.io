@@ -1,7 +1,7 @@
 ---
 title: Reactor 模式--Scalable IO in Java
 date: 2021-01-09 19:23:58
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/cover/netty_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/netty_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -22,7 +22,7 @@ tags:
 
 周末随便学习一些东西，在[屈定](https://mrdear.cn/)老兄的博客上看到更新了一篇文章[《Netty -- Reactor模型的应用》](https://mrdear.cn/posts/framework-netty-reactor-model.html)，内容分析的很到位，对于 `Reactor` 模式，我了解到的主要还是在 `Netty` 框架中的线程模式使用的是 `Reactor` 模式，有时会想这个东西在在我们的业务系统中会有什么样的应用场景，是不是有机会在某些功能中落地到我们的项目中，而不是一直高高在上，为此还和屈定老兄交流了一下。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-01.jpeg" style="width:300px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-01.jpeg" style="width:300px"/>
 
 看来这个东西也只是“此曲只应天上有，人间能得几回闻”，业务系统落地机会看来不多，也可能还需要慢慢探索，不过还是想在学习一下，不要只是肤浅的理解。
 
@@ -30,7 +30,7 @@ tags:
 
 ## 目录
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-02.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-02.png"/>
 
 ## 可扩展的网络服务
 
@@ -52,7 +52,7 @@ tags:
 
 ### 经典服务设计
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-03.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-03.png"/>
 
 每一个 `handler` 处理流程可能会启动一个自己独享的线程。
 
@@ -121,7 +121,7 @@ class Server implements Runnable {
 
 当某个时刻任务被启用时，开始执行这个任务；在整个过程中，`IO` 事件作为任务启用的触发器。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-06.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-06.png"/>
 
 `java.nio` 实现的基本机制：
 
@@ -155,7 +155,7 @@ class Server implements Runnable {
 
 ### 背景介绍：AWT 中的事件
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-07.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-07.png"/>
 
 事件驱动的 `IO` 使用相似的想法，但设计不同
 
@@ -172,7 +172,7 @@ class Server implements Runnable {
 
 ### Reactor 模式基本实现
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-04.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-04.png"/>
 
 单线程版本实现
 
@@ -260,7 +260,7 @@ class Acceptor implements Runnable { // inner
 }
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-04.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-04.png"/>
 
 ### Reactor 模式第四步：Handler 启动
 
@@ -381,7 +381,7 @@ PS. 工作线程用于处理 IO 事件，`Reactor` 线程不用关心 `IO` 事�
 
 ### 工作线程池
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-05.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-05.png"/>
 
 ### 线程池处理器
 
@@ -488,7 +488,7 @@ class Acceptor { // ...
 
 ### 使用多 Reactor 模式
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-08.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-08.png"/>
 
 ### 使用其他的 java.nio 特性
 
@@ -579,7 +579,7 @@ abstract class Buffer {
 }
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-09.png"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/02-Reactor-Pattern-Scalable-IO-In-Java/Reactor-Pattern-Scalable-IO-In-Java-09.png"/>
 
 ### ByteBuffer
 

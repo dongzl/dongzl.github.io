@@ -1,7 +1,7 @@
 ---
 title: Apache Calcite 进阶(一)--适配器
 date: 2021-01-03 20:03:22
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/calcite_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/calcite_study.png
 # author information, multiple authors are set to array
 # single author
 author:

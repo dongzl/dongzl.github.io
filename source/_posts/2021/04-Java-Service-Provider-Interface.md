@@ -1,7 +1,7 @@
 ---
 title: Java SPI 使用及原理分析
 date: 2021-01-16 10:19:04
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/java_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/java_study.png
 # author information, multiple authors are set to array
 # single author
 author:

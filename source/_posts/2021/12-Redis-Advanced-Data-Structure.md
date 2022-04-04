@@ -1,7 +1,7 @@
 ---
 title: Redis 特殊数据存储结构使用总结
 date: 2021-07-25 15:13:25
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:

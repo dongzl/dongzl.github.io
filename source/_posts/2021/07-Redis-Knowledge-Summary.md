@@ -1,7 +1,7 @@
 ---
 title: Redis 知识思维导图总结
 date: 2021-07-05 20:17:16
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/redis_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
 # single author
 author:
@@ -24,7 +24,7 @@ tags:
 
 ## 思维导图
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-01.png" style="width:400px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-01.png" style="width:400px"/>
 
 ## 知识汇总
 
@@ -62,7 +62,7 @@ tags:
 
 系统梳理 Redis 中 RDB 和 AOF 两种数据持久化方式的特征和使用方式。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-02.png" style="width:400px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/07-Redis-Knowledge-Summary/Redis-Knowledge-Summary-02.png" style="width:400px"/>
 
 ### Redis 高可用架构
 

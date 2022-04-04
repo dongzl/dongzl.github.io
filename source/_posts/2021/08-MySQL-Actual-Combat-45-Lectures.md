@@ -1,7 +1,7 @@
 ---
 title: MySQL 实战45讲--基础篇
 date: 2021-07-08 09:16:39
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/mysql_geek_time.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_geek_time.png
 
 # single author
 author:

@@ -1,7 +1,7 @@
 ---
 title: Apache Dubbo 可扩展机制分析
 date: 2021-01-23 18:00:56
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/dubbo_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/dubbo_study.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -156,7 +156,7 @@ consistenthash=com.alibaba.dubbo.rpc.cluster.loadbalance.ConsistentHashLoadBalan
 
 可以看到文件中定义了 `4` 个 `LoadBalance` 的扩展实现。由于负载均衡的实现不是本次的内容，这里就不过多说明。只用知道 `Dubbo` 提供了 `4` 种负载均衡的实现，我们可以通过 `XML` 文件，`properties` 文件，`JVM` 参数显式的指定一个实现。如果没有，默认使用随机。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/05-Java-SPI-In-Dubbo/dubbo-loadbalance.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/05-Java-SPI-In-Dubbo/dubbo-loadbalance.png" style="width:800px"/>
 
 - `@Adaptive(“loadbalance”)`：`@Adaptive` 注解修饰 `select` 方法，表明方法 `select` 方法是一个可自适应的方法。`Dubbo` 会自动生成该方法对应的代码，当调用 `select` 方法时，会根据具体的方法参数来决定调用哪个扩展实现的 `select` 方法。`@Adaptive` 注解的参数 `loadbalance` 表示方法参数中的 `loadbalance` 的值作为实际要调用的扩展实例。 但奇怪的是，我们发现 `select` 的方法中并没有 `loadbalance` 参数，那怎么获取 `loadbalance` 的值呢？`select` 方法中还有一个 `URL` 类型的参数，`Dubbo` 就是从 `URL` 中获取 `loadbalance` 的值的。这里涉及到 `Dubbo` 的 `URL` 总线模式，简单说，`URL` 中包含了 `RPC` 调用中的所有参数。`URL` 类中有一个 `Map<String, String> parameters` 字段，`parameters` 中就包含了 `loadbalance`。
 
@@ -436,7 +436,7 @@ private ExtensionLoader(Class<?> type) {
 
 `objectFacory` 本身也是一个扩展，通过 `ExtensionLoader.getExtensionLoader(ExtensionFactory.class).getAdaptiveExtension())` 来获取。
 
-<img src="https://gitee.com/dongzl/article-images/raw/master/2021/05-Java-SPI-In-Dubbo/dubbo-extensionfactory.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/05-Java-SPI-In-Dubbo/dubbo-extensionfactory.png" style="width:800px"/>
 
 `ExtensionFactory` 有三个实现：
 
