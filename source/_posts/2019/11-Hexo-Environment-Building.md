@@ -209,7 +209,5 @@ Parallel 4   :         des6, after des4, 1d
 - [如何在 hexo 中支持 Mathjax？](https://blog.csdn.net/u014630987/article/details/78670258)
 - [hexo下LaTeX无法显示的解决方案](https://blog.csdn.net/crazy_scott/article/details/79293576)
 - [hexo 博客添加 pdf 插件](https://www.jianshu.com/p/7f10f51bce47)
-
-
-
-
+- [Hexo 使用 Github Actions 自动发布至 Github Pages 时，生成的 html 页面空白？](https://www.v2ex.com/t/728048)
+- [如何使用 GitHub Actions 自动部署 Hexo 博客](https://juejin.cn/post/6943895271751286821)
