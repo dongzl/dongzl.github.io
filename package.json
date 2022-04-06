@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.9.0"
+    "version": "6.1.0"
   },
   "dependencies": {
     "gitalk": "^1.5.0",
@@ -39,7 +39,7 @@
     "live2d-widget-model-z16": "^1.0.5",
     "lunr": "github:mamboer/lunr.js",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.1",
     "object-assign": "^4.1.1"
   }
 }
