@@ -213,7 +213,7 @@ func TestUserRepository_ListIntegration(t *testing.T) {
 
 如果你想了解更多内容，你可以访问 https://www.testcontainers.org 和 https://github.com/testcontainers/testcontainers-go ，如果你想查看上面示例代码文件，你可以访问 https://github.com/qreasio/go-starter-kit ，这是我的 `golang rest api starter kit` 项目，提供可用于新 `API` 项目的初始代码。
 
-## 一个困扰我的为
+## 一个困扰我的问题
 
 正好我需要在一个项目中使用 `testcontainers-go` 这个库，而且也很快就搜到了上面这篇文章，我将作者在 `Github` 上面的 [go-starter-kit](https://github.com/qreasio/go-starter-kit) 仓库代码 `clone` 下来直接运行，一切都是 OK 的，但是当我把相关代码拷贝到我的项目中之后，在运行就失败了，报错如下：
 
