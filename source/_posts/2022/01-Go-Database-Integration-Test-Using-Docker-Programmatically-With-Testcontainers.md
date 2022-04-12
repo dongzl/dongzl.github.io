@@ -23,25 +23,25 @@ tags:
 
 ## 背景介绍
 
-使用 Docker 工具进行测试工作已经变得越来与普遍，因为 Docker 工具以一种更优雅的方式提供了集成测试和 e2e 测试的能力，但是很多开发者仍然依赖 Docker cli 和 Dockerfile 工具完成和 Docker 的交互工作。
+使用 `Docker` 工具进行测试工作已经变得越来与普遍，因为 `Docker` 工具以一种更优雅的方式提供了集成测试和 `e2e` 测试的能力，但是很多开发者仍然依赖 `Docker CLI` 和 `Dockerfile` 工具完成和 `Docker` 的交互工作。
 
-一些开发人员可能会使用 Makefile 文件、bash 命令来操作 Docker 工具；或者在代码中封装 Docker CLI 工具的调用，在 Goland 语言中可能会使用 os/exec 库中的 exec.Command 方法进行调用。
+一些开发人员可能会使用 `Makefile` 文件、`bash` 命令来操作 `Docker` 工具；或者在代码中封装 `Docker CLI` 工具的调用，在 `Goland` 语言中可能会使用 `os/exec` 库中的 `exec.Command` 方法进行调用。
 
-我尝试了上面的各种方式，依赖 Makefile、bash 或者在代码中封装 Docker CLI 工具的调用都是不可靠的；在我们的测试工作中，我们无法实现对 Docker 工具的优雅集成和进行足够的控制。
+我尝试了上面的各种方式，依赖 `Makefile`、`bash` 或者在代码中封装 `Docker CLI` 工具的调用都是不可靠的；在我们的测试工作中，我们无法实现对 `Docker` 工具的优雅集成和进行足够的控制。
 
-所以我尝试去搜索一些其他的实现方案，最终我搜索到了 testcontainers-go 这个库，这个库是一个专门的 Go 语言依赖库，用于使用 docker 进行测试。这是 [testcontainers](https://www.testcontainers.org/) 项目下的一个子项目，testcontainers 项目最初是使用 Java 语言构建的。
+所以我尝试去搜索一些其他的实现方案，最终我搜索到了 `testcontainers-go` 这个库，这个库是一个专门的 `Go` 语言依赖库，用于使用 `Docker` 进行测试。这是 [testcontainers](https://www.testcontainers.org/) 项目下的一个子项目，`testcontainers` 项目最初是使用 `Java` 语言构建的。
 
-在我了解了这个工具之后，我突然觉得自己很愚蠢，因为 Docker 工具是用 Go 语言开发的，并且有 [Docker Engine SDK]((https://docs.docker.com/engine/api/sdk/examples/)) 纯粹用于使用 Golang 代码交互和管理 Docker 工具。我怎么能把这个给忘了呢，现在已经很明确了，如果我要使用 Docker 进行测试，我可以直接使用 Docker SDK 调用 Docker 工具。但是如果我想使用 Docker 的原因只是为了测试目的，相较于直接使用 SDK 与 Docker 进行交互，我认为使用 testcontainers-go 工具很明显是一个更好的选择。
+在我了解了这个工具之后，我突然觉得自己很愚蠢，因为 `Docker` 工具是用 `Go` 语言开发的，并且有 [Docker Engine SDK]((https://docs.docker.com/engine/api/sdk/examples/)) 纯粹用于使用 `Golang` 代码交互和管理 `Docker` 工具。我怎么能把这个给忘了呢，现在已经很明确了，如果我要使用 `Docker` 进行测试，我可以直接使用 `Docker SDK` 调用 `Docker` 工具。但是如果我想使用 `Docker` 的原因只是为了测试目的，相较于直接使用 `SDK` 与 `Docker` 进行交互，我认为使用 `testcontainers-go` 工具很明显是一个更好的选择。
 
-背景已经介绍的足够多了。现在，我将要分享一下我在 go-starter-kit 项目是如何使用 testcontainers-go 实现一个简单的数据库集成测试的功能的。
+背景已经介绍的足够多了。现在，我将要分享一下我在 `go-starter-kit` 项目是如何使用 `testcontainers-go` 实现一个简单的数据库集成测试的功能的。
 
 ## 使用 TestContainers 工具在 Docker 中启动 MySQL数据库
 
-所以我想要做的第一件事是运行提供数据库连接的 MySQL Docker，并且需要将测试数据填充进去。
+所以我想要做的第一件事是运行提供数据库连接的 `MySQL` `Docker`，并且需要将测试数据填充进去。
 
-我需要实现一个可重用的 `SetupMySQLContainer` 方法，这个方法需要返回 sqlx.DB 对象和一个 function 对象，function 对象将会用于终止 Docker container。在这个方法实现中我不没有处理数据库凭据问题，因为我要测试的用户存储库不需要 MySQL 凭据。
+我需要实现一个可重用的 `SetupMySQLContainer` 方法，这个方法需要返回 `sqlx.DB` 对象和一个 `function` 对象，`function` 对象将会用于终止 `Docker` `container`。在这个方法实现中我不没有处理数据库凭据问题，因为我要测试的用户存储库不需要 `MySQL` 凭据。
 
-于是我将这个方法放在 pkg/test 中的 db.go 文件中，因为我希望它能够被其他测试重复使用。
+于是我将这个方法放在 `pkg/test` 中的 `db.go` 文件中，因为我希望它能够被其他测试重复使用。
 
 ```Go
 package test
@@ -133,13 +133,13 @@ func SetupMySQLContainer(logger log.Logger) (func(), *sqlx.DB, error) {
 }
 ```
 
-在上面的代码中，你可以看到我首先使用 testcontainers.ContainerRequest 准备了 Docker 配置信息，然后将其传递给 testcontainers。GenericContainer 将会启动运行 Docker 容器。
+在上面的代码中，你可以看到我首先使用 `testcontainers.ContainerRequest` 准备了 `Docker` 配置信息，然后将其传递给 `testcontainers`。`GenericContainer` 将会启动运行 `Docker` 容器。
 
-然后是 user_test.go 代码文件，它是 Go 语言实现的 user repository 集成测试代码，它在 TestMain方法中调用 SetupMySQLContainer 函数，因此它可以优雅地启动和终止容器运行。
+然后是 `user_test.go` 代码文件，它是 `Go` 语言实现的 `user` `repository` 集成测试代码，它在 `TestMain` 方法中调用 `SetupMySQLContainer` 函数，因此它可以优雅地启动和终止容器运行。
 
-我将终止容器运行的 function 存储在一个变量中，在它内部它将调用 container.Terminate 函数。
+我将终止容器运行的 `function` 存储在一个变量中，在它内部它将调用 `container.Terminate` 函数。
 
-为了能够填充 MySQL（添加测试数据），我需要绑定 /docker-entrypoint-initdb.d 到一个文件夹路径，这个文件夹中存储了 .sql 文件，这些 SQL 文件用户创建 schema、tables和添加测试用的数据。代码如下：
+为了能够填充 `MySQL`（添加测试数据），我需要绑定 `/docker-entrypoint-initdb.d` 到一个文件夹路径，这个文件夹中存储了 `.sql` 文件，这些 `SQL` 文件用户创建 `schema`、`tables` 和添加测试用的数据。代码如下：
 
 ```Go
 BindMounts: map[string]string{
@@ -147,13 +147,13 @@ BindMounts: map[string]string{
 },
 ```
 
-在容器被创建之后，下一步我需要获取 host 地址和端口来构造 MySQL DNS 连接串，以便将其传递给 sqlx.Connect。
+在容器被创建之后，下一步我需要获取 `host` 地址和端口来构造 `MySQL DNS` 连接串，以便将其传递给 `sqlx.Connect`。
 
 我觉得这段代码还是比较简单易读的，就不多解释了，大家可以慢慢看，好好理解一下。
 
 ## Repository / Database 集成测试
 
-下面是一个简单的集成测试示例，它使用 SetupMySQLContainer 方法让 MySQL 服务器填充了测试数据并在测试完成后终止它。
+下面是一个简单的集成测试示例，它使用 `SetupMySQLContainer` 方法让 `MySQL` 服务器填充了测试数据并在测试完成后终止它。
 
 ```Go
 package user_test
@@ -211,11 +211,11 @@ func TestUserRepository_ListIntegration(t *testing.T) {
 
 这就是这篇文件的内容。
 
-如果你想了解更多内容，你可以访问 https://www.testcontainers.org 和 https://github.com/testcontainers/testcontainers-go ，如果你想查看上面示例代码文件，你可以访问 https://github.com/qreasio/go-starter-kit ，这是我的 golang rest api starter kit 项目，提供可用于新 API 项目的初始代码。
+如果你想了解更多内容，你可以访问 https://www.testcontainers.org 和 https://github.com/testcontainers/testcontainers-go ，如果你想查看上面示例代码文件，你可以访问 https://github.com/qreasio/go-starter-kit ，这是我的 `golang rest api starter kit` 项目，提供可用于新 `API` 项目的初始代码。
 
 ## 一个困扰我的为
 
-正好我需要在一个项目中使用 testcontainers-go 这个库，而且也很快就搜到了上面这篇文章，我将作者在 Github 上面的 [go-starter-kit](https://github.com/qreasio/go-starter-kit) 仓库代码 clone 下来直接运行，一切都是 OK 的，但是当我把相关代码拷贝到我的项目中之后，在运行就失败了，报错如下：
+正好我需要在一个项目中使用 `testcontainers-go` 这个库，而且也很快就搜到了上面这篇文章，我将作者在 `Github` 上面的 [go-starter-kit](https://github.com/qreasio/go-starter-kit) 仓库代码 `clone` 下来直接运行，一切都是 OK 的，但是当我把相关代码拷贝到我的项目中之后，在运行就失败了，报错如下：
 
 ```Go
 2022-04-10T18:06:42.271+0800	ERROR	test/testcontainer_mysql.go:72	Error Start MySQL container: failed to create container: Error response from daemon: invalid mount config for type "bind": bind source path does not exist: /docker-entrypoint-initdb.d
@@ -228,7 +228,7 @@ main.main
 
 我查了很多资料，尝试解决这个问题，最后通过这篇文章给出的思路解决了这个问题：[GoLang Postgres Testcontainers Init Script Doesn't Work](https://tutorialmeta.com/question/golang-postgres-testcontainers-init-script-doesnt-work)
 
-我按照文章中介绍的方式调换了 BindMounts 参数的顺序，代码如下：
+我按照文章中介绍的方式调换了 `BindMounts` 参数的顺序，代码如下：
 
 ```Go
 BindMounts: map[string]string{
@@ -236,7 +236,7 @@ BindMounts: map[string]string{
 },
 ```
 
-这次再启动运行，程序运行 OK 了；不过我当时没有搞清楚这是为什么，都是同样的程序，为什么 map 参数中 key & value 的顺序正好是相反的，不过在写这篇文章的时候我突然想到，会不会是项目依赖的 testcontainers-go 版本不同导致存在差异？
+这次再启动运行，程序运行 OK 了；不过我当时没有搞清楚这是为什么，都是同样的程序，为什么 `map` 参数中 `key & value` 的顺序正好是相反的，不过在写这篇文章的时候我突然想到，会不会是项目依赖的 `testcontainers-go` 版本不同导致存在差异？
 
 顺着这个想法，我首先查看了我的项目中使用的版本：
 
@@ -244,7 +244,7 @@ BindMounts: map[string]string{
 github.com/testcontainers/testcontainers-go v0.12.0
 ```
 
-使用的是最新的 v0.12.0 版本，搜索这个版本的源代码，查看 [BindMounts](https://github.com/testcontainers/testcontainers-go/blob/v0.12.0/docker.go#L746) 参数使用位置：
+使用的是最新的 `v0.12.0` 版本，搜索这个版本的源代码，查看 [BindMounts](https://github.com/testcontainers/testcontainers-go/blob/v0.12.0/docker.go#L746) 参数使用位置：
 
 ```Go
 // prepare mounts
@@ -258,13 +258,13 @@ for innerPath, hostPath := range req.BindMounts {
 }
 ```
 
-我们在看一下作者在 go-starter-kit 项目使用 testcontainers-go 这个库的版本：
+我们在看一下作者在 `go-starter-kit` 项目使用 `testcontainers-go` 这个库的版本：
 
 ```
 github.com/testcontainers/testcontainers-go v0.5.1
 ```
 
-作者使用的是 v0.5.1 版本，搜索这个版本的源代码，查看 [BindMounts](https://github.com/testcontainers/testcontainers-go/blob/v0.5.1/docker.go#L543) 参数使用位置：
+作者使用的是 `v0.5.1` 版本，搜索这个版本的源代码，查看 [BindMounts](https://github.com/testcontainers/testcontainers-go/blob/v0.5.1/docker.go#L543) 参数使用位置：
 
 ```Go
 // prepare mounts
@@ -278,7 +278,7 @@ for hostPath, innerPath := range req.BindMounts {
 }
 ```
 
-我们可以看到两个版本中 BindMounts 参数中 map 集合中 key & value 的顺序正好是相反的，这也就解答了上面的问题。
+我们可以看到两个版本中 `BindMounts` 参数中 `map` 集合中 `key & value` 的顺序正好是相反的，这也就解答了上面的问题。
 
 ## 参考链接
 
