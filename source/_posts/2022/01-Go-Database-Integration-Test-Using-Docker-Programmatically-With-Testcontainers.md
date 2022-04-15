@@ -280,6 +280,10 @@ for hostPath, innerPath := range req.BindMounts {
 
 我们可以看到两个版本中 `BindMounts` 参数中 `map` 集合中 `key & value` 的顺序正好是相反的，这也就解答了上面的问题。
 
+## 后续问题研究
+
+虽然上面通过翻看源码，已经解决了现在的问题，那为什么会调整参数的顺序呢？这个也许通过翻看源码 `Git` 提交记录也许能够找到答案。
+
 ## 参考链接
 
 - [GoLang Postgres Testcontainers Init Script Doesn't Work](https://tutorialmeta.com/question/golang-postgres-testcontainers-init-script-doesnt-work)
