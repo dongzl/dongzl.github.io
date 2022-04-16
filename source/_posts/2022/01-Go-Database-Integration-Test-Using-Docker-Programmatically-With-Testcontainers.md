@@ -282,7 +282,88 @@ for hostPath, innerPath := range req.BindMounts {
 
 ## 后续问题研究
 
-虽然上面通过翻看源码，已经解决了现在的问题，那为什么会调整参数的顺序呢？这个也许通过翻看源码 `Git` 提交记录也许能够找到答案。
+虽然上面通过翻看源码，已经解决了现在的问题，那为什么会调整参数的顺序呢？这个也许通过翻看源码 `Git` 提交记录也许能够找到答案。通过翻看代码的提交记录，找到如下的内容：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/03-Redis-Hot-Key/Redis-Hot-Key-01.png" style="width:800px"/>
+
+我们通过 Git 提交记录，翻看到对应的 Github 的 PR，在 PR 中作者描述了如下内容：
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+> 当前无法将本地路径挂载到多个容器路径。BindMounts 当前存储在 map[string]string 集合中，其中 hostPath 是 key， containerPath 是 value。
+这可以防止用户将 hostPath 安装到
+多个 containerPath。使用 map 结构实际上是有意义的，因为它是不可能的
+将多个主机路径挂载到容器中的同一路径。只需要将 map 中键和
+值只是交换一下顺序。VolumeMounts 与此相同。
+
+在这里提到了将本地路径映射到容器路径的问题，旧版本的代码中本地路径是 key，容器路径是 value，可以防止用户将多个本地路径映射到同一个容器路径（设置多个只会取到最后一个）；作者也提到了，为了防止这个问题，将 key 和 value 调换一下顺序，通过 map 结构特征，设置多个会被直接覆盖掉。
+
+在最新版本的代码中，这块代码已经被彻底重构掉了，在 `v0.12.0` 版本中，`ContainerRequest` 结构体代码如下：
+
+```Go
+// ContainerRequest represents the parameters used to get a running container
+type ContainerRequest struct {
+	FromDockerfile
+	Image           string
+	Entrypoint      []string
+	Env             map[string]string
+	ExposedPorts    []string // allow specifying protocol info
+	Cmd             []string
+	Labels          map[string]string
+	BindMounts      map[string]string
+	VolumeMounts    map[string]string
+	Tmpfs           map[string]string
+	RegistryCred    string
+	WaitingFor      wait.Strategy
+	Name            string // for specifying container name
+	Hostname        string
+	Privileged      bool                // for starting privileged container
+	Networks        []string            // for specifying network names
+	NetworkAliases  map[string][]string // for specifying network aliases
+	User            string              // for specifying uid:gid
+	SkipReaper      bool                // indicates whether we skip setting up a reaper for this
+	ReaperImage     string              // alternative reaper image
+	AutoRemove      bool                // if set to true, the container will be removed from the host when stopped
+	NetworkMode     container.NetworkMode
+	AlwaysPullImage bool // Always pull image
+}
+```
+
+截止到目前 [7504bdf](https://github.com/testcontainers/testcontainers-go/commit/7504bdf4c99651058e37518698b802ea760291aa) 这个版本的代码，`ContainerRequest` 结构体代码如下：
+
+```Go
+// ContainerRequest represents the parameters used to get a running container
+type ContainerRequest struct {
+	FromDockerfile
+	Image           string
+	Entrypoint      []string
+	Env             map[string]string
+	ExposedPorts    []string // allow specifying protocol info
+	Cmd             []string
+	Labels          map[string]string
+	Mounts          ContainerMounts
+	Tmpfs           map[string]string
+	RegistryCred    string
+	WaitingFor      wait.Strategy
+	Name            string // for specifying container name
+	Hostname        string
+	Privileged      bool                // for starting privileged container
+	Networks        []string            // for specifying network names
+	NetworkAliases  map[string][]string // for specifying network aliases
+	NetworkMode     container.NetworkMode
+	Resources       container.Resources
+	User            string // for specifying uid:gid
+	SkipReaper      bool   // indicates whether we skip setting up a reaper for this
+	ReaperImage     string // alternative reaper image
+	AutoRemove      bool   // if set to true, the container will be removed from the host when stopped
+	AlwaysPullImage bool   // Always pull image
+	ImagePlatform   string // ImagePlatform describes the platform which the image runs on.
+}
+```
+
+其中，`BindMounts` 和 `VolumeMounts` 两个 map 结构已经被移除，取代是的 `ContainerMounts` 结构体类型的 `Mounts` 属性，我们来试验一下新的接口该如何调用：
+
+此处暂且留白，最新的代码还没有测试通，网上也没有谷歌到解决办法，等到搞定再补充这块内容。
 
 ## 参考链接
 
