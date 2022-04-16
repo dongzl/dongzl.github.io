@@ -284,11 +284,14 @@ for hostPath, innerPath := range req.BindMounts {
 
 虽然上面通过翻看源码，已经解决了现在的问题，那为什么会调整参数的顺序呢？这个也许通过翻看源码 `Git` 提交记录也许能够找到答案。通过翻看代码的提交记录，找到如下的内容：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2021/03-Redis-Hot-Key/Redis-Hot-Key-01.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/01-Go-Database-Integration-Test-Using-Docker-Programmatically-With-Testcontainers/01_testcontianers_api.png" style="width:800px"/>
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/01-Go-Database-Integration-Test-Using-Docker-Programmatically-With-Testcontainers/02_testcontainers_api.png" style="width:800px"/>
 
 我们通过 Git 提交记录，翻看到对应的 Github 的 PR，在 PR 中作者描述了如下内容：
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/01-Go-Database-Integration-Test-Using-Docker-Programmatically-With-Testcontainers/03_testcontainers_api.png" style="width:800px"/>
+
 
 > 当前无法将本地路径挂载到多个容器路径。BindMounts 当前存储在 map[string]string 集合中，其中 hostPath 是 key， containerPath 是 value。
 这可以防止用户将 hostPath 安装到
