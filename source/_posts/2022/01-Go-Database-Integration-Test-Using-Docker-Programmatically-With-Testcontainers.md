@@ -288,7 +288,7 @@ for hostPath, innerPath := range req.BindMounts {
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/01-Go-Database-Integration-Test-Using-Docker-Programmatically-With-Testcontainers/02_testcontainers_api.png" style="width:800px"/>
 
-我们通过 Git 提交记录，翻看到对应的 Github 的 PR，在 PR 中作者描述了如下内容：
+我们通过 `Git` 提交记录，翻看到对应的 `Github` 的 `PR`，在 [Swap incorrect key and value of BindMounts and VolumeMounts](https://github.com/testcontainers/testcontainers-go/pull/354) 这个 `PR` 中作者描述了如下内容：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/01-Go-Database-Integration-Test-Using-Docker-Programmatically-With-Testcontainers/03_testcontainers_api.png" style="width:800px"/>
 
@@ -299,7 +299,7 @@ for hostPath, innerPath := range req.BindMounts {
 将多个主机路径挂载到容器中的同一路径。只需要将 map 中键和
 值只是交换一下顺序。VolumeMounts 与此相同。
 
-在这里提到了将本地路径映射到容器路径的问题，旧版本的代码中本地路径是 key，容器路径是 value，可以防止用户将多个本地路径映射到同一个容器路径（设置多个只会取到最后一个）；作者也提到了，为了防止这个问题，将 key 和 value 调换一下顺序，通过 map 结构特征，设置多个会被直接覆盖掉。
+在这里提到了将本地路径映射到容器路径的问题，旧版本的代码中本地路径是 `key`，容器路径是 `value`，可以防止用户将多个本地路径映射到同一个容器路径（设置多个只会取到最后一个）；作者也提到了，为了防止这个问题，将 `key` 和 `value` 调换一下顺序，通过 `map` 结构特征，设置多个会被直接覆盖掉。
 
 在最新版本的代码中，这块代码已经被彻底重构掉了，在 `v0.12.0` 版本中，`ContainerRequest` 结构体代码如下：
 
