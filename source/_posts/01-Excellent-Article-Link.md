@@ -41,6 +41,11 @@ tags:
 -|-|-
 01 | [Innodb中的事务隔离级别和锁的关系](https://tech.meituan.com/2014/08/20/innodb-lock.html) | [美团技术团队](https://tech.meituan.com/)
 
+### Redis
+
+-|-|-
+01 | [干货 | 16张图吃透 Redis 架构演进](https://jishuin.proginn.com/p/763bfbd4d516) | [IT人的职场进阶](https://jishuin.proginn.com/u/468168)
+
 ### Go
 
 序号| 文章链接 | 文章来源

@@ -220,6 +220,8 @@ type Employee struct  {
 var  dilbert Employee
 ```
 
+[Go struct 设置默认值](https://pylist.com/topic/109.html)
+
 #### JSON
 
 ```go
