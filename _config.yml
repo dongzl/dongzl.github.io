@@ -83,7 +83,8 @@ menu:
   home: / 
   #zookeeper: / 
   #leetcode-cookbook: https://books.halfrost.com/leetcode/
-  life-meditation: /2021/01/01/14-Life-Meditations/
+  #life-meditation: /2021/01/01/14-Life-Meditations/
+  rust: https://course.rs/about-book.html
   netty: https://dongzl.github.io/netty-handbook/
   #mysql: / 
   good-article: /2019/01/01/01-Excellent-Article-Link/
