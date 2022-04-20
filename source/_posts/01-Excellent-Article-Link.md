@@ -43,6 +43,7 @@ tags:
 
 ### Redis
 
+序号| 文章链接 | 文章来源
 -|-|-
 01 | [干货 | 16张图吃透 Redis 架构演进](https://jishuin.proginn.com/p/763bfbd4d516) | [IT人的职场进阶](https://jishuin.proginn.com/u/468168)
 
