@@ -68,3 +68,37 @@ tags:
 如果第一个字节的等于 `0xfb`，那么就不需要读取下一个字节了，它等于 `MySQL` 的 `NULL` 值，如果等于 `0xff` 则表示它未定义。
 
 例如，要将 `fd 03 00 00 ...` 转换为普通整数，我们必须读取第一个字节，它是 `0xfd`。根据上述规则，我们必须读取接下来的 `3` 个字节并将其转换为普通整数，其值在十进制数系统中为 `2`。所以长度编码的整数数据类型的值为 `2`。
+
+
+## 字符串类型
+
+字符串类型同样被分割成为几部分：
+
+- String - 固定长度的字符串类型，它们具有已知的硬编码长度；
+- String - Null 终止的字符串类型，这些字符串以 0x00 字节结尾；
+- String - 可变长度字符串类型，在这样的字符串出现之前是固定长度的整数类型，根据这个整数类型，我们可以计算字符串的实际长度；
+- String - 长度编码的字符串类型，在这样的字符串之前是长度编码的整数类型，根据该整数类型，我们可以计算字符串的实际长度；
+- String - 如果字符串类型是数据包的最后一部分，那么字符串的长度可以通过整个数据包长度减去当前位置来计算得出。
+
+## 使用 Wireshark 抓包数据
+
+我们启动 Wireshark 工具来嗅探网络数据，通过 IP 条件来过滤 MySQL 的数据包（在我的环境中，服务端 IP 是：54.235.111.67）。接下来我们尝试使用我本地的 MySQL 原生客户端工具来连接到 MySQL 服务器。
+
+正如在 TCP 连接到服务器后看到的内容，我们有几个来自服务器的 MySQL 数据包，首先是握手数据包。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/02.webp" style="width:800px"/>
+
+让我们深入研究这个数据包并描述每个字段含义：
+
+前 3 个字节是数据包长度：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/03.webp" style="width:800px"/>
+
+接下来 1 字节是数据包序号：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/04.webp" style="width:800px"/>
+
+剩余字节为 MySQL 客户端 / 服务端协议的握手数据包的有效载荷：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/05.webp" style="width:800px"/>
+
