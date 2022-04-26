@@ -23,15 +23,15 @@ tags:
 
 ## 背景介绍
 
-`MySQL` 的客户端/服务端协议有很多应用场景。例如：
+`MySQL` 的**客户端 / 服务端**协议有很多应用场景。例如：
 
 - `MySQL` 的客户端连接工具，例如：`ConnectorC`，`ConnectorJ` 等等；
 - `MySQL` 的 `Proxy` 工具；
 - 成为 `Master` 和 `Slave` 之间的桥梁。
 
-那么，`MySQL` 的 客户端 / 服务端协议到底是什么东西呢？
+那么，`MySQL` 的**客户端 / 服务端**协议到底是什么东西呢？
 
-`MySQL` 的 客户端 / 服务端协议是一种被接受的约定（规则）。通过这些规则，客户端和服务器可以实现“对话”并能够相互理解。客户端通过带有特殊套接字的 `TCP` 连接连接到 `MySQL` 的服务端，向服务端发送特殊数据包并从服务端接收返回数据。这个连接有会有两个阶段：
+`MySQL` 的**客户端 / 服务端**协议是一种被接受的约定（规则）。通过这些规则，客户端和服务器可以实现“对话”并能够相互理解。客户端通过带有特殊套接字的 `TCP` 连接连接到 `MySQL` 的服务端，向服务端发送特殊数据包并从服务端接收返回数据。这个连接有会有两个阶段：
 
 - 连接阶段；
 - 指令阶段。
@@ -90,40 +90,40 @@ tags:
 
 让我们深入研究这个数据包并描述每个字段含义：
 
-前 3 个字节是数据包长度：
+前 `3` 个字节是数据包长度：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/03.webp" style="width:600px"/>
 
-接下来 1 字节是数据包序号：
+接下来 `1` 字节是数据包序号：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/04.webp" style="width:600px"/>
 
-剩余字节为 MySQL 客户端 / 服务端协议的握手数据包的有效载荷：
+剩余字节为 `MySQL` **客户端 / 服务端**协议的握手数据包的有效载荷：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/05.webp" style="width:600px"/>
 
 我们来详细描述一下握手数据包每一个属性的内容：
 
-- 协议号 - Int<1> （Protocol number – Int<1>）
-- 服务端版本号 - String （Server version – String）
-- 线程 id - Int<4> （Thread id – Int<4>）
-- 盐值1 - String （Salt1 – String）
-- 服务端能力 - Int<2> （Server capabilities – Int<2>）
-- 服务端语言 - Int<1> （Server language – Int<1>）
-- 服务端状态 - Int<2> （Server Status – Int<2>）
-- 扩展服务端能力 - Int<2> （Extended Server Capabilities – Int<2>）
-- 身份认证插件长度 - Int<1> （Authentication plugin length – Int<1>）
-- 保留字节 - 10 字节 （Reserved bytes – 10 bytes）
-- 盐值2 - String （Salt2 – String）
-- 身份验证插件字符串 - String （Authentication plugin string – String）
+- 协议号 - `Int<1>` （Protocol number – Int<1>）
+- 服务端版本号 - `String` （Server version – String）
+- 线程 id - `Int<4>` （Thread id – Int<4>）
+- 盐值1 - `String` （Salt1 – String）
+- 服务端能力 - `Int<2>` （Server capabilities – Int<2>）
+- 服务端语言 - `Int<1>` （Server language – Int<1>）
+- 服务端状态 - `Int<2>` （Server Status – Int<2>）
+- 扩展服务端能力 - `Int<2>` （Extended Server Capabilities – Int<2>）
+- 身份认证插件长度 - `Int<1>` （Authentication plugin length – Int<1>）
+- 保留字节 - `10` 字节 （Reserved bytes – 10 bytes）
+- 盐值2 - `String` （Salt2 – String）
+- 身份验证插件字符串 - `String` （Authentication plugin string – String）
 
 服务器语言是整数数值，下表将帮助我们通过整数值选择合适的语言：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/06.webp" style="width:600px"/>
 
-在我的测试环境中服务端语言的整数数值是 16 进制的 0x08（在十进制数值中也是 8）。从上表中我们可以看到 8 的等价内容是 latin1_swedish_ci，所以我们知道服务器的默认语言是 latin1_swedish_ci。
+在我的测试环境中服务端语言的整数数值是 `16` 进制的 `0x08`（在十进制数值中也是 `8`）。从上表中我们可以看到 `8` 的等价内容是 `latin1_swedish_ci`，所以我们知道服务器的默认语言是 `latin1_swedish_ci`。
 
-服务器能力和服务器状态同样是整数类型，但是通过读取这些整数的每个 BIT，我们可以了解服务器的能力和状态。下图描述了服务器功能和状态位：
+服务器能力和服务器状态同样是整数类型，但是通过读取这些整数的每个 `BIT`，我们可以了解服务器的能力和状态。下图描述了服务器功能和状态位：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/07.webp" style="width:600px"/>
 
@@ -135,26 +135,26 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/10.webp" style="width:600px"/>
 
-- 前 3 字节描述了载荷的长度；
-- 接下来的 1 字节是数据包序号；
-- 客户端能力 - Int<2> / 与服务器功能相同
-- 客户端扩展能力 - Int<2> / 与服务器扩展能力功能相同
-- 最大数据包 - Int<4> / 描述了数据包的最大长度
-- 字符类型 - Int<1> / 在我的例子中它是 16 进制的 0x21（十进制数字系统是 33），从表中我们可以看到它是 utf8_general_ci，这里将服务器的默认字符集从 latin1_swedish_ci 设置为 utf8_general_ci。
-- 用户名 - String
-- 密码 - String
-- 客户端身份验证插件字符串 - String
+- 前 `3` 字节描述了载荷的长度；
+- 接下来的 `1` 字节是数据包序号；
+- 客户端能力 - `Int<2>` / 与服务器功能相同
+- 客户端扩展能力 - `Int<2>` / 与服务器扩展能力功能相同
+- 最大数据包 - `Int<4>` / 描述了数据包的最大长度
+- 字符类型 - `Int<1>` / 在我的例子中它是 `16` 进制的 `0x21`（十进制数字系统是 `33`），从表中我们可以看到它是 `utf8_general_ci`，这里将服务器的默认字符集从 `latin1_swedish_ci` 设置为 `utf8_general_ci`。
+- 用户名 - `String`
+- 密码 - `String`
+- 客户端身份验证插件字符串 - `String`
 
-正如你所看到的密码是被加密的。为了加密密码，我们可以使用 SHA1、MD5 算法，以及从服务器发送的先前握手包中的 salt1 和 salt2 字符串作为盐值，为密码内容进行加密。
+正如你所看到的密码是被加密的。为了加密密码，我们可以使用 `SHA1`、`MD5` 算法，以及从服务器发送的先前握手包中的 `salt1` 和 `salt2` 字符串作为盐值，为密码内容进行加密。
 
-最后如果我们验证成功，我们会从服务器获得 OK 数据包；否则我们会得到 ERR 数据包。
+最后如果我们验证成功，我们会从服务器获得 `OK` 数据包；否则我们会得到 `ERR` 数据包。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/02-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-1/11.webp" style="width:600px"/>
 
-- 3 字节是数据包的长度；
-- 1 字节时数据包的序号；
-- 受影响行数 - Int<1>；
-- 服务器状态 - Int<2>；
-- 警告信息 - Int<2>。
+- `3` 字节是数据包的长度；
+- `1` 字节时数据包的序号；
+- 受影响行数 - `Int<1>`；
+- 服务器状态 - `Int<2>`；
+- 警告信息 - `Int<2>`。
 
-就这样我们已经完成了理论知识的学习，现在是时候开始开始进行实践了。在本文的第二部分，我们将不使用外部模块或库从头开始编写我们自己的 MySQL 本地客户端。
+就这样我们已经完成了理论知识的学习，现在是时候开始开始进行实践了。在本文的第二部分，我们将不使用外部模块或库从头开始编写我们自己的 `MySQL` 本地客户端。
