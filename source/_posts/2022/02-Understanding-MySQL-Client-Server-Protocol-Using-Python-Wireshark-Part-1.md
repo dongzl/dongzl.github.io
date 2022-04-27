@@ -1,7 +1,7 @@
 ---
 title: 使用 Python 和 Wireshark 理解 MySQL 客户端/服务器协议：第 1 部分
 date: 2022-04-24 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study_2.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_python.png
 # author information, multiple authors are set to array
 # single author
 author:
@@ -9,7 +9,7 @@ author:
     link: https://www.turing.com/blog/author/elshad-agayev/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，主要介绍了如何使用 Python 和 Wireshark 工具，来学习 MySQL 客户端和服务端的交互协议。
+subtitle: 本文是一篇翻译文章，根据 MySQL 官方文档，该博客文章解释了 MySQL 客户端/服务器协议的全部内容。
 
 categories: 
   - 数据库
