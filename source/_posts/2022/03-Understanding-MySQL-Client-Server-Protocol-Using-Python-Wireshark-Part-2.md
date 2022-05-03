@@ -154,4 +154,267 @@ return hash
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2022/03-Understanding-MySQL-Client-Server-Protocol-Using-Python-Wireshark-Part-2/06.webp" style="width:600px"/>
 
+## 数据类型 Class
 
+在前面的文章中我们学习了 `MySQL` 客户端 / 服务端协议中的有关 `Int` 和 `String` 数据类型内容。现在我们需要一些 `Class` 来从接收到的数据包中读取字段。
+
+### INT 类
+
+```Python
+class Int:
+    """see documentation: https://dev.mysql.com/doc/internals/en/integer.html"""
+
+    def __init__(self, package, length=-1, type='fix'):
+        self.package = package
+        self.length = length
+        self.type = type
+            
+
+    def next(self):
+        # int<n>
+        if self.type == 'fix' and self.length > 0:
+            return self.package.next(self.length)
+        # int<lenenc>
+        if self.type == 'lenenc':
+            byte = self.package.next(1)
+            if byte < 0xfb:
+                return self.package.next(1)
+            elif byte == 0xfc:
+                return self.package.next(2)
+            elif byte == 0xfd:
+                return self.package.next(3)
+            elif byte == 0xfe:
+                return self.package.next(8)
+```
+
+
+`Int` 类实现了 `MySQL` 客户端 / 服务端协议中的 `INT` 数据类型。它在初始化时接受数据包参数，参数包应该是继承自 `MYSQL_PACKAGE` 类的任何包类的实例。`next` 方法决定了 `Integer` 的类型（`int<fix>` 类型或者是 `int<lenenc>` 类型. 请参考上一篇文章内容）并且调用包对象中的 `next` 方法来读取接收到的响应的字节部分。
+
+### STR 类
+
+```Python
+class Str:
+    """see documentation: https://dev.mysql.com/doc/internals/en/string.html"""
+    def __init__(self, package, length = -1, type="fix"):
+        self.package = package
+        self.length = length
+        self.type = type
+
+    def next(self):
+        # string<fix>
+        if self.type == 'fix' and self.length > 0:
+            return self.package.next(self.length, str)
+        # string<lenenc>
+        elif self.type == 'lenenc':
+            length = self.package.next(1)
+            if length == 0x00:
+                return ""
+            elif length == 0xfb:
+                return "NULL"
+            elif length == 0xff:
+                return "undefined"
+            return self.package.next(length, str)
+        # string<var>
+        elif self.type == 'var':
+            length = Int(self.package, type='lenenc').next()
+            return self.package.next(length, str)
+        # string<eof>
+        elif self.type == 'eof':
+            return self.package.next(type=str)
+        # string<null> - null terminated strings
+        elif self.type == 'null':
+            strbytes = bytearray()
+
+            byte = self.package.next(1)
+            while True:
+                if byte == 0x00:
+                    break
+                else:
+                    strbytes.append(byte)
+                    byte = self.package.next(1)
+            
+            return strbytes.decode('utf-8')
+```
+
+`Str` 类实现了 `MySQL` 客户端 / 服务端协议中的 `STRING` 数据类型。它在初始化时接受数据包参数，参数包应该是继承自 `MYSQL_PACKAGE` 类的任何包类的实例。`next` 方法决定了 `String` 的类型（`String<fix>`、`String<Var>`、`String<NULL>`、`String<EOF>` 或者是 `String<lenenc>`。请参考上一篇文章内容）并且调用包对象中的 `next` 方法来读取接收到的响应的字节部分。
+
+### HANDSHAKE_PACKAGE 类
+
+`HANDSHAKE_PACKAGE` 类用来解析从服务端接收到的握手数据包。它继承自 `MYSQL_PACKAGE` 类并且在初始化时接收 `resp` 参数。参数 `resp` 是从服务端接收的以字节为单位的握手包响应数据。
+
+```Python
+class HANDSHAKE_PACKAGE(MYSQL_PACKAGE):
+    def __init__(self, resp):
+        super().__init__(resp)
+    
+    def parse(self):
+        return {
+            "package_name": "HANDSHAKE_PACKAGE",
+            "package_length": Int(self, 3).next(), #self.next(3),
+            "package_number": Int(self, 1).next(), #self.next(1),
+            "protocol": Int(self, 1).next(), #self.next(1),
+            "server_version": Str(self, type='null').next(),
+            "connection_id": Int(self, 4).next(), #self.next(4),
+            "salt1": Str(self, type='null').next(),
+            "server_capabilities": self.get_server_capabilities(Int(self, 2).next()),
+            "server_language": self.get_character_set(Int(self, 1).next()),
+            "server_status": self.get_server_status(Int(self, 2).next()),
+            "server_extended_capabilities": self.get_server_extended_capabilities(Int(self, 2).next()),
+            "authentication_plugin_length": Int(self, 1).next(),
+            "unused": Int(self, 10).next(), #self.next(10, hex),
+            "salt2": Str(self, type='null').next(),
+            "authentication_plugin": Str(self, type='eof').next()
+        }
+```
+
+方法 `parse` 使用 `Int` 和 `Str` 类从响应中读取属性内容，并将他们存入字典中做为结果返回。
+
+### LOGIN_PACKAGE 类
+
+这个类用于创建登录请求数据包。
+
+```Python
+class LOGIN_PACKAGE(MYSQL_PACKAGE):
+    def __init__(self, handshake):
+        super().__init__()
+        self.handshake_info = handshake.parse()
+    
+    def create_package(self, user, password, package_number):
+        package = bytearray()
+        # client capabilities
+        package.extend(self.capabilities_2_bytes(self.client_capabilities))
+        # extended client capabilities
+        package.extend(self.capabilities_2_bytes(self.extended_client_capabilities))
+        # max package -> 16777216
+        max_package = (16777216).to_bytes(4, byteorder='little')
+        package.extend(max_package)
+        # charset -> 33 (utf8_general_ci)
+        package.append(33)
+        # 23 bytes are reserved
+        reserved = (0).to_bytes(23, byteorder='little')
+        package.extend(reserved)
+        # username (null byte end)
+        package.extend(user.encode('utf-8'))
+        package.append(0)
+        # password
+        salt = self.handshake_info['salt1'] + self.handshake_info['salt2']
+        encrypted_password = self.encrypt_password(salt.strip(), password)
+        length = len(encrypted_password)
+        package.append(length)
+        package.extend(encrypted_password)
+        # authentication plugin
+        plugin = self.handshake_info['authentication_plugin'].encode('utf-8')
+        package.extend(plugin)
+
+        finpack = bytearray()
+        package_length = len(package)
+        
+        finpack.append(package_length)
+        finpack.extend((0).to_bytes(2, byteorder='little'))
+        finpack.append(package_number)
+        finpack.extend(package)
+
+        return finpack
+```
+
+`OK` 数据包和 `ERR` 数据包是在服务端认证之后或者向服务端发送查询命令阶段后服务端反馈的响应数据包。
+
+```Python
+class OK_PACKAGE(MYSQL_PACKAGE):
+    def __init__(self, resp):
+        super().__init__(resp)
+
+    def parse(self):
+        return {
+            "package_name": "OK_PACKAGE",
+            "package_length": Int(self, 3).next(), #self.next(3),
+            "package_number": Int(self, 1).next(), #self.next(1),
+            "header": hex(Int(self, 1).next()),
+            "affected_rows": Int(self, 1).next(), #self.next(1),
+            "last_insert_id": Int(self, 1).next(), #self.next(1),
+            "server_status": self.get_server_status(Int(self, 2).next()),
+            "warnings": Int(self, 2).next()
+        }
+```
+
+```Python
+class ERR_PACKAGE(MYSQL_PACKAGE):
+    def __init__(self, resp):
+        super().__init__(resp)
+
+    def parse(self):
+        return {
+            "package_name": "ERR_PACKAGE",
+            "package_length": Int(self, 3).next(), #self.next(3),
+            "package_number": Int(self, 1).next(), #self.next(1),
+            "header": hex(Int(self, 1).next()), #self.next(1, hex),
+            "error_code": Int(self, 2).next(), #self.next(2),
+            "sql_state": Str(self, 6).next(),
+            "error_message": Str(self, type='eof').next()
+        }
+```
+
+### MYSQL 类
+
+`MYSQL` 类是是创建服务端 `TCP` 连接的包装类，使用上述类从服务端发送和接收包。
+
+```Python
+def __enter__(self):
+    self.client = socket(AF_INET, SOCK_STREAM)
+    ip = gethostbyname(self.host)
+    address=(ip,int(self.port))
+    self.client.connect(address)
+    return self
+
+def __exit__(self, exc_type, exc_value, traceback):
+    print("Good Bye!")
+    self.close()
+
+def close(self):
+    self.client.close()
+```
+
+```Python
+class MySQL: 
+    def __init__(self, host="", port="", user="", password=""):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+    
+    def connect(self):
+        resp = self.client.recv(65536)
+        return HANDSHAKE_PACKAGE(resp)
+
+    def login(self, handshake_package, package_number):
+        """Sending Authentication package"""
+        login_package = LOGIN_PACKAGE(handshake_package)
+        package = login_package.create_package(user=self.user, password=self.password, package_number=package_number)
+        self.client.sendall(package)
+        resp = self.client.recv(65536)
+        package = self.detect_package(resp)
+        if isinstance(package, ERR_PACKAGE):
+            info = package.parse()
+            raise Exception(f"MySQL Server Error: {info['error_code']} - {info['error_message']}")
+        elif isinstance(package, OK_PACKAGE):
+            return package.parse()['package_number']
+        elif isinstance(package, EOF_PACKAGE):
+            return False
+```
+
+我认为这个类一切都很清晰了。我已经定义了 `__enter__` 和 `__exit__` 以便能够使用带有“with”语句的这个类来自动关闭 `TCP` 连接。在 `__enter__` 方法中我正在通过套接字创建 `TCP` 连接，在 `__exit__` 方法中去关闭创建的连接。这个类在初始化中接收 `host`、`port`、`user` 和 `password` 参数。
+
+在连接方法中我们从服务端接收了握手数据包：
+
+```
+resp = self.client.recv(65536)
+return HANDSHAKE_PACKAGE(resp)
+```
+
+在登录方法中我们使用 `LOGIN_PACKAGE` 和 `HANDSHAKE_PACKAGE` 类创建登录请求数据包，并发送到服务端，同时从服务端获取 `OK` 或者 `ERR` 数据包。
+
+就这样。我们已经实现了连接阶段，为了避免这篇文章太长，我不会解释命令阶段，因为命令阶段比连接阶段更容易，您可以使用从本文和以前的文章中积累的知识自行研究。
+
+示例视频：
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lO81kjtdTYc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
