@@ -515,6 +515,7 @@ tags:
 - [387. 字符串中的第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)
 - [709. 转换成小写字母](https://leetcode-cn.com/problems/to-lower-case/)
 - [771. 宝石与石头](https://leetcode-cn.com/problems/jewels-and-stones/)
+- [789. 在 Python 中将字符串转换为浮点数](https://www.scaler.com/topics/convert-string-to-float-in-python/)
 
 #### 字符串操作问题
 
