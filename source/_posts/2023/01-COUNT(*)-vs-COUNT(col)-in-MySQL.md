@@ -87,7 +87,7 @@ CREATE TABLE count_innodb (
 
 因此 `COUNT(*)` 和 `COUNT(col)` 查询不仅可能具有显着的性能差异，而且还会提出不同的问题。
 
-下面我们来看下面一系列查询，我们将对比一下，在带有 WHERE 条件的查询中，`InnoDB` 引擎是如何处理 `COUNT(*)`, `COUNT(val_no_null)`, `COUNT(val_with_nulls)` 的：
+下面我们来看下面一系列查询，我们将对比一下，在带有 `WHERE` 条件的查询中，`InnoDB` 引擎是如何处理 `COUNT(*)`, `COUNT(val_no_null)`, `COUNT(val_with_nulls)` 的：
 
 ```SQL
 (mysql) >  select count(*) from count_innodb where id<1000000;
@@ -196,7 +196,7 @@ CREATE TABLE count_myisam (
 
 由于这是一个 `MyISAM` 引擎表，在引擎内部缓存了表的行数，这就是 `MyISAM` 引擎的工作方式；这就是为什么它可以立即返回 `COUNT(*)` 和 `COUNT(val_no_null)` 的查询结果。
 
-请注意引擎之间的区别：`InnoDB` 是一个事务引擎，`MyISAM` 是一个非事务存储引擎。
+请注意引擎之间的区别：`InnoDB` 是一个事务存储引擎，`MyISAM` 是一个非事务存储引擎。
 
 ```SQL
 (mysql) > select count(val_with_nulls) from count_myisam;
@@ -270,11 +270,13 @@ possible_keys: idx
         Extra: Using index condition; Using MRR
 ```
 
-正如我们所看到的，即使是带有 `WHERE` 条件的查询，`COUNT(*)` 和 `COUNT(col)` 的性能也会有很大不同。事实上，这个示例显示了五倍的性能差异，因为所有数据都在内存中命中（对于目前场景，由于是使用 `MyISAM` 引擎，数据缓存发生在文件系统缓存级别）。如果 `IO` 工作负载很大，在这种情况下，我们可以看到甚至 `100` 倍的性能差异。
+正如我们所看到的，即使是带有 `WHERE` 条件的查询，`COUNT(*)` 和 `COUNT(col)` 的性能也会有很大不同。事实上，这个示例显示了 `5` 倍的性能差异，因为所有数据都在内存中命中（对于目前场景，由于是使用 `MyISAM` 引擎，数据缓存发生在文件系统缓存级别）。如果 `IO` 工作负载很大，在这种情况下，我们可以看到甚至 `100` 倍的性能差异。
 
 `COUNT(*)` 查询能够使用覆盖索引，而 `COUNT(col)` 是不行的。当然，我们可以将索引扩展为 `(id, val_with_nulls)`，再次查询就可以使用覆盖索引；但只有在无法更改查询语句（例如：它是第三方应用程序）或列名出于某种原因出现在查询中，并且需要计算非 `NULL` 值的行数时，我才会使用此解决方法。
 
-值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_with_nulls)` 列不为空，因此 `COUNT(val_with _null)` 与 `COUNT(*)` 相同；因此查询可以作为索引覆盖的查询运行。它不会，在这种情况下，两个查询都必须执行行读取。
+值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_with_nulls)` 列不为空，因此 `COUNT(val_with_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。
+
+> **我认为原文这里有误，应该是：值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_no_null)` 列不为空，因此 `COUNT(val_no_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。**
 
 ```SQL
 (mysql) >  alter table count_myisam drop key idx, add key idx (id,val_with_nulls);
@@ -298,7 +300,7 @@ Records: 10000000  Duplicates: 0  Warnings: 0
 1 row in set (0.56 sec)
 ```
 
-正如我们看到的，与没有索引的 `COUNT(val_with_nulls)` 相比，扩展索引有助于提高 `COUNT(val_with_nulls)` 查询空值的性能，大约有七倍提升。但是，我们也发现 `COUNT(*)` 变慢了大约 `0.6` 倍，这可能是因为在这种情况下索引长度大约扩大为原来两倍。
+正如我们看到的，与没有索引的 `COUNT(val_with_nulls)` 相比，扩展索引有助于提高 `COUNT(val_with_nulls)` 查询空值的性能，大约有 `7` 倍提升。但是，我们也发现 `COUNT(*)` 变慢了大约 `0.6` 倍，这可能是因为在这种情况下索引长度大约扩大为原来两倍。
 
 最后，我想消除一些关于 `COUNT(0)` 和 `COUNT(1)` 的错觉。
 
