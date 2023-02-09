@@ -39,11 +39,11 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
 
-gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends]()
+<font color=DarkGray size=2>gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends]()</font>
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/02.webp" style="width:600px"/>
 
-gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com]()
+<font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com]()</font>
 
 截至目前，除非我们的应用程序以某种方式附属于 Facebook，否则没有充分的理由考虑使用 Thrift。
 
