@@ -276,7 +276,7 @@ possible_keys: idx
 
 值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_with_nulls)` 列不为空，因此 `COUNT(val_with_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。
 
-> **我认为原文这里有误，应该是：值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_no_null)` 列不为空，因此 `COUNT(val_no_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。**
+> **我认为原文这里应该有误，正确的内容是：值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_no_null)` 列不为空，因此 `COUNT(val_no_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。**
 
 ```SQL
 (mysql) >  alter table count_myisam drop key idx, add key idx (id,val_with_nulls);
