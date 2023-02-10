@@ -203,3 +203,225 @@ fn main() {
     println!("cargo:rerun-if-changed={}", proto_file);
 }
 ```
+
+需要特别指出的是，我们添加了这个 .out_dir("./src") 配置，它可以设置将文件默认输出到 src 目录，以便我们可以更轻松地查看生成的文件，以达到本文的目的。
+
+在我们进行编译之前还要做另外一件事，tonic-build 依赖于 Protocol Buffers 编译器，编译器可以将 .proto 文件解析为可以转换为 Rust 的表示形式。让我们安装 protobuf：
+
+```shell
+$ brew install protobuf
+```
+
+并仔细检查 protobuf 编译器是否安装正确：
+
+```shell
+$ protoc --version
+libprotoc 3.19.4
+```
+
+准备编译：
+
+```shell
+$ cargo build
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
+```
+
+有了这些操作，我们应该生成一个 src/bookstore.rs 文件，此时，我们的文件结构应该是这样的：
+
+```shell
+  | - Cargo.toml
+  | - proto
+  |  | - bookstore.proto
+  | - Cargo.lock
+  | - build.rs
+  | - src
+  |  | - bookstore.rs
+  |  | - main.rs
+```
+
+### 服务器端实现
+
+最后，是时候将服务内容放在一起了，将 `main.rs` 替换为以下内容：
+
+```rust
+use tonic::{transport::Server, Request, Response, Status};
+
+use bookstore::bookstore_server::{Bookstore, BookstoreServer};
+use bookstore::{GetBookRequest, GetBookResponse};
+
+
+mod bookstore {
+    include!("bookstore.rs");
+}
+
+
+#[derive(Default)]
+pub struct BookStoreImpl {}
+
+#[tonic::async_trait]
+impl Bookstore for BookStoreImpl {
+    async fn get_book(
+        &self,
+        request: Request<GetBookRequest>,
+    ) -> Result<Response<GetBookResponse>, Status> {
+        println!("Request from {:?}", request.remote_addr());
+
+        let response = GetBookResponse {
+            id: request.into_inner().id,
+            author: "Peter".to_owned(),
+            name: "Zero to One".to_owned(),
+            year: 2014,
+        };
+        Ok(Response::new(response))
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let addr = "[::1]:50051".parse().unwrap();
+    let bookstore = BookStoreImpl::default();
+
+    println!("Bookstore server listening on {}", addr);
+
+    Server::builder()
+        .add_service(BookstoreServer::new(bookstore))
+        .serve(addr)
+        .await?;
+
+    Ok(())
+}
+```
+
+如我们所见，为了简单起见，我们实际上并没有保存书籍的数据库。在这个端点，我们只是返回一本假书。
+
+服务端运行时间：
+
+```shell
+$ cargo run
+   Compiling rust_grpc_demo v0.1.0 (/Users/yuchen/Documents/rust_grpc_demo)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.71s
+     Running `target/debug/rust_grpc_demo`
+Bookstore server listening on [::1]:50051
+```
+
+很高兴我们在 `Rust` 中启动并运行了我们的 `gRPC` 服务器！
+
+### 奖励：服务器反射
+
+如开头所述，我最初对 `gRPC` 印象深刻是因为它具有进行服务端反射的能力。这不仅使服务开发过程中得心应手，也让与前端工程师的沟通变得更加容易。因此，如果不解释如何在 `Rust` 服务端代码中添加它，本教程就是不完整的。
+
+将以下内容添加到依赖项中：
+
+```shell
+tonic-reflection = "0.4.0"
+```
+
+更新 `build.rs` 文件，`// Add this comment` 注释标记的那一行是修改的内容。
+
+```rust
+use std::{env, path::PathBuf};
+
+fn main() {
+    let proto_file = "./proto/book_store.proto";
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap()); // Add this
+
+    tonic_build::configure()
+        .build_server(true)
+        .file_descriptor_set_path(out_dir.join("greeter_descriptor.bin")) // Add this
+        .out_dir("./src")
+        .compile(&[proto_file], &["."])
+        .unwrap_or_else(|e| panic!("protobuf compile error: {}", e));
+
+    println!("cargo:rerun-if-changed={}", proto_file);
+}
+```
+
+最后，将 `main.rs` 更新为以下内容。
+
+```rust
+use tonic::{transport::Server, Request, Response, Status};
+
+use bookstore::bookstore_server::{Bookstore, BookstoreServer};
+use bookstore::{GetBookRequest, GetBookResponse};
+
+
+mod bookstore {
+    include!("bookstore.rs");
+
+    // Add this
+    pub(crate) const FILE_DESCRIPTOR_SET: &[u8] =
+        tonic::include_file_descriptor_set!("greeter_descriptor");
+}
+
+
+#[derive(Default)]
+pub struct BookStoreImpl {}
+
+#[tonic::async_trait]
+impl Bookstore for BookStoreImpl {
+    async fn get_book(
+        &self,
+        request: Request<GetBookRequest>,
+    ) -> Result<Response<GetBookResponse>, Status> {
+        println!("Request from {:?}", request.remote_addr());
+
+        let response = GetBookResponse {
+            id: request.into_inner().id,
+            author: "Peter".to_owned(),
+            name: "Zero to One".to_owned(),
+            year: 2014,
+        };
+        Ok(Response::new(response))
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let addr = "[::1]:50051".parse().unwrap();
+    let bookstore = BookStoreImpl::default();
+
+    // Add this
+    let reflection_service = tonic_reflection::server::Builder::configure()
+        .register_encoded_file_descriptor_set(bookstore::FILE_DESCRIPTOR_SET)
+        .build()
+        .unwrap();
+
+    println!("Bookstore server listening on {}", addr);
+
+    Server::builder()
+        .add_service(BookstoreServer::new(bookstore))
+        .add_service(reflection_service) // Add this
+        .serve(addr)
+        .await?;
+
+    Ok(())
+}
+```
+
+### 测试 `gRPC` 服务功能
+
+有很多的 `GUI` 客户端工具可以用来和 `gRPC` 服务器进行交互，例如：[Postman](https://www.postman.com/)、[Kreya](https://kreya.app/)、[bloomrpc](https://github.com/bloomrpc/bloomrpc)、[grpcox](https://github.com/gusaul/grpcox) 等。为了简单起见，我们将使用命令行工具 `grpc_cli`。
+
+安装：
+
+```shell
+$ brew install grpc
+```
+
+并测试我们的第一个 `gRPC` 功能：
+
+```shell
+$ grpc_cli call localhost:50051 bookstore.Bookstore.GetBook "id: 'test-book-id'"
+connecting to localhost:50051
+Received initial metadata from server:
+date : Sun, 08 May 2022 20:15:39 GMT
+id: "test-book-id"
+name: "Zero to One"
+author: "Peter"
+year: 2014
+Rpc succeeded with OK status
+```
+
+它看起来运行正常！亲爱的朋友们，这就是我们在 `Rust` 中构建 `gRPC` 服务器的方式。
+
+今天就到此为止。感谢您的阅读，祝您编程愉快！与往常一样，源代码可在 [GitHub](https://github.com/yzhong52/rust_grpc_demo) 上获得。
