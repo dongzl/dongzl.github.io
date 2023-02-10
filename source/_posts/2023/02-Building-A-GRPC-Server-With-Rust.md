@@ -25,29 +25,181 @@ tags:
 
 ### RPC、JSON、SOAP 对比
 
-一旦我了解了 [gRPC]() 和 [Thrift]()，就很难回到使用更具过渡性的基于 `JSON` 的 `REST` `API` 或 [SOAP]() `API`。
+一旦我了解了 [gRPC](https://grpc.io/) 和 [Thrift](https://github.com/facebook/fbthrift)，就很难回到使用更具过渡性的基于 `JSON` 的 `REST` `API` 或 [SOAP](https://en.wikipedia.org/wiki/SOAP) `API`。
 
-`gRPC` 和 `Thrift` 这两个著名的 [RPC]() 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好的支持，而且性能都很好。
+`gRPC` 和 `Thrift` 这两个著名的 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好的支持，而且性能都很好。
 
 这两个框架最有价值的功能是支持多语言代码自动生成和服务器端反射，这些特性使得 `API` 本质上是类型安全的；通过服务器端反射，无需阅读和理解接口实现，就可以更轻松地探索 `API` 的模式定义。
 
 ### gRPC 和 Thrift 对比
 
-[Apache Thrift]() 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 Facebook 的持续支持，再加上 [fbthrift]() 的分支项目，逐渐失去了人气。
+[Apache Thrift](https://thrift.apache.org/) 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 Facebook 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
 
 与此同时，gRPC 已经赶上了越来越多的功能，拥有更健康的生态系统。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
 
-<font color=DarkGray size=2>gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends]()</font>
+<font color=DarkGray size=2>gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends](https://trends.google.com/trends/explore?date=all&q=GRPC,%2Fm%2F02qd4d1)</font>
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/02.webp" style="width:600px"/>
 
-<font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com]()</font>
+<font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com](https://star-history.com/#grpc/grpc&facebook/fbthrift&apache/thrift&Date)</font>
 
 截至目前，除非我们的应用程序以某种方式附属于 Facebook，否则没有充分的理由考虑使用 Thrift。
 
 ### GraphQL 怎么样？
 
-[GraphQL]() 是另一个由 Facebook 发起的框架。它与上面的两个 RPC 框架有许多相似之处。
+[GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 Facebook 发起的框架。它与上面的两个 RPC 框架有许多相似之处。
 
+移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们想要保持接口向后兼容性，所以我们要么保留 `API` 中未使用的旧字段，要么创建 `API` 的多个版本；[`GraphQL` 的一个动机就是解决这个问题](https://www.youtube.com/watch?v=783ccP__No8)，它被设计成一种“**查询语言**”，允许客户端指定它需要的数据字段，这使得更加方便地处理接口向后兼容性。
+
+`GraphQL` 在开发移动端 `API` 开发以及面向公众的 `API`（例如：`GitHub`）开发方面具有巨大优势，因为在这两种情况下，我们都无法轻易控制用户的行为。
+
+但是，如果我们正在为 `Web` 前端构建 `API` 或为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么好处。
+
+### Rust
+
+以上是目前为止出现过的网络框架的一个小概述。除了网络框架，我们还需要为应用程序确定一种服务端语言。
+
+根据 [Stack Overflow 上的一项调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)：“在过去的六年时间，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的后端服务开发编程语言。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/03.webp" style="width:600px"/>
+
+<font color=DarkGray size=2>Rust 是最受喜爱的编程语言。[Stack Overflow Survey 2021](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)</font>
+
+我们也开始看到 `Rust` 在行业中得到越来越广泛的应用：[Facebook](https://engineering.fb.com/2021/04/29/developer-tools/rust/)、[Dropbox](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)、[Yelp](https://www.youtube.com/watch?v=u6ZbF4apABk)、[AWS(https://aws.amazon.com/cn/blogs/opensource/sustainability-with-rust/)、[谷歌](https://opensource.googleblog.com/2021/02/google-joins-rust-foundation.html)等。很明显，`Rust` 将会持续发展，并将一直存在。
+
+这就是我们将在今天的教程中看到的内容——在 `Rust` 中使用 `gRPC` 构建一个小型服务器。
+
+### 安装 Rust
+
+使用如下命令来安装 `Rust`：
+
+```shell
+$ curl --proto '=https' --tlsv1.2 -sSf <https://sh.rustup.rs> | sh
+```
+
+如果之前安装了 `Rust`，我们可以通过以下方式更新它：
+
+```shell
+$ rustup update stable
+```
+
+我们需要仔细检查 `rustc`（`Rust` 编译器）和 `cargo`（`Rust` 包管理器）的安装版本：
+
+```shell
+$ rustc --version
+rustc 1.60.0 (7737e0b5c 2022-04-04)
+$ cargo --version
+cargo 1.60.0 (d1fd9fe2c 2022-03-01)
+```
+
+有关安装的更多信息，请查看 https://www.rust-lang.org/tools/install。
+
+### 创建一个 `Rust` 项目
+
+运行以下命令创建一个新的“Hello World”项目：
+
+```shell
+$ cargo new rust_grpc_demo --bin
+```
+
+我们来编译运行这个程序：
+
+```shell
+$ cd rust_grpc_demo
+$ cargo run
+   Compiling rust_grpc_demo v0.1.0 (/Users/yuchen/Documents/rust_grpc_demo)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.75s
+     Running `target/debug/rust_grpc_demo`
+Hello, world!
+```
+
+这里显示了我们到目前为止的文件结构：
+
+```shell
+$ find . -not -path "./target*" -not -path "./.git*" | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
+  |-Cargo.toml
+  |-Cargo.lock
+  |-src
+  |  |-main.rs
+```
+
+### 定义 `gRPC` 接口
+
+`gRPC` 使用 [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) 工具来序列化和反序列化数据。让我们在 `.proto` 文件中定义服务端 `API`。
+
+```shell
+$ mkdir proto
+$ touch proto/bookstore.proto
+```
+
+我们定义了一个书店服务，只有一个方法：提供一本书的 `ID`，并返回关于这本书的一些详细信息。
+
+```proto
+syntax = "proto3";
+
+package bookstore;
+
+// The book store service definition.
+service Bookstore {
+  // Retrieve a book
+  rpc GetBook(GetBookRequest) returns (GetBookResponse) {}
+}
+
+// The request with a id of the book
+message GetBookRequest {
+  string id = 1;
+}
+
+// The response details of a book
+message GetBookResponse {
+  string id = 1;
+  string name = 2;
+  string author = 3;
+  int32 year = 4;
+}
+```
+
+我们将使用 [tonic](https://docs.rs/tonic/latest/tonic/) 创建我们的 `gRPC` 服务。将以下依赖项添加到 `Cargo.toml` 文件中：
+
+```
+[package]
+name = "rust_grpc_demo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tonic = "0.7.1"
+tokio = { version = "1.18.0", features = ["macros", "rt-multi-thread"] }
+prost = "0.10.1"
+
+[build-dependencies]
+tonic-build = "0.7.2"
+```
+
+为了从 bookstore.proto 生成 Rust 代码，我们在 crate 的 build.rs 构建脚本中使用 tonic-build。
+
+```shell
+$ touch build.rs
+```
+
+将如下内容添加到 build.rs 文件中：
+
+```
+use std::{env, path::PathBuf};
+
+fn main() {
+    let proto_file = "./proto/bookstore.proto";
+
+    tonic_build::configure()
+        .build_server(true)
+        .out_dir("./src")
+        .compile(&[proto_file], &["."])
+        .unwrap_or_else(|e| panic!("protobuf compile error: {}", e));
+
+    println!("cargo:rerun-if-changed={}", proto_file);
+}
+```
