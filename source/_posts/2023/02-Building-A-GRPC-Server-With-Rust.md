@@ -57,7 +57,7 @@ tags:
 
 但是，如果我们正在为 `Web` 前端构建 `API` 或为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么好处。
 
-### Rust
+## Rust
 
 以上是目前为止出现过的网络框架的一个小概述。除了网络框架，我们还需要为应用程序确定一种服务端语言。
 
@@ -96,7 +96,7 @@ cargo 1.60.0 (d1fd9fe2c 2022-03-01)
 
 有关安装的更多信息，请查看 https://www.rust-lang.org/tools/install。
 
-### 创建一个 `Rust` 项目
+## 创建一个 Rust 项目
 
 运行以下命令创建一个新的“Hello World”项目：
 
@@ -125,7 +125,7 @@ $ find . -not -path "./target*" -not -path "./.git*" | sed -e "s/[^-][^\/]*\//  
   |  |-main.rs
 ```
 
-### 定义 `gRPC` 接口
+### 定义 gRPC 接口
 
 `gRPC` 使用 [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) 工具来序列化和反序列化数据。让我们在 `.proto` 文件中定义服务端 `API`。
 
@@ -163,7 +163,7 @@ message GetBookResponse {
 
 我们将使用 [tonic](https://docs.rs/tonic/latest/tonic/) 创建我们的 `gRPC` 服务。将以下依赖项添加到 `Cargo.toml` 文件中：
 
-```
+```toml
 [package]
 name = "rust_grpc_demo"
 version = "0.1.0"
@@ -188,7 +188,7 @@ $ touch build.rs
 
 将如下内容添加到 build.rs 文件中：
 
-```
+```rust
 use std::{env, path::PathBuf};
 
 fn main() {
@@ -306,7 +306,7 @@ Bookstore server listening on [::1]:50051
 
 很高兴我们在 `Rust` 中启动并运行了我们的 `gRPC` 服务器！
 
-### 奖励：服务器反射
+### 奖励：服务器端反射
 
 如开头所述，我最初对 `gRPC` 印象深刻是因为它具有进行服务端反射的能力。这不仅使服务开发过程中得心应手，也让与前端工程师的沟通变得更加容易。因此，如果不解释如何在 `Rust` 服务端代码中添加它，本教程就是不完整的。
 
