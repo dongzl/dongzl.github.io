@@ -276,7 +276,7 @@ possible_keys: idx
 
 值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_with_nulls)` 列不为空，因此 `COUNT(val_with_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。
 
-> 我认为原文这里有误，正确的内容应该是：值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_no_null)` 列不为空，因此 `COUNT(val_no_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。
+> **我认为原文这里有误，正确的内容应该是：值得注意的是在这种情况下，`MySQL` 优化器在优化查询方面做得不够好。我们可能会注意到 `(val_no_null)` 列不为空，因此 `COUNT(val_no_null)` 与 `COUNT(*)` 查询结果相同；因此可以使用覆盖索引进行查询操作，但是它不会，在这种情况下，两个查询都必须执行行读取。**
 
 > 原文内容：It is worth to note in this case, MySQL Optimizer does not do a good job of optimizing the query. One could notice (val_with_nulls) column is not null, so COUNT(val_with_nulls) is the same as COUNT(*), and so the query could be run as an index-covered query. It does not, and both queries have to perform row reads in this case.
 
