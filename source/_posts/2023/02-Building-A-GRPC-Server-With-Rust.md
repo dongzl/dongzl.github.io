@@ -33,9 +33,9 @@ tags:
 
 ### gRPC 和 Thrift 对比
 
-[Apache Thrift](https://thrift.apache.org/) 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 Facebook 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
+[Apache Thrift](https://thrift.apache.org/) 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 `Facebook` 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
 
-与此同时，gRPC 已经赶上了越来越多的功能，拥有更健康的生态系统。
+与此同时，`gRPC` 已经赶上了越来越多的功能，拥有更健康的生态系统。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
 
@@ -45,11 +45,11 @@ tags:
 
 <font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com](https://star-history.com/#grpc/grpc&facebook/fbthrift&apache/thrift&Date)</font>
 
-截至目前，除非我们的应用程序以某种方式附属于 Facebook，否则没有充分的理由考虑使用 Thrift。
+截至目前，除非我们的应用程序以某种方式附属于 `Facebook`，否则没有充分的理由考虑使用 `Thrift`。
 
 ### GraphQL 怎么样？
 
-[GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 Facebook 发起的框架。它与上面的两个 RPC 框架有许多相似之处。
+[GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 `Facebook` 发起的框架。它与上面的两个 `RPC` 框架有许多相似之处。
 
 移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们想要保持接口向后兼容性，所以我们要么保留 `API` 中未使用的旧字段，要么创建 `API` 的多个版本；[`GraphQL` 的一个动机就是解决这个问题](https://www.youtube.com/watch?v=783ccP__No8)，它被设计成一种“**查询语言**”，允许客户端指定它需要的数据字段，这使得更加方便地处理接口向后兼容性。
 
@@ -180,13 +180,13 @@ prost = "0.10.1"
 tonic-build = "0.7.2"
 ```
 
-为了从 bookstore.proto 生成 Rust 代码，我们在 crate 的 build.rs 构建脚本中使用 tonic-build。
+为了从 `bookstore.proto` 生成 `Rust` 代码，我们在 `crate` 的 `build.rs` 构建脚本中使用 `tonic-build`。
 
 ```shell
 $ touch build.rs
 ```
 
-将如下内容添加到 build.rs 文件中：
+将如下内容添加到 `build.rs` 文件中：
 
 ```rust
 use std::{env, path::PathBuf};
@@ -204,15 +204,15 @@ fn main() {
 }
 ```
 
-需要特别指出的是，我们添加了这个 .out_dir("./src") 配置，它可以设置将文件默认输出到 src 目录，以便我们可以更轻松地查看生成的文件，以达到本文的目的。
+需要特别指出的是，我们添加了这个 `.out_dir("./src")` 配置，它可以设置将文件默认输出到 `src` 目录，以便我们可以更轻松地查看生成的文件，以达到本文的目的。
 
-在我们进行编译之前还要做另外一件事，tonic-build 依赖于 Protocol Buffers 编译器，编译器可以将 .proto 文件解析为可以转换为 Rust 的表示形式。让我们安装 protobuf：
+在我们进行编译之前还要做另外一件事，`tonic-build` 依赖于 `Protocol Buffers` 编译器，编译器可以将 `.proto` 文件解析为可以转换为 `Rust` 的表示形式。让我们安装 `protobuf`：
 
 ```shell
 $ brew install protobuf
 ```
 
-并仔细检查 protobuf 编译器是否安装正确：
+并仔细检查 `protobuf` 编译器是否安装正确：
 
 ```shell
 $ protoc --version
@@ -226,7 +226,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
 ```
 
-有了这些操作，我们应该生成一个 src/bookstore.rs 文件，此时，我们的文件结构应该是这样的：
+有了这些操作，我们应该生成一个 `src/bookstore.rs` 文件，此时，我们的文件结构应该是这样的：
 
 ```shell
   | - Cargo.toml
