@@ -61,13 +61,13 @@ tags:
 
 以上是目前为止出现过的网络框架的一个小概述。除了网络框架，我们还需要为应用程序确定一种服务端语言。
 
-根据 [Stack Overflow 上的一项调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)：“在过去的六年时间，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的后端服务开发编程语言。
+根据 `Stack Overflow` 上的一项[调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)显示：“在过去的六年时间，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的后端服务开发编程语言。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/03.webp" style="width:600px"/>
 
 <font color=DarkGray size=2>Rust 是最受喜爱的编程语言。[Stack Overflow Survey 2021](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)</font>
 
-我们也开始看到 `Rust` 在行业中得到越来越广泛的应用：[Facebook](https://engineering.fb.com/2021/04/29/developer-tools/rust/)、[Dropbox](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)、[Yelp](https://www.youtube.com/watch?v=u6ZbF4apABk)、[AWS(https://aws.amazon.com/cn/blogs/opensource/sustainability-with-rust/)、[谷歌](https://opensource.googleblog.com/2021/02/google-joins-rust-foundation.html)等。很明显，`Rust` 将会持续发展，并将一直存在。
+我们也开始看到 `Rust` 在行业中得到越来越广泛的应用：[Facebook](https://engineering.fb.com/2021/04/29/developer-tools/rust/)、[Dropbox](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)、[Yelp](https://www.youtube.com/watch?v=u6ZbF4apABk)、[AWS](https://aws.amazon.com/cn/blogs/opensource/sustainability-with-rust/)、[谷歌](https://opensource.googleblog.com/2021/02/google-joins-rust-foundation.html)等。很明显，`Rust` 将会持续发展，并将一直存在。
 
 这就是我们将在今天的教程中看到的内容——在 `Rust` 中使用 `gRPC` 构建一个小型服务器。
 
@@ -94,7 +94,7 @@ $ cargo --version
 cargo 1.60.0 (d1fd9fe2c 2022-03-01)
 ```
 
-有关安装的更多信息，请查看 https://www.rust-lang.org/tools/install。
+有关安装的更多信息，请查看 https://www.rust-lang.org/tools/install 。
 
 ## 创建一个 Rust 项目
 
@@ -316,7 +316,7 @@ Bookstore server listening on [::1]:50051
 tonic-reflection = "0.4.0"
 ```
 
-更新 `build.rs` 文件，`// Add this comment` 注释标记的那一行是修改的内容。
+更新 `build.rs` 文件，`// Add this` 注释标记的那一行是修改的内容。
 
 ```rust
 use std::{env, path::PathBuf};
