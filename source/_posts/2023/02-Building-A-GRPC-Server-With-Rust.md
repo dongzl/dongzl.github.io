@@ -9,7 +9,7 @@ author:
     link: https://yuchen52.medium.com/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何在不使用连接器或外部库的情况下从头开始编写我们自己的原生 MySQL 客户端。
+subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何使用 `Rust` 语言一步一步构建一个 `gRPC` 服务端程序。
 
 categories: 
   - 架构设计
