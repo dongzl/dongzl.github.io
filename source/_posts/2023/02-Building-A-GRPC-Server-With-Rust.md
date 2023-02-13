@@ -316,7 +316,7 @@ Bookstore server listening on [::1]:50051
 tonic-reflection = "0.4.0"
 ```
 
-更新 `build.rs` 文件，`// Add this` 注释标记的那一行是修改的内容。
+更新 `build.rs` 文件，`// Add this` 注释标记的是需要修改的代码内容。
 
 ```rust
 use std::{env, path::PathBuf};
@@ -398,7 +398,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-### 测试 `gRPC` 服务功能
+### 测试 gRPC 服务功能
 
 有很多的 `GUI` 客户端工具可以用来和 `gRPC` 服务器进行交互，例如：[Postman](https://www.postman.com/)、[Kreya](https://kreya.app/)、[bloomrpc](https://github.com/bloomrpc/bloomrpc)、[grpcox](https://github.com/gusaul/grpcox) 等。为了简单起见，我们将使用命令行工具 `grpc_cli`。
 
