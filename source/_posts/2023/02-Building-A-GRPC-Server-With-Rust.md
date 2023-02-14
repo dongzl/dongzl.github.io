@@ -25,9 +25,9 @@ tags:
 
 ### RPC、JSON、SOAP 对比
 
-一旦我了解了 [gRPC](https://grpc.io/) 和 [Thrift](https://github.com/facebook/fbthrift)，就很难回到使用更具过渡性的基于 `JSON` 的 `REST` `API` 或 [SOAP](https://en.wikipedia.org/wiki/SOAP) `API`。
+一旦我们了解了 [gRPC](https://grpc.io/) 和 [Thrift](https://github.com/facebook/fbthrift)，就很难回到过去使用基于 `JSON` 的 `REST` `API` 或 [SOAP](https://en.wikipedia.org/wiki/SOAP) `API` 等更具过渡性的框架。
 
-`gRPC` 和 `Thrift` 这两个著名的 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好的支持，而且性能都很好。
+`gRPC` 和 `Thrift` 这两个著名的 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好地支持，而且性能都很好。
 
 这两个框架最有价值的功能是支持多语言代码自动生成和服务器端反射，这些特性使得 `API` 本质上是类型安全的；通过服务器端反射，无需阅读和理解接口实现，就可以更轻松地探索 `API` 的模式定义。
 
@@ -35,7 +35,7 @@ tags:
 
 [Apache Thrift](https://thrift.apache.org/) 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 `Facebook` 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
 
-与此同时，`gRPC` 已经赶上了越来越多的功能，拥有更健康的生态系统。
+与此同时，`gRPC` 已经开发了越来越多的功能，拥有更健康的生态系统。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
 
@@ -45,31 +45,31 @@ tags:
 
 <font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com](https://star-history.com/#grpc/grpc&facebook/fbthrift&apache/thrift&Date)</font>
 
-截至目前，除非我们的应用程序以某种方式附属于 `Facebook`，否则没有充分的理由考虑使用 `Thrift`。
+截至目前，除非我们的应用程序以某种方式依赖于 `Facebook`，否则没有充分的理由考虑使用 `Thrift`。
 
 ### GraphQL 怎么样？
 
-[GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 `Facebook` 发起的框架。它与上面的两个 `RPC` 框架有许多相似之处。
+[GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 `Facebook` 发起的框架，它与上面的两个 `RPC` 框架有许多相似之处。
 
-移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们想要保持接口向后兼容性，所以我们要么保留 `API` 中未使用的旧字段，要么创建 `API` 的多个版本；[`GraphQL` 的一个动机就是解决这个问题](https://www.youtube.com/watch?v=783ccP__No8)，它被设计成一种“**查询语言**”，允许客户端指定它需要的数据字段，这使得更加方便地处理接口向后兼容性。
+移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们想要保持接口向后兼容性，所以我们要么保留 `API` 中未使用的旧字段，要么创建 `API` 的多个版本；[`GraphQL` 的一个动机就是解决这个问题](https://www.youtube.com/watch?v=783ccP__No8)被设计成一种“**查询语言**”，它允许客户端指定需要的数据字段，这个特性能够更加方便地处理接口向后兼容性。
 
-`GraphQL` 在开发移动端 `API` 开发以及面向公众的 `API`（例如：`GitHub`）开发方面具有巨大优势，因为在这两种情况下，我们都无法轻易控制用户的行为。
+`GraphQL` 在移动端 `API` 开发以及面向公众的 `API`（例如：`GitHub`）开发方面具有巨大优势，因为在这两种情况下，我们都无法轻易控制用户的行为。
 
-但是，如果我们正在为 `Web` 前端构建 `API` 或为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么好处。
+但是，如果我们正在为 `Web` 前端构建 `API` 或为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么优势。
 
 ## Rust
 
 以上是目前为止出现过的网络框架的一个小概述。除了网络框架，我们还需要为应用程序确定一种服务端语言。
 
-根据 `Stack Overflow` 上的一项[调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)显示：“在过去的六年时间，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的后端服务开发编程语言。
+根据 `Stack Overflow` 上的一项[调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)显示：“在过去的六年时间里，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的服务端编程语言。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/03.webp" style="width:600px"/>
 
 <font color=DarkGray size=2>Rust 是最受喜爱的编程语言。[Stack Overflow Survey 2021](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)</font>
 
-我们也开始看到 `Rust` 在行业中得到越来越广泛的应用：[Facebook](https://engineering.fb.com/2021/04/29/developer-tools/rust/)、[Dropbox](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)、[Yelp](https://www.youtube.com/watch?v=u6ZbF4apABk)、[AWS](https://aws.amazon.com/cn/blogs/opensource/sustainability-with-rust/)、[谷歌](https://opensource.googleblog.com/2021/02/google-joins-rust-foundation.html)等。很明显，`Rust` 将会持续发展，并将一直存在。
+我们也注意到 `Rust` 在行业中得到越来越广泛的应用：[Facebook](https://engineering.fb.com/2021/04/29/developer-tools/rust/)、[Dropbox](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)、[Yelp](https://www.youtube.com/watch?v=u6ZbF4apABk)、[AWS](https://aws.amazon.com/cn/blogs/opensource/sustainability-with-rust/)、[谷歌](https://opensource.googleblog.com/2021/02/google-joins-rust-foundation.html)等。很明显，`Rust` 将会持续发展，并将一直存在。
 
-这就是我们将在今天的教程中看到的内容——在 `Rust` 中使用 `gRPC` 构建一个小型服务器。
+这就是我们将在今天的教程中看到的内容 -- 在 `Rust` 中使用 `gRPC` 构建一个小型服务器。
 
 ### 安装 Rust
 
@@ -226,7 +226,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
 ```
 
-有了这些操作，我们应该生成一个 `src/bookstore.rs` 文件，此时，我们的文件结构应该是这样的：
+有了这些操作，我们应该生成一个 `src/bookstore.rs` 文件，此时项目的文件结构应该是这样的：
 
 ```shell
   | - Cargo.toml
@@ -241,7 +241,7 @@ $ cargo build
 
 ### 服务器端实现
 
-最后，是时候将服务内容放在一起了，将 `main.rs` 替换为以下内容：
+最后，是时候将服务内容组装到一起了，将 `main.rs` 替换为以下内容：
 
 ```rust
 use tonic::{transport::Server, Request, Response, Status};
@@ -292,7 +292,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-如我们所见，为了简单起见，我们实际上并没有保存书籍的数据库。在这个端点，我们只是返回一本假书。
+如上述所见，为了简单我们实际上并没有保存书籍的数据库。在这个测试场景我们只是返回一条虚假图书记录。
 
 服务端运行时间：
 
@@ -304,7 +304,7 @@ $ cargo run
 Bookstore server listening on [::1]:50051
 ```
 
-很高兴我们在 `Rust` 中启动并运行了我们的 `gRPC` 服务器！
+很高兴我们在 `Rust` 中启动并运行了我们的 `gRPC` 服务！
 
 ### 奖励：服务器端反射
 
