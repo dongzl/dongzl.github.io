@@ -512,13 +512,9 @@ mysql> show processlist;
 mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_ID is not null;
 
 +-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
-
 | OBJECT_TYPE | OBJECT_SCHEMA | OBJECT_NAME | OBJECT_INSTANCE_BEGIN | OWNER_THREAD_ID | OWNER_EVENT_ID | INTERNAL_LOCK | EXTERNAL_LOCK  |
-
 +-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
-
 | TABLE       | sysbench      | sbtest2     |       140087472317648 |             141 |             77 | NULL          | WRITE EXTERNAL |
-
 +-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
 ```
 
@@ -526,27 +522,16 @@ mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_
 mysql> select * from metadata_locks;
 
 +---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
-
 | OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME      | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE            | LOCK_DURATION | LOCK_STATUS | SOURCE            | OWNER_THREAD_ID | OWNER_EVENT_ID |
-
 +---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
-
 | GLOBAL        | NULL               | NULL             | NULL        |       140087472151024 | INTENTION_EXCLUSIVE  | STATEMENT     | GRANTED     | sql_base.cc:5534  |             141 |             77 |
-
 | SCHEMA        | sysbench           | NULL             | NULL        |       140087472076832 | INTENTION_EXCLUSIVE  | TRANSACTION   | GRANTED     | sql_base.cc:5521  |             141 |             77 |
-
 | TABLE         | sysbench           | sbtest2          | NULL        |       140087471957616 | SHARED_NO_READ_WRITE | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             141 |             77 |
-
 | BACKUP TABLES | NULL               | NULL             | NULL        |       140087472077120 | INTENTION_EXCLUSIVE  | STATEMENT     | GRANTED     | lock.cc:1259      |             141 |             77 |
-
 | TABLESPACE    | NULL               | sysbench/sbtest2 | NULL        |       140087471954800 | INTENTION_EXCLUSIVE  | TRANSACTION   | GRANTED     | lock.cc:812       |             141 |             77 |
-
 | TABLE         | sysbench           | sbtest2          | NULL        |       140087673437920 | SHARED_READ          | TRANSACTION   | PENDING     | sql_parse.cc:6295 |             142 |             77 |
-
 | TABLE         | performance_schema | metadata_locks   | NULL        |       140088117153152 | SHARED_READ          | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             143 |            970 |
-
 | TABLE         | sysbench           | sbtest1          | NULL        |       140087543861792 | SHARED_WRITE         | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             132 |            156 |
-
 +---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
 ```
 
@@ -572,86 +557,61 @@ Empty set (0.00 sec)
 mysql> select * from events_waits_history order by TIMER_WAIT desc limit 2\G;
 
 *************************** 1. row ***************************
-
             THREAD_ID: 88
-
              EVENT_ID: 124481038
-
          END_EVENT_ID: 124481038
-
            EVENT_NAME: wait/io/file/sql/binlog
-
                SOURCE: mf_iocache.cc:1694
-
           TIMER_START: 356793339225677600
-
             TIMER_END: 420519408945931200
-
            TIMER_WAIT: 63726069720253600
-
                 SPINS: NULL
-
         OBJECT_SCHEMA: NULL
-
           OBJECT_NAME: /var/lib/mysql/mysqld-bin.000009
-
            INDEX_NAME: NULL
-
           OBJECT_TYPE: FILE
-
 OBJECT_INSTANCE_BEGIN: 140092364472192
-
      NESTING_EVENT_ID: 124481033
-
    NESTING_EVENT_TYPE: STATEMENT
-
             OPERATION: write
-
       NUMBER_OF_BYTES: 683
-
                 FLAGS: NULL
-
 *************************** 2. row ***************************
-
             THREAD_ID: 142
-
              EVENT_ID: 77
-
          END_EVENT_ID: 77
-
            EVENT_NAME: wait/lock/metadata/sql/mdl
-
                SOURCE: mdl.cc:3443
-
           TIMER_START: 424714091048155200
-
             TIMER_END: 426449252955162400
-
            TIMER_WAIT: 1735161907007200
-
                 SPINS: NULL
-
         OBJECT_SCHEMA: sysbench
-
           OBJECT_NAME: sbtest2
-
            INDEX_NAME: NULL
-
           OBJECT_TYPE: TABLE
-
 OBJECT_INSTANCE_BEGIN: 140087673437920
-
      NESTING_EVENT_ID: 76
-
    NESTING_EVENT_TYPE: STATEMENT
-
             OPERATION: metadata lock
-
       NUMBER_OF_BYTES: NULL
-
                 FLAGS: NULL
 
 2 rows in set (0.00 sec)
 ```
 
 在上面的例子中，**bin log file** 操作已经等待了很长时间（`timer_wait` 单位是皮秒），在等待 `mysqld-bin.000009` 文件来完成 `IO` 操作。这可能是由于多种原因，例如存储空间已满。接下来的记录显示了我之前解释的示例二的详细信息。
+
+### 还有什么？
+
+为了让工作更轻松，能够更方便地监控这些 `Instrument`，[Percona Monitoring and Management(PMM)](https://docs.percona.com/percona-monitoring-and-management/index.html) 扮演着重要的角色。例如，请参见下面的快照信息。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/01.png" style="width:600px"/>
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/02.png" style="width:600px"/>
+
+我们仅使用这些图表，几乎可以将所有的 `Instrument` 通过配置成进行监控，而不是使用 `SQL` 进行查询。如果要熟悉这些内容，请查看 PMM [示例](https://pmm2demo.percona.com/graph/d/mysql-performance-schema/mysql-performance-schema-details?from=now-12h&to=now&var-interval=$__auto_interval_interval&var-environment=All&var-node_name=&var-crop_host=&var-service_name=pxc57-2-mysql&var-region=&var-cluster=PXCCluster1&var-node_id=&var-agent_id=&var-service_id=%2Fservice_id%2F03d49df4-3870-460b-a5e4-94647b56a99d&var-az=&var-node_type=All&var-node_model=&var-replication_set=All&var-version=&var-service_type=All&var-database=All&var-username=All&var-schema=All&orgId=1&refresh=1m)。
+
+显然，了解 `performance schema` 对我们有很大帮助，但同时启用这个特性会产生额外成本并影响性能。因此在许多场景下，[Percona Toolkit](https://docs.percona.com/percona-toolkit/) 能够在不影响数据库性能的情况下发挥很大有用。例如：`pt-index-usage`、`pt-online-schema-change`、`pt-query-digest`等工具。
+
+
