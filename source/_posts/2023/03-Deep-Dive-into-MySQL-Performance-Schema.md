@@ -48,9 +48,7 @@ tags:
 select count(1) from performance_schema.setup_instruments;
 
 +----------+
-
 | count(1) |
-
 +----------+
 
 |     1269 |
@@ -64,25 +62,15 @@ select count(1) from performance_schema.setup_instruments;
 select distinct(substring_index(name,'/',1)) from performance_schema.setup_instruments;
  
 +-------------------------------+
- 
 | (substring_index(name,'/',1)) |
- 
 +-------------------------------+
- 
 | wait                          |
- 
 | idle                          |
- 
 | stage                         |
- 
 | statement                     |
- 
 | transaction                   |
- 
 | memory                        |
- 
 | error                         |
- 
 +-------------------------------+
  
 7 rows in set (0.01 sec)
@@ -102,25 +90,15 @@ select distinct(substring_index(name,'/',1)) from performance_schema.setup_instr
 select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from performance_schema.setup_instruments group by instrument_name;
  
 +-----------------+----------+
- 
 | instrument_name | count(1) |
- 
 +-----------------+----------+
- 
 | wait            |      399 |
- 
 | idle            |        1 |
- 
 | stage           |      133 |
- 
 | statement       |      221 |
- 
 | transaction     |        1 |
- 
 | memory          |      513 |
- 
 | error           |        1 |
- 
 +-----------------+----------+
 ```
 
@@ -134,15 +112,10 @@ select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from pe
 select * from setup_instruments where name like '%innodb_log_file%';
 
 +-----------------------------------------+---------+-------+------------+------------+---------------+
-
 | NAME                                    | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
-
 +-----------------------------------------+---------+-------+------------+------------+---------------+
-
 | wait/synch/mutex/innodb/log_files_mutex | NO      | NO    |            |          0 | NULL          |
-
 | wait/io/file/innodb/innodb_log_file     | YES     | YES   |            |          0 | NULL          |
-
 +-----------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
@@ -154,43 +127,24 @@ select * from setup_instruments where name like '%innodb_log_file%';
 select * from setup_instruments where PROPERTIES='progress';        
  
 +------------------------------------------------------+---------+-------+------------+------------+---------------+
- 
 | NAME                                                 | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
- 
 +------------------------------------------------------+---------+-------+------------+------------+---------------+
- 
 | stage/sql/copy to tmp table                          | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/sql/Applying batch of row changes (write)      | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/sql/Applying batch of row changes (update)     | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/sql/Applying batch of row changes (delete)     | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (end)                       | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (flush)                     | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (insert)                    | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (log apply index)           | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (log apply table)           | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (merge sort)                | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter table (read PK and internal sort) | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/alter tablespace (encryption)           | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/buffer pool load                        | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/clone (file copy)                       | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/clone (redo copy)                       | YES     | YES   | progress   |          0 | NULL          |
- 
 | stage/innodb/clone (page copy)                       | YES     | YES   | progress   |          0 | NULL          |
- 
 +------------------------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
@@ -204,13 +158,9 @@ select * from setup_instruments where PROPERTIES='progress';
 select count(*) from setup_instruments where ENABLED='YES';
 
 +----------+
-
 | count(*) |
-
 +----------+
-
 |      810 |
-
 +----------+
 
 1 row in set (0.00 sec)
@@ -223,71 +173,38 @@ select * from performance_schema.setup_instruments where enabled='YES' limit 30;
 
 
 +---------------------------------------+---------+-------+------------+------------+---------------+
-
 | NAME                                  | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
-
 +---------------------------------------+---------+-------+------------+------------+---------------+
-
 | wait/io/file/sql/binlog               | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/binlog_cache         | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/binlog_index         | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/binlog_index_cache   | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/relaylog             | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/relaylog_cache       | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/relaylog_index       | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/relaylog_index_cache | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/io_cache             | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/casetest             | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/dbopt                | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/ERRMSG               | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/select_to_file       | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/file_parser          | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/FRM                  | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/load                 | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/LOAD_FILE            | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/log_event_data       | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/log_event_info       | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/misc                 | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/pid                  | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/query_log            | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/slow_log             | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/tclog                | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/trigger_name         | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/trigger              | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/init                 | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/SDI                  | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/sql/hash_join            | YES     | YES   |            |          0 | NULL          |
-
 | wait/io/file/mysys/proc_meminfo       | YES     | YES   |            |          0 | NULL          |
-
 +---------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
@@ -297,43 +214,24 @@ select * from performance_schema.setup_instruments where enabled='YES' limit 30;
 select * from performance_schema.setup_consumers;
  
 +----------------------------------+---------+
- 
 | NAME                             | ENABLED |
- 
 +----------------------------------+---------+
- 
 | events_stages_current            | YES     |
- 
 | events_stages_history            | YES     |
- 
 | events_stages_history_long       | YES     |
- 
 | events_statements_cpu            | YES     |
- 
 | events_statements_current        | YES     |
- 
 | events_statements_history        | YES     |
- 
 | events_statements_history_long   | YES     |
- 
 | events_transactions_current      | YES     |
- 
 | events_transactions_history      | YES     |
- 
 | events_transactions_history_long | YES     |
- 
 | events_waits_current             | YES     |
- 
 | events_waits_history             | YES     |
- 
 | events_waits_history_long        | YES     |
- 
 | global_instrumentation           | YES     |
- 
 | thread_instrumentation           | YES     |
- 
 | statements_digest                | YES     |
- 
 +----------------------------------+---------+
 ```
 
@@ -373,80 +271,42 @@ rate - 10
 ```shell
 select * from memory_summary_global_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 3\G;
  
- 
- 
 *************************** 1. row ***************************
- 
                   EVENT_NAME: memory/innodb/buf_buf_pool
- 
                  COUNT_ALLOC: 24
- 
                   COUNT_FREE: 0
- 
    SUM_NUMBER_OF_BYTES_ALLOC: 3292102656
- 
     SUM_NUMBER_OF_BYTES_FREE: 0
- 
               LOW_COUNT_USED: 0
- 
           CURRENT_COUNT_USED: 24
- 
              HIGH_COUNT_USED: 24
- 
     LOW_NUMBER_OF_BYTES_USED: 0
- 
 CURRENT_NUMBER_OF_BYTES_USED: 3292102656
- 
    HIGH_NUMBER_OF_BYTES_USED: 3292102656
- 
 *************************** 2. row ***************************
- 
                   EVENT_NAME: memory/sql/THD::main_mem_root
- 
                  COUNT_ALLOC: 138566
- 
                   COUNT_FREE: 138543
- 
    SUM_NUMBER_OF_BYTES_ALLOC: 2444314336
- 
     SUM_NUMBER_OF_BYTES_FREE: 2443662928
- 
               LOW_COUNT_USED: 0
- 
           CURRENT_COUNT_USED: 23
- 
              HIGH_COUNT_USED: 98
- 
     LOW_NUMBER_OF_BYTES_USED: 0
- 
 CURRENT_NUMBER_OF_BYTES_USED: 651408
- 
    HIGH_NUMBER_OF_BYTES_USED: 4075056
- 
 *************************** 3. row ***************************
- 
                   EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
- 
                  COUNT_ALLOC: 58869
- 
                   COUNT_FREE: 58868
- 
    SUM_NUMBER_OF_BYTES_ALLOC: 2412676319
- 
     SUM_NUMBER_OF_BYTES_FREE: 2412673879
- 
               LOW_COUNT_USED: 0
- 
           CURRENT_COUNT_USED: 1
- 
              HIGH_COUNT_USED: 13
- 
     LOW_NUMBER_OF_BYTES_USED: 0
- 
 CURRENT_NUMBER_OF_BYTES_USED: 2440
- 
    HIGH_NUMBER_OF_BYTES_USED: 491936
- 
  
 Above are the top three records, showing where the memory is getting mostly utilized.
 ```
@@ -467,55 +327,30 @@ Above are the top three records, showing where the memory is getting mostly util
 select * from memory_summary_by_host_by_event_name where HOST='10.11.120.141' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 2\G;
 
 *************************** 1. row ***************************
-
                         HOST: 10.11.120.141
-
                   EVENT_NAME: memory/sql/THD::main_mem_root
-
                  COUNT_ALLOC: 73817
-
                   COUNT_FREE: 73810
-
    SUM_NUMBER_OF_BYTES_ALLOC: 1300244144
-
     SUM_NUMBER_OF_BYTES_FREE: 1300114784
-
               LOW_COUNT_USED: 0
-
           CURRENT_COUNT_USED: 7
-
              HIGH_COUNT_USED: 39
-
     LOW_NUMBER_OF_BYTES_USED: 0
-
 CURRENT_NUMBER_OF_BYTES_USED: 129360
-
    HIGH_NUMBER_OF_BYTES_USED: 667744
-
 *************************** 2. row ***************************
-
                         HOST: 10.11.120.141
-
                   EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
-
                  COUNT_ALLOC: 31318
-
                   COUNT_FREE: 31318
-
    SUM_NUMBER_OF_BYTES_ALLOC: 1283771072
-
     SUM_NUMBER_OF_BYTES_FREE: 1283771072
-
               LOW_COUNT_USED: 0
-
           CURRENT_COUNT_USED: 0
-
              HIGH_COUNT_USED: 8
-
     LOW_NUMBER_OF_BYTES_USED: 0
-
 CURRENT_NUMBER_OF_BYTES_USED: 0
-
    HIGH_NUMBER_OF_BYTES_USED: 327936
 ```
 
@@ -531,29 +366,17 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 select * from memory_summary_by_host_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
  
 *************************** 1. row ***************************
- 
                         HOST: 10.11.54.152
- 
                   EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
- 
                  COUNT_ALLOC: 5617297
- 
                   COUNT_FREE: 5617297
- 
    SUM_NUMBER_OF_BYTES_ALLOC: 193386762784
- 
     SUM_NUMBER_OF_BYTES_FREE: 193386762784
- 
               LOW_COUNT_USED: 0
- 
           CURRENT_COUNT_USED: 0
- 
              HIGH_COUNT_USED: 20
- 
     LOW_NUMBER_OF_BYTES_USED: 0
- 
 CURRENT_NUMBER_OF_BYTES_USED: 0
- 
    HIGH_NUMBER_OF_BYTES_USED: 819840
 ```
 
@@ -563,62 +386,34 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 select * from memory_summary_by_account_by_event_name where HOST='10.11.54.152' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
 
 *************************** 1. row ***************************
-
                         USER: sbuser
-
                         HOST: 10.11.54.152
-
                   EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
-
                  COUNT_ALLOC: 5612993
-
                   COUNT_FREE: 5612993
-
    SUM_NUMBER_OF_BYTES_ALLOC: 193239513120
-
     SUM_NUMBER_OF_BYTES_FREE: 193239513120
-
               LOW_COUNT_USED: 0
-
           CURRENT_COUNT_USED: 0
-
              HIGH_COUNT_USED: 20
-
     LOW_NUMBER_OF_BYTES_USED: 0
-
 CURRENT_NUMBER_OF_BYTES_USED: 0
-
    HIGH_NUMBER_OF_BYTES_USED: 819840
-
-
-
 
 select * from memory_summary_by_thread_by_event_name where EVENT_NAME='memory/sql/Filesort_buffer::sort_keys' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
 
 *************************** 1. row ***************************
-
                    THREAD_ID: 84
-
                   EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
-
                  COUNT_ALLOC: 565645
-
                   COUNT_FREE: 565645
-
    SUM_NUMBER_OF_BYTES_ALLOC: 19475083680
-
     SUM_NUMBER_OF_BYTES_FREE: 19475083680
-
               LOW_COUNT_USED: 0
-
           CURRENT_COUNT_USED: 0
-
              HIGH_COUNT_USED: 2
-
     LOW_NUMBER_OF_BYTES_USED: 0
-
 CURRENT_NUMBER_OF_BYTES_USED: 0
-
    HIGH_NUMBER_OF_BYTES_USED: 81984
 ```
 
@@ -628,93 +423,49 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 select * from events_statements_history where THREAD_ID=84 order by SORT_SCAN desc\G;
 
 *************************** 1. row ***************************
-
               THREAD_ID: 84
-
                EVENT_ID: 48091828
-
            END_EVENT_ID: 48091833
-
              EVENT_NAME: statement/sql/select
-
                  SOURCE: init_net_server_extension.cc:95
-
             TIMER_START: 145083499054314000
-
               TIMER_END: 145083499243093000
-
              TIMER_WAIT: 188779000
-
               LOCK_TIME: 1000000
-
                SQL_TEXT: SELECT c FROM sbtest2 WHERE id BETWEEN 5744223 AND 5744322 ORDER BY c
-
                  DIGEST: 4f764af1c0d6e44e4666e887d454a241a09ac8c4df9d5c2479f08b00e4b9b80d
-
             DIGEST_TEXT: SELECT `c` FROM `sbtest2` WHERE `id` BETWEEN ? AND ? ORDER BY `c`
-
          CURRENT_SCHEMA: sysbench
-
             OBJECT_TYPE: NULL
-
           OBJECT_SCHEMA: NULL
-
             OBJECT_NAME: NULL
-
   OBJECT_INSTANCE_BEGIN: NULL
-
             MYSQL_ERRNO: 0
-
       RETURNED_SQLSTATE: NULL
-
            MESSAGE_TEXT: NULL
-
                  ERRORS: 0
-
                WARNINGS: 0
-
           ROWS_AFFECTED: 0
-
               ROWS_SENT: 14
-
           ROWS_EXAMINED: 28
-
 CREATED_TMP_DISK_TABLES: 0
-
      CREATED_TMP_TABLES: 0
-
        SELECT_FULL_JOIN: 0
-
  SELECT_FULL_RANGE_JOIN: 0
-
            SELECT_RANGE: 1
-
      SELECT_RANGE_CHECK: 0
-
             SELECT_SCAN: 0
-
       SORT_MERGE_PASSES: 0
-
          SORT_RANGE: 0
-
               SORT_ROWS: 14
-
           SORT_SCAN: 1
-
           NO_INDEX_USED: 0
-
      NO_GOOD_INDEX_USED: 0
-
        NESTING_EVENT_ID: NULL
-
      NESTING_EVENT_TYPE: NULL
-
     NESTING_EVENT_LEVEL: 0
-
            STATEMENT_ID: 49021382
-
                CPU_TIME: 185100000
-
        EXECUTION_ENGINE: PRIMARY
 ```
 
@@ -736,39 +487,22 @@ Query OK, 0 rows affected (0.00 sec)
 mysql> show processlist;
 
 +----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-----------+-----------+---------------+
-
 | Id | User   | Host                | db                 | Command     | Time   | State                                                           | Info             | Time_ms   | Rows_sent | Rows_examined |
-
 +----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-----------+-----------+---------------+
-
 |  8 | repl   | 10.11.139.171:53860 | NULL               | Binlog Dump | 421999 | Source has sent all binlog to replica; waiting for more updates | NULL             | 421998368 |         0 |             0 |
-
 |  9 | repl   | 10.11.223.98:51212  | NULL               | Binlog Dump | 421998 | Source has sent all binlog to replica; waiting for more updates | NULL             | 421998262 |         0 |             0 |
-
 | 25 | sbuser | 10.11.54.152:38060  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222573 |         0 |             1 |
-
 | 26 | sbuser | 10.11.54.152:38080  | sysbench           | Sleep       |  65222 |                                                                 | NULL             |  65222177 |         0 |             1 |
-
 | 27 | sbuser | 10.11.54.152:38090  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222438 |         0 |             0 |
-
 | 28 | sbuser | 10.11.54.152:38096  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222489 |         0 |             1 |
-
 | 29 | sbuser | 10.11.54.152:38068  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222527 |         0 |             1 |
-
 | 45 | root   | localhost           | performance_schema | Sleep       |   7722 |                                                                 | NULL             |   7722009 |        40 |           348 |
-
 | 46 | root   | localhost           | performance_schema | Sleep       |   6266 |                                                                 | NULL             |   6265800 |        16 |          1269 |
-
 | 47 | root   | localhost           | performance_schema | Sleep       |   4904 |                                                                 | NULL             |   4903622 |         0 |            23 |
-
 | 48 | root   | localhost           | performance_schema | Sleep       |   1777 |                                                                 | NULL             |   1776860 |         0 |             0 |
-
 | 54 | root   | localhost           | sysbench           | Sleep       |    689 |                                                                 | NULL             |    688740 |         0 |             1 |
-
 | 58 | root   | localhost           | NULL               | Sleep       |     44 |                                                                 | NULL             |     44263 |         1 |             1 |
-
 | 59 | root   | localhost           | sysbench           | Query       |      0 | init                                                            | show processlist |         0 |         0 |             0 |
-
 +----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-
 ```
 
