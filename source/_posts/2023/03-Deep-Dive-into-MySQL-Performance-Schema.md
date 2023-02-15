@@ -44,7 +44,7 @@ tags:
 
 我们可以在表 `setup_instruments` 下找到所使用的 `MySQL` 版本中所有可用的 `Instrument`。值得注意的是，每个版本的 `MySQL` 都有不同数量的 `Instrument`。
 
-```shell
+```sql
 select count(1) from performance_schema.setup_instruments;
 
 +----------+
@@ -60,7 +60,7 @@ select count(1) from performance_schema.setup_instruments;
 
 为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们曾经只有四个，因此如果您使用不同/较低版本，我们期望可能会看到不同类型的 `Instrument`。
 
-```shell
+```sql
 select distinct(substring_index(name,'/',1)) from performance_schema.setup_instruments;
  
 +-------------------------------+
@@ -98,7 +98,7 @@ select distinct(substring_index(name,'/',1)) from performance_schema.setup_instr
 
 下面列出了这七个组件的 `Instrument` 总数，我们可以仅以这些名称开头来识别这些 `Instrument`。
 
-```shell
+```sql
 select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from performance_schema.setup_instruments group by instrument_name;
  
 +-----------------+----------+
@@ -834,7 +834,7 @@ Empty set (0.00 sec)
 
 在某些情况下，我们需要找出 `MySQL` 服务器在哪里出现等待而花费了大部分时间，以便我们可以进一步采取措施：
 
-```shell
+```sql
 mysql> select * from events_waits_history order by TIMER_WAIT desc limit 2\G;
 
 *************************** 1. row ***************************
