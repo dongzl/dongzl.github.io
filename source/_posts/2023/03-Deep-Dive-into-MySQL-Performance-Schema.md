@@ -38,9 +38,9 @@ tags:
 > 3. At which execution stage is a query taking time, or how much time will an alter command will take?
 > 4. Which process is consuming most of the memory or how to identify the cause of memory leakage?
 
-## 就 `performance schema` 而言，什么是 `Instrument`？
+## 就 performance schema 而言，什么是 Instrument？
 
-`Instrument` 是将 **wait**、**IO**、*SQL*、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常意义的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，然后组件将添加分隔符“/”。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂或越具体，即 `Instrument` 越长，它就越复杂。
+`Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常意义的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，然后组件将添加分隔符“/”。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂或越具体，即 `Instrument` 越长，它就越复杂。
 
 我们可以在表 `setup_instruments` 下找到所使用的 `MySQL` 版本中所有可用的 `Instrument`。值得注意的是，每个版本的 `MySQL` 都有不同数量的 `Instrument`。
 
@@ -57,3 +57,867 @@ select count(1) from performance_schema.setup_instruments;
 
 +----------+
 ```
+
+为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们曾经只有四个，因此如果您使用不同/较低版本，我们期望可能会看到不同类型的 `Instrument`。
+
+```shell
+select distinct(substring_index(name,'/',1)) from performance_schema.setup_instruments;
+ 
++-------------------------------+
+ 
+| (substring_index(name,'/',1)) |
+ 
++-------------------------------+
+ 
+| wait                          |
+ 
+| idle                          |
+ 
+| stage                         |
+ 
+| statement                     |
+ 
+| transaction                   |
+ 
+| memory                        |
+ 
+| error                         |
+ 
++-------------------------------+
+ 
+7 rows in set (0.01 sec)
+```
+
+- **Stage** - 以 `stage` 开头的 `Instrument` 提供所有查询的执行阶段，如读取数据、发送数据、修改表、检查查询缓存等等。例如 `stage/sql/altering table`；
+- **Wait** - 以 `wait` 开头的 `Instrument` 放在这里，像互斥锁等待、文件等待、`I/O` 等待和表等待，这个 `Instrument` 可以是 **wait/io/file/sql/map**；
+- **Memory** - 以 `memory` 开头的 `Instrument` 提供有关每个线程内存使用情况的信息，例如 **memory/sql/MYSQL_BIN_LOG**；
+- **Statement** - 以 `statement` 开头的 `Instrument` 提供有关 `SQL` 类型和存储过程的信息；
+- **Idle** - 提供有关套接字连接的信息和与线程相关的信息；
+- **Transaction** - 提供与事务相关的信息并且只有一种 `Instrument`；
+- **Error** - 该单一 `Instrument` 提供与用户活动产生的错误相关的信息，该 `Instrument` 没有附加其他组件；
+
+下面列出了这七个组件的 `Instrument` 总数，我们可以仅以这些名称开头来识别这些 `Instrument`。
+
+```shell
+select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from performance_schema.setup_instruments group by instrument_name;
+ 
++-----------------+----------+
+ 
+| instrument_name | count(1) |
+ 
++-----------------+----------+
+ 
+| wait            |      399 |
+ 
+| idle            |        1 |
+ 
+| stage           |      133 |
+ 
+| statement       |      221 |
+ 
+| transaction     |        1 |
+ 
+| memory          |      513 |
+ 
+| error           |        1 |
+ 
++-----------------+----------+
+```
+
+## 如何找到你需要的 `Instrument`
+
+我清楚地记得有位客户问我，既然有成千上万种 `Instrument` 可供选择，他如何才能找到他需要的那一种。正如我之前提到的，`Instrument` 是从左到右阅读的，我们可以找出我们需要的 `Instrument`，然后找到它各自代表的性能指标。
+
+例如 - 我需要观察我的 `MySQL` 实例的 `redo` 日志（日志文件或 `WAL` 文件）的性能，并且需要检查线程/连接在写入数据之前，是否需要等待重做日志文件被刷新到磁盘，如果需要会查询出多少内容。
+
+```shell
+select * from setup_instruments where name like '%innodb_log_file%';
+
++-----------------------------------------+---------+-------+------------+------------+---------------+
+
+| NAME                                    | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
+
++-----------------------------------------+---------+-------+------------+------------+---------------+
+
+| wait/synch/mutex/innodb/log_files_mutex | NO      | NO    |            |          0 | NULL          |
+
+| wait/io/file/innodb/innodb_log_file     | YES     | YES   |            |          0 | NULL          |
+
++-----------------------------------------+---------+-------+------------+------------+---------------+
+```
+
+在这里你看到我有两个用于重做日志文件的工具。一个是关于重做日志文件的互斥锁统计信息，第二个是关于重做日志文件的 `IO` 等待统计信息。
+
+示例二 - 您需要找出可以计算所需时间的操作或工具，即批量更新需要多少时间。以下是所有可以帮助您找到相同位置的工具。
+
+```shell
+select * from setup_instruments where PROPERTIES='progress';        
+ 
++------------------------------------------------------+---------+-------+------------+------------+---------------+
+ 
+| NAME                                                 | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
+ 
++------------------------------------------------------+---------+-------+------------+------------+---------------+
+ 
+| stage/sql/copy to tmp table                          | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/sql/Applying batch of row changes (write)      | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/sql/Applying batch of row changes (update)     | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/sql/Applying batch of row changes (delete)     | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (end)                       | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (flush)                     | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (insert)                    | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (log apply index)           | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (log apply table)           | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (merge sort)                | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter table (read PK and internal sort) | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/alter tablespace (encryption)           | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/buffer pool load                        | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/clone (file copy)                       | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/clone (redo copy)                       | YES     | YES   | progress   |          0 | NULL          |
+ 
+| stage/innodb/clone (page copy)                       | YES     | YES   | progress   |          0 | NULL          |
+ 
++------------------------------------------------------+---------+-------+------------+------------+---------------+
+```
+
+上述工具是可以跟踪其进展的工具。
+
+## 如何准备 `Instrument` 来解决性能问题
+
+要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。让我们看看，默认情况下我所使用的版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
+
+```shell
+select count(*) from setup_instruments where ENABLED='YES';
+
++----------+
+
+| count(*) |
+
++----------+
+
+|      810 |
+
++----------+
+
+1 row in set (0.00 sec)
+```
+
+下面的查询列出了前 `30` 个启用的 `Instrument`，它们将在表中进行日志记录。
+
+```shell
+select * from performance_schema.setup_instruments where enabled='YES' limit 30;
+
+
++---------------------------------------+---------+-------+------------+------------+---------------+
+
+| NAME                                  | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
+
++---------------------------------------+---------+-------+------------+------------+---------------+
+
+| wait/io/file/sql/binlog               | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/binlog_cache         | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/binlog_index         | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/binlog_index_cache   | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/relaylog             | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/relaylog_cache       | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/relaylog_index       | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/relaylog_index_cache | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/io_cache             | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/casetest             | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/dbopt                | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/ERRMSG               | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/select_to_file       | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/file_parser          | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/FRM                  | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/load                 | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/LOAD_FILE            | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/log_event_data       | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/log_event_info       | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/misc                 | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/pid                  | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/query_log            | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/slow_log             | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/tclog                | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/trigger_name         | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/trigger              | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/init                 | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/SDI                  | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/sql/hash_join            | YES     | YES   |            |          0 | NULL          |
+
+| wait/io/file/mysys/proc_meminfo       | YES     | YES   |            |          0 | NULL          |
+
++---------------------------------------+---------+-------+------------+------------+---------------+
+```
+
+正如我之前提到的，还可以维护事件的历史记录。例如，如果我们正在运行负载测试并希望分析查询完成后的性能，则需要激活以下消费者（如果尚未激活）。
+
+```shell
+select * from performance_schema.setup_consumers;
+ 
++----------------------------------+---------+
+ 
+| NAME                             | ENABLED |
+ 
++----------------------------------+---------+
+ 
+| events_stages_current            | YES     |
+ 
+| events_stages_history            | YES     |
+ 
+| events_stages_history_long       | YES     |
+ 
+| events_statements_cpu            | YES     |
+ 
+| events_statements_current        | YES     |
+ 
+| events_statements_history        | YES     |
+ 
+| events_statements_history_long   | YES     |
+ 
+| events_transactions_current      | YES     |
+ 
+| events_transactions_history      | YES     |
+ 
+| events_transactions_history_long | YES     |
+ 
+| events_waits_current             | YES     |
+ 
+| events_waits_history             | YES     |
+ 
+| events_waits_history_long        | YES     |
+ 
+| global_instrumentation           | YES     |
+ 
+| thread_instrumentation           | YES     |
+ 
+| statements_digest                | YES     |
+ 
++----------------------------------+---------+
+```
+
+注意 – 上面行中的前 `15` 条记录的意思是不言自明的，但最后一条用于摘要意味着允许记录 `SQL` 语句的摘要文本。我的意思是摘要内容，将相似的查询分组并显示它们的性能。这是通过哈希算法完成的。
+
+比方说，您想分析花费大部分时间的查询的阶段，您需要使用以下查询启用相应的日志记录。
+
+```shell
+MySQL> update performance_schema.setup_consumers set ENABLED='YES' where NAME='events_stages_current';
+
+Query OK, 1 row affected (0.00 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+```
+
+## 如何充分利用 `performance schema`
+
+现在我们知道什么是 `Instrument`、如何启用它们以及我们要存储的数据量，是时候了解如何使用这些 `Instrument` 了。为了更容易理解，我从我的测试用例中提取了一些 `Instrument` 的输出，因为有超过一千种 `Instrument`，我们的测试不可能覆盖所有。
+
+请注意为了生成模拟负载，我使用了 `sysbench`（如果不熟悉它，可以阅读[此处](https://github.com/akopytov/sysbench)文档）以使用以下详细信息创建读写流量：
+
+```lua
+lua : oltp_read_write.lua
+ 
+Number of tables : 1
+ 
+table_Size : 100000
+ 
+threads : 4/10 
+ 
+rate - 10
+
+```
+
+举个例子，请思考一下如果我们想知道内存在哪里被使用的情况。为了找出这一点，让我们在与内存相关的表中执行以下查询。
+
+```shell
+select * from memory_summary_global_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 3\G;
+ 
+ 
+ 
+*************************** 1. row ***************************
+ 
+                  EVENT_NAME: memory/innodb/buf_buf_pool
+ 
+                 COUNT_ALLOC: 24
+ 
+                  COUNT_FREE: 0
+ 
+   SUM_NUMBER_OF_BYTES_ALLOC: 3292102656
+ 
+    SUM_NUMBER_OF_BYTES_FREE: 0
+ 
+              LOW_COUNT_USED: 0
+ 
+          CURRENT_COUNT_USED: 24
+ 
+             HIGH_COUNT_USED: 24
+ 
+    LOW_NUMBER_OF_BYTES_USED: 0
+ 
+CURRENT_NUMBER_OF_BYTES_USED: 3292102656
+ 
+   HIGH_NUMBER_OF_BYTES_USED: 3292102656
+ 
+*************************** 2. row ***************************
+ 
+                  EVENT_NAME: memory/sql/THD::main_mem_root
+ 
+                 COUNT_ALLOC: 138566
+ 
+                  COUNT_FREE: 138543
+ 
+   SUM_NUMBER_OF_BYTES_ALLOC: 2444314336
+ 
+    SUM_NUMBER_OF_BYTES_FREE: 2443662928
+ 
+              LOW_COUNT_USED: 0
+ 
+          CURRENT_COUNT_USED: 23
+ 
+             HIGH_COUNT_USED: 98
+ 
+    LOW_NUMBER_OF_BYTES_USED: 0
+ 
+CURRENT_NUMBER_OF_BYTES_USED: 651408
+ 
+   HIGH_NUMBER_OF_BYTES_USED: 4075056
+ 
+*************************** 3. row ***************************
+ 
+                  EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
+ 
+                 COUNT_ALLOC: 58869
+ 
+                  COUNT_FREE: 58868
+ 
+   SUM_NUMBER_OF_BYTES_ALLOC: 2412676319
+ 
+    SUM_NUMBER_OF_BYTES_FREE: 2412673879
+ 
+              LOW_COUNT_USED: 0
+ 
+          CURRENT_COUNT_USED: 1
+ 
+             HIGH_COUNT_USED: 13
+ 
+    LOW_NUMBER_OF_BYTES_USED: 0
+ 
+CURRENT_NUMBER_OF_BYTES_USED: 2440
+ 
+   HIGH_NUMBER_OF_BYTES_USED: 491936
+ 
+ 
+Above are the top three records, showing where the memory is getting mostly utilized.
+```
+
+`memory/innodb/buf_buf_pool` 这个 `Instrument` 与缓冲池相关，我们可以从 `SUM_NUMBER_OF_BYTES_ALLOC` 字段获取到缓冲池被分配了 `3GB` 空间。另一个对我们来说也很重要的数据是 `CURRENT_COUNT_USED`，它告诉我们当前使用了多少数据块，一旦工作完成，该列的值将被修改。看这条记录的统计数据，`3GB` 的消耗不是问题，即使 `MySQL` 使用缓冲池的频率很高（例如，写入数据、加载数据、修改数据等）。但是当我们遇到内存泄漏问题或缓冲池未被使用时，问题就来了，在这种情况下，该 `Instrument` 对分析问题非常有用。
+
+再看第二个 `Instrument`，`memory/sql/THD::main_mem_root` 占用了 `2G` 空间，这个 `Instrument` 跟 `sql` 相关（应该从最左边开始读）。`THD::main_mem_root` 是一种线程类型。让我们试着了解这个 `Instrument`：
+
+**THD** 代表线程
+
+**main_mem_root** 是 `MEM_ROOT` 的一种类型。 `MEM_ROOT` 是一种为线程分配内存空间的结构体，这些线程用于解析查询、生成执行计划期间、执行嵌套查询/子查询期间或者其他执行查询分配资源操作。现在，在我们的例子中我们想要查看 **线程/主机** 内存消耗情况，以便我们可以进一步优化查询。在进一步深入之前，让我们先了解第三种 `Instrument`，这是一种用于搜索的重要 `Instrument`。
+
+**memory/sql/filesort_buffer::sort_keys** —— 正如我之前提到的，`Instrument` 名称应该从左侧开始阅读。这是一个和 `sql` 内存分配有关的 `Instrument`，该 `Instrument` 中的下一个组件是 **filesort_buffer::sort_keys**，它负责对数据进行排序（它可以是一个缓冲区，用于存储数据并进行排序，这方面的各种示例很多，比如创建索引或常见的 `order by` 子句）。
+
+是时候深入分析哪个连接正在使用内存了。为了找出这一点，我使用了表 **memory_summary_by_host_by_event_name** 并过滤出来自我的应用程序服务器的记录。
+
+```shell
+select * from memory_summary_by_host_by_event_name where HOST='10.11.120.141' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 2\G;
+
+*************************** 1. row ***************************
+
+                        HOST: 10.11.120.141
+
+                  EVENT_NAME: memory/sql/THD::main_mem_root
+
+                 COUNT_ALLOC: 73817
+
+                  COUNT_FREE: 73810
+
+   SUM_NUMBER_OF_BYTES_ALLOC: 1300244144
+
+    SUM_NUMBER_OF_BYTES_FREE: 1300114784
+
+              LOW_COUNT_USED: 0
+
+          CURRENT_COUNT_USED: 7
+
+             HIGH_COUNT_USED: 39
+
+    LOW_NUMBER_OF_BYTES_USED: 0
+
+CURRENT_NUMBER_OF_BYTES_USED: 129360
+
+   HIGH_NUMBER_OF_BYTES_USED: 667744
+
+*************************** 2. row ***************************
+
+                        HOST: 10.11.120.141
+
+                  EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
+
+                 COUNT_ALLOC: 31318
+
+                  COUNT_FREE: 31318
+
+   SUM_NUMBER_OF_BYTES_ALLOC: 1283771072
+
+    SUM_NUMBER_OF_BYTES_FREE: 1283771072
+
+              LOW_COUNT_USED: 0
+
+          CURRENT_COUNT_USED: 0
+
+             HIGH_COUNT_USED: 8
+
+    LOW_NUMBER_OF_BYTES_USED: 0
+
+CURRENT_NUMBER_OF_BYTES_USED: 0
+
+   HIGH_NUMBER_OF_BYTES_USED: 327936
+```
+
+主机 `11.11.120.141` 是我执行查询的应用程序主机，通过事件 **memory/sql/THD::main_mem_root** 显示，这台主机已消耗超过 `1G` 内存（内存总和）。现在我们已经知道这台主机目前内存消耗情况，我们就可以进一步挖掘以找出嵌套查询或子查询之类的查询语句，然后尝试对其进行优化。
+
+同样，如果我们看到在执行查询时 **filesort_buffer::sort_keys** 分配的内存也超过了1G（内存总会）。这些 `Instrument` 工具向我们展示了一些带有排序操作（例如：`order by` 子句）查询语句参考指标。
+
+### Time to join all dotted lines
+
+让我们尝试在文件排序使用大部分内存的情况之一中找出罪魁祸首线程。第一个查询帮助我们找到主机和事件名称（工具）：
+
+```shell
+select * from memory_summary_by_host_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
+ 
+*************************** 1. row ***************************
+ 
+                        HOST: 10.11.54.152
+ 
+                  EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
+ 
+                 COUNT_ALLOC: 5617297
+ 
+                  COUNT_FREE: 5617297
+ 
+   SUM_NUMBER_OF_BYTES_ALLOC: 193386762784
+ 
+    SUM_NUMBER_OF_BYTES_FREE: 193386762784
+ 
+              LOW_COUNT_USED: 0
+ 
+          CURRENT_COUNT_USED: 0
+ 
+             HIGH_COUNT_USED: 20
+ 
+    LOW_NUMBER_OF_BYTES_USED: 0
+ 
+CURRENT_NUMBER_OF_BYTES_USED: 0
+ 
+   HIGH_NUMBER_OF_BYTES_USED: 819840
+```
+
+这是我的应用程序主机，让我们找出正在执行的用户及其各自的线程 `ID`。
+
+```shell
+select * from memory_summary_by_account_by_event_name where HOST='10.11.54.152' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
+
+*************************** 1. row ***************************
+
+                        USER: sbuser
+
+                        HOST: 10.11.54.152
+
+                  EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
+
+                 COUNT_ALLOC: 5612993
+
+                  COUNT_FREE: 5612993
+
+   SUM_NUMBER_OF_BYTES_ALLOC: 193239513120
+
+    SUM_NUMBER_OF_BYTES_FREE: 193239513120
+
+              LOW_COUNT_USED: 0
+
+          CURRENT_COUNT_USED: 0
+
+             HIGH_COUNT_USED: 20
+
+    LOW_NUMBER_OF_BYTES_USED: 0
+
+CURRENT_NUMBER_OF_BYTES_USED: 0
+
+   HIGH_NUMBER_OF_BYTES_USED: 819840
+
+
+
+
+select * from memory_summary_by_thread_by_event_name where EVENT_NAME='memory/sql/Filesort_buffer::sort_keys' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
+
+*************************** 1. row ***************************
+
+                   THREAD_ID: 84
+
+                  EVENT_NAME: memory/sql/Filesort_buffer::sort_keys
+
+                 COUNT_ALLOC: 565645
+
+                  COUNT_FREE: 565645
+
+   SUM_NUMBER_OF_BYTES_ALLOC: 19475083680
+
+    SUM_NUMBER_OF_BYTES_FREE: 19475083680
+
+              LOW_COUNT_USED: 0
+
+          CURRENT_COUNT_USED: 0
+
+             HIGH_COUNT_USED: 2
+
+    LOW_NUMBER_OF_BYTES_USED: 0
+
+CURRENT_NUMBER_OF_BYTES_USED: 0
+
+   HIGH_NUMBER_OF_BYTES_USED: 81984
+```
+
+现在我们查到了用户及其线程 `ID` 的全部详细信息，让我们查一下这个线程正在执行哪种查询。
+
+```shell
+select * from events_statements_history where THREAD_ID=84 order by SORT_SCAN desc\G;
+
+*************************** 1. row ***************************
+
+              THREAD_ID: 84
+
+               EVENT_ID: 48091828
+
+           END_EVENT_ID: 48091833
+
+             EVENT_NAME: statement/sql/select
+
+                 SOURCE: init_net_server_extension.cc:95
+
+            TIMER_START: 145083499054314000
+
+              TIMER_END: 145083499243093000
+
+             TIMER_WAIT: 188779000
+
+              LOCK_TIME: 1000000
+
+               SQL_TEXT: SELECT c FROM sbtest2 WHERE id BETWEEN 5744223 AND 5744322 ORDER BY c
+
+                 DIGEST: 4f764af1c0d6e44e4666e887d454a241a09ac8c4df9d5c2479f08b00e4b9b80d
+
+            DIGEST_TEXT: SELECT `c` FROM `sbtest2` WHERE `id` BETWEEN ? AND ? ORDER BY `c`
+
+         CURRENT_SCHEMA: sysbench
+
+            OBJECT_TYPE: NULL
+
+          OBJECT_SCHEMA: NULL
+
+            OBJECT_NAME: NULL
+
+  OBJECT_INSTANCE_BEGIN: NULL
+
+            MYSQL_ERRNO: 0
+
+      RETURNED_SQLSTATE: NULL
+
+           MESSAGE_TEXT: NULL
+
+                 ERRORS: 0
+
+               WARNINGS: 0
+
+          ROWS_AFFECTED: 0
+
+              ROWS_SENT: 14
+
+          ROWS_EXAMINED: 28
+
+CREATED_TMP_DISK_TABLES: 0
+
+     CREATED_TMP_TABLES: 0
+
+       SELECT_FULL_JOIN: 0
+
+ SELECT_FULL_RANGE_JOIN: 0
+
+           SELECT_RANGE: 1
+
+     SELECT_RANGE_CHECK: 0
+
+            SELECT_SCAN: 0
+
+      SORT_MERGE_PASSES: 0
+
+         SORT_RANGE: 0
+
+              SORT_ROWS: 14
+
+          SORT_SCAN: 1
+
+          NO_INDEX_USED: 0
+
+     NO_GOOD_INDEX_USED: 0
+
+       NESTING_EVENT_ID: NULL
+
+     NESTING_EVENT_TYPE: NULL
+
+    NESTING_EVENT_LEVEL: 0
+
+           STATEMENT_ID: 49021382
+
+               CPU_TIME: 185100000
+
+       EXECUTION_ENGINE: PRIMARY
+```
+
+我在这里仅根据 `rows_scan`（代表的是表扫描）粘贴了一条记录，我们也可以在案例中找到类似的其他查询，然后尝试通过创建索引或其他一些合适的解决方案来优化查询。
+
+**案例二**
+
+我们来吃尝试找出表锁定的情况，例如：有哪些锁？读锁还是写锁等？已经在用户表上加锁多长时间（以**皮秒**为单位显示）。
+
+我们先给一张表加上写锁：
+
+```shell
+mysql> lock tables sbtest2 write;
+
+Query OK, 0 rows affected (0.00 sec)
+```
+
+```shell
+mysql> show processlist;
+
++----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-----------+-----------+---------------+
+
+| Id | User   | Host                | db                 | Command     | Time   | State                                                           | Info             | Time_ms   | Rows_sent | Rows_examined |
+
++----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-----------+-----------+---------------+
+
+|  8 | repl   | 10.11.139.171:53860 | NULL               | Binlog Dump | 421999 | Source has sent all binlog to replica; waiting for more updates | NULL             | 421998368 |         0 |             0 |
+
+|  9 | repl   | 10.11.223.98:51212  | NULL               | Binlog Dump | 421998 | Source has sent all binlog to replica; waiting for more updates | NULL             | 421998262 |         0 |             0 |
+
+| 25 | sbuser | 10.11.54.152:38060  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222573 |         0 |             1 |
+
+| 26 | sbuser | 10.11.54.152:38080  | sysbench           | Sleep       |  65222 |                                                                 | NULL             |  65222177 |         0 |             1 |
+
+| 27 | sbuser | 10.11.54.152:38090  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222438 |         0 |             0 |
+
+| 28 | sbuser | 10.11.54.152:38096  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222489 |         0 |             1 |
+
+| 29 | sbuser | 10.11.54.152:38068  | sysbench           | Sleep       |  65223 |                                                                 | NULL             |  65222527 |         0 |             1 |
+
+| 45 | root   | localhost           | performance_schema | Sleep       |   7722 |                                                                 | NULL             |   7722009 |        40 |           348 |
+
+| 46 | root   | localhost           | performance_schema | Sleep       |   6266 |                                                                 | NULL             |   6265800 |        16 |          1269 |
+
+| 47 | root   | localhost           | performance_schema | Sleep       |   4904 |                                                                 | NULL             |   4903622 |         0 |            23 |
+
+| 48 | root   | localhost           | performance_schema | Sleep       |   1777 |                                                                 | NULL             |   1776860 |         0 |             0 |
+
+| 54 | root   | localhost           | sysbench           | Sleep       |    689 |                                                                 | NULL             |    688740 |         0 |             1 |
+
+| 58 | root   | localhost           | NULL               | Sleep       |     44 |                                                                 | NULL             |     44263 |         1 |             1 |
+
+| 59 | root   | localhost           | sysbench           | Query       |      0 | init                                                            | show processlist |         0 |         0 |             0 |
+
++----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-
+```
+
+现在思考这样一种情况，我们不知道该会话存在，并且正在尝试读取该表数据并需要等待[元数据锁定](https://dev.mysql.com/doc/refman/5.6/en/metadata-locking.html)。在这种情况下，我们需要借助与锁相关的 `Instrument`（找出哪个会话正在锁定该表），例如：**wait/table/lock/sql/handler**（`table_handles` 表负责存储表锁相关的 `Instrument`）：
+
+```shell
+mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_ID is not null;
+
++-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
+
+| OBJECT_TYPE | OBJECT_SCHEMA | OBJECT_NAME | OBJECT_INSTANCE_BEGIN | OWNER_THREAD_ID | OWNER_EVENT_ID | INTERNAL_LOCK | EXTERNAL_LOCK  |
+
++-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
+
+| TABLE       | sysbench      | sbtest2     |       140087472317648 |             141 |             77 | NULL          | WRITE EXTERNAL |
+
++-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
+```
+
+```shell
+mysql> select * from metadata_locks;
+
++---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
+
+| OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME      | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE            | LOCK_DURATION | LOCK_STATUS | SOURCE            | OWNER_THREAD_ID | OWNER_EVENT_ID |
+
++---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
+
+| GLOBAL        | NULL               | NULL             | NULL        |       140087472151024 | INTENTION_EXCLUSIVE  | STATEMENT     | GRANTED     | sql_base.cc:5534  |             141 |             77 |
+
+| SCHEMA        | sysbench           | NULL             | NULL        |       140087472076832 | INTENTION_EXCLUSIVE  | TRANSACTION   | GRANTED     | sql_base.cc:5521  |             141 |             77 |
+
+| TABLE         | sysbench           | sbtest2          | NULL        |       140087471957616 | SHARED_NO_READ_WRITE | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             141 |             77 |
+
+| BACKUP TABLES | NULL               | NULL             | NULL        |       140087472077120 | INTENTION_EXCLUSIVE  | STATEMENT     | GRANTED     | lock.cc:1259      |             141 |             77 |
+
+| TABLESPACE    | NULL               | sysbench/sbtest2 | NULL        |       140087471954800 | INTENTION_EXCLUSIVE  | TRANSACTION   | GRANTED     | lock.cc:812       |             141 |             77 |
+
+| TABLE         | sysbench           | sbtest2          | NULL        |       140087673437920 | SHARED_READ          | TRANSACTION   | PENDING     | sql_parse.cc:6295 |             142 |             77 |
+
+| TABLE         | performance_schema | metadata_locks   | NULL        |       140088117153152 | SHARED_READ          | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             143 |            970 |
+
+| TABLE         | sysbench           | sbtest1          | NULL        |       140087543861792 | SHARED_WRITE         | TRANSACTION   | GRANTED     | sql_parse.cc:6295 |             132 |            156 |
+
++---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
+```
+
+通过查询结果我们知道 `ID` 为 `141` 的线程在 `sbtest2` 表上持有锁**SHARED_NO_READ_WRITE**，因此我们可以采取一些处理措施，例如我们可以根据实际情况，提交会话或者终止会话。我们需要从线程表中找到相应的 `processlist_id` 来杀死它。
+
+```shell
+mysql> kill 63;
+
+Query OK, 0 rows affected (0.00 sec)
+```
+
+```shell
+mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_ID is not null;
+ 
+Empty set (0.00 sec)
+```
+
+**案例三**
+
+在某些情况下，我们需要找出 `MySQL` 服务器在哪里出现等待而花费了大部分时间，以便我们可以进一步采取措施：
+
+```shell
+mysql> select * from events_waits_history order by TIMER_WAIT desc limit 2\G;
+
+*************************** 1. row ***************************
+
+            THREAD_ID: 88
+
+             EVENT_ID: 124481038
+
+         END_EVENT_ID: 124481038
+
+           EVENT_NAME: wait/io/file/sql/binlog
+
+               SOURCE: mf_iocache.cc:1694
+
+          TIMER_START: 356793339225677600
+
+            TIMER_END: 420519408945931200
+
+           TIMER_WAIT: 63726069720253600
+
+                SPINS: NULL
+
+        OBJECT_SCHEMA: NULL
+
+          OBJECT_NAME: /var/lib/mysql/mysqld-bin.000009
+
+           INDEX_NAME: NULL
+
+          OBJECT_TYPE: FILE
+
+OBJECT_INSTANCE_BEGIN: 140092364472192
+
+     NESTING_EVENT_ID: 124481033
+
+   NESTING_EVENT_TYPE: STATEMENT
+
+            OPERATION: write
+
+      NUMBER_OF_BYTES: 683
+
+                FLAGS: NULL
+
+*************************** 2. row ***************************
+
+            THREAD_ID: 142
+
+             EVENT_ID: 77
+
+         END_EVENT_ID: 77
+
+           EVENT_NAME: wait/lock/metadata/sql/mdl
+
+               SOURCE: mdl.cc:3443
+
+          TIMER_START: 424714091048155200
+
+            TIMER_END: 426449252955162400
+
+           TIMER_WAIT: 1735161907007200
+
+                SPINS: NULL
+
+        OBJECT_SCHEMA: sysbench
+
+          OBJECT_NAME: sbtest2
+
+           INDEX_NAME: NULL
+
+          OBJECT_TYPE: TABLE
+
+OBJECT_INSTANCE_BEGIN: 140087673437920
+
+     NESTING_EVENT_ID: 76
+
+   NESTING_EVENT_TYPE: STATEMENT
+
+            OPERATION: metadata lock
+
+      NUMBER_OF_BYTES: NULL
+
+                FLAGS: NULL
+
+2 rows in set (0.00 sec)
+```
+
+在上面的例子中，**bin log file** 操作已经等待了很长时间（`timer_wait` 单位是皮秒），在等待 `mysqld-bin.000009` 文件来完成 `IO` 操作。这可能是由于多种原因，例如存储空间已满。接下来的记录显示了我之前解释的示例二的详细信息。
