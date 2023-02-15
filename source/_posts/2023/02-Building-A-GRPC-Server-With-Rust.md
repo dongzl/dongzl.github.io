@@ -27,15 +27,15 @@ tags:
 
 一旦我们了解了 [gRPC](https://grpc.io/) 和 [Thrift](https://github.com/facebook/fbthrift)，就很难回到过去使用基于 `JSON` 的 `REST` `API` 或 [SOAP](https://en.wikipedia.org/wiki/SOAP) `API` 等更具过渡性的框架。
 
-`gRPC` 和 `Thrift` 这两个著名的 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好地支持，而且性能都很好。
+`gRPC` 和 `Thrift` 这两个著名的 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 框架有很多相似之处。前者源自谷歌，后者源自 `Facebook`。它们都易于使用，对各种编程语言都有很好地支持，并且性能都很好。
 
 这两个框架最有价值的功能是支持多语言代码自动生成和服务器端反射，这些特性使得 `API` 本质上是类型安全的；通过服务器端反射，无需阅读和理解接口实现，就可以更轻松地探索 `API` 的模式定义。
 
 ### gRPC 和 Thrift 对比
 
-[Apache Thrift](https://thrift.apache.org/) 在历史上一直是一个受欢迎的选择。但近年来，由于缺乏 `Facebook` 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
+[Apache Thrift](https://thrift.apache.org/) 在过去一直是一个不错的选择。但近年来由于缺乏 `Facebook` 的持续支持，再加上 [fbthrift](https://github.com/facebook/fbthrift) 的分支项目，逐渐失去了人气。
 
-与此同时，`gRPC` 已经开发了越来越多的功能，拥有更健康的生态系统。
+与此同时，`gRPC` 已经实现了越来越多的功能，拥有更健康的生态系统。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
 
@@ -51,11 +51,11 @@ tags:
 
 [GraphQL](https://github.com/graphql/graphql-spec) 是另一个由 `Facebook` 发起的框架，它与上面的两个 `RPC` 框架有许多相似之处。
 
-移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们想要保持接口向后兼容性，所以我们要么保留 `API` 中未使用的旧字段，要么创建 `API` 的多个版本；[`GraphQL` 的一个动机就是解决这个问题](https://www.youtube.com/watch?v=783ccP__No8)被设计成一种“**查询语言**”，它允许客户端指定需要的数据字段，这个特性能够更加方便地处理接口向后兼容性。
+移动端 `API` 开发过程中最大的痛点之一是有些用户从不升级他们的 `APP`。因为我们需要保持接口向后兼容性，所以我们要么保留 `API` 中已不再使用的旧字段，要么创建 `API` 的多个版本；[GraphQL 的一个目的就是为解决这个问题](https://www.youtube.com/watch?v=783ccP__No8) 而被设计成一种“**查询语言**”，它允许客户端指定需要的数据字段，这个特性能够更加方便地处理接口向后兼容性。
 
 `GraphQL` 在移动端 `API` 开发以及面向公众的 `API`（例如：`GitHub`）开发方面具有巨大优势，因为在这两种情况下，我们都无法轻易控制用户的行为。
 
-但是，如果我们正在为 `Web` 前端构建 `API` 或为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么优势。
+但是，如果我们正在为 `Web` 前端构建 `API` 或者为内部后端服务构建 `API`，那么选择 `GraphQL` 而不是 `gRPC` 几乎没有什么优势。
 
 ## Rust
 
@@ -308,7 +308,7 @@ Bookstore server listening on [::1]:50051
 
 ### 奖励：服务器端反射
 
-如开头所述，我最初对 `gRPC` 印象深刻是因为它具有进行服务端反射的能力。这不仅使服务开发过程中得心应手，也让与前端工程师的沟通变得更加容易。因此，如果不解释如何在 `Rust` 服务端代码中添加它，本教程就是不完整的。
+如开头所述，我最初对 `gRPC` 印象深刻是因为它具有进行服务端反射的能力。这不仅使服务开发过程中得心应手，也让与前端工程师的沟通变得更加容易。因此如果不解释如何在 `Rust` 服务端代码中使用反射功能，本教程就是不完整的。
 
 将以下内容添加到依赖项中：
 
