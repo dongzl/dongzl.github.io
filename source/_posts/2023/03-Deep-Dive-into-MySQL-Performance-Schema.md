@@ -10,7 +10,7 @@ author:
     link: https://www.percona.com/blog/author/ankit-kapoor/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何在不使用连接器或外部库的情况下从头开始编写我们自己的原生 MySQL 客户端。
+subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何借助 `performance schema` 中 `Instrument` 工具来排查 `MySQL` 数据库的一些问题。
 
 categories: 
   - 数据库
@@ -606,12 +606,22 @@ OBJECT_INSTANCE_BEGIN: 140087673437920
 
 为了让工作更轻松，能够更方便地监控这些 `Instrument`，[Percona Monitoring and Management(PMM)](https://docs.percona.com/percona-monitoring-and-management/index.html) 扮演着重要的角色。例如，请参见下面的快照信息。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/01.png" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/01.png" />
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/02.png" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/02.png" />
 
 我们仅使用这些图表，几乎可以将所有的 `Instrument` 通过配置成进行监控，而不是使用 `SQL` 进行查询。如果要熟悉这些内容，请查看 PMM [示例](https://pmm2demo.percona.com/graph/d/mysql-performance-schema/mysql-performance-schema-details?from=now-12h&to=now&var-interval=$__auto_interval_interval&var-environment=All&var-node_name=&var-crop_host=&var-service_name=pxc57-2-mysql&var-region=&var-cluster=PXCCluster1&var-node_id=&var-agent_id=&var-service_id=%2Fservice_id%2F03d49df4-3870-460b-a5e4-94647b56a99d&var-az=&var-node_type=All&var-node_model=&var-replication_set=All&var-version=&var-service_type=All&var-database=All&var-username=All&var-schema=All&orgId=1&refresh=1m)。
 
 显然，了解 `performance schema` 对我们有很大帮助，但同时启用这个特性会产生额外成本并影响性能。因此在许多场景下，[Percona Toolkit](https://docs.percona.com/percona-toolkit/) 能够在不影响数据库性能的情况下发挥很大有用。例如：`pt-index-usage`、`pt-online-schema-change`、`pt-query-digest`等工具。
 
+**几点重要说明**
 
+1. 历史表会在一段时间后加载，而不是立即加载。只有在一个线程活动完成之后。
+2. 启用所有工具可能会影响您的 MySQL 的性能，因为我们正在启用对这些内存表的更多写入。此外，它还会对您的预算施加额外的资金。因此仅根据要求启用。
+3. PMM 包含大部分仪器，也可以根据您的要求配置更多。
+4. 您不需要记住所有表的名称。您可以只使用 PMM 或使用连接来创建查询。本文将整个概念散列成更小的块，因此没有使用任何连接，以便读者可以理解它。
+5. 启用多种仪器的最佳方法是在暂存环境中优化您的发现，然后转移到生产环境中。
+
+### 总结
+
+在对 `MySQL` 服务器的行为进行故障排除时，性能模式非常有用。您需要找出您需要的仪器。如果您仍在为性能而苦恼，请随时联系我们，我们将非常乐意为您提供帮助。
