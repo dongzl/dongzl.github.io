@@ -1,6 +1,6 @@
 ---
-title: 深入探究 MySQL 数据库 Performance Schema
-date: 2023-02-17 20:03:22
+title: Rust vs Go in 2023
+date: 2023-02-25 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/Rust-vs-Go.png
 
 # author information, multiple authors are set to array
