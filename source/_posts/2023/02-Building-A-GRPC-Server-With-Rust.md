@@ -37,11 +37,11 @@ tags:
 
 与此同时，`gRPC` 已经实现了越来越多的功能，拥有更健康的生态系统。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.webp" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.png" style="width:600px"/>
 
 <font color=DarkGray size=2>gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends](https://trends.google.com/trends/explore?date=all&q=GRPC,%2Fm%2F02qd4d1)</font>
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/02.webp" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/02.png" style="width:600px"/>
 
 <font color=DarkGray size=2>gRPC、fbThrift 和 Apache Thrift GitHub star 历史数据。[https://star-history.com](https://star-history.com/#grpc/grpc&facebook/fbthrift&apache/thrift&Date)</font>
 
@@ -63,7 +63,7 @@ tags:
 
 根据 `Stack Overflow` 上的一项[调查](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)显示：“在过去的六年时间里，`Rust` 是最受欢迎的编程语言。”尽管学习曲线相对陡峭，但是它的类型安全、优雅的内存管理、广泛的社区支持和性能，都使 `Rust` 成为一种非常有吸引力和有前途的服务端编程语言。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/03.webp" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/03.png" style="width:600px"/>
 
 <font color=DarkGray size=2>Rust 是最受喜爱的编程语言。[Stack Overflow Survey 2021](https://insights.stackoverflow.com/survey/2021#most-loved-dreaded-and-wanted-language-love-dread)</font>
 
