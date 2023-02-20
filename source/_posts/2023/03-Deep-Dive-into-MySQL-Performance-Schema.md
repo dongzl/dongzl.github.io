@@ -38,7 +38,7 @@ tags:
 > 3. At which execution stage is a query taking time, or how much time will an alter command will take?
 > 4. Which process is consuming most of the memory or how to identify the cause of memory leakage?
 
-## 就 performance schema 而言，什么是 Instrument？
+### 就 performance schema 而言，什么是 Instrument？
 
 `Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常有用的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，组件之间使用“/”分隔符进行分割。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂、越具体，即 `Instrument` 越长，它就越复杂。
 
@@ -102,7 +102,7 @@ select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from pe
 +-----------------+----------+
 ```
 
-## 如何找到你需要的 `Instrument`
+### 如何找到你需要的 Instrument
 
 我清楚地记得有位客户问我，既然有成千上万种 `Instrument` 可供选择，他如何才能找到他需要的那一种。正如我之前提到的，`Instrument` 是从左到右阅读的，我们可以找出我们需要的 `Instrument`，然后找到它各自代表的性能指标。
 
@@ -150,7 +150,7 @@ select * from setup_instruments where PROPERTIES='progress';
 
 上述 `Instrument` 是可以进行跟踪定位的工具。
 
-## 如何准备 `Instrument` 来解决性能问题
+### 如何准备 Instrument 来解决性能问题
 
 要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。我们查看一下默认情况下所使用版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
 
@@ -247,7 +247,7 @@ Query OK, 1 row affected (0.00 sec)
 Rows matched: 1  Changed: 1  Warnings: 0
 ```
 
-## 如何充分利用 `performance schema`
+### 如何充分利用 performance schema
 
 现在我们知道什么是 `Instrument`、如何启用它们以及我们要存储的数据量，是时候了解如何使用这些 `Instrument` 了。为了更容易理解，我从测试用例中提取了一些 `Instrument` 的输出，因为有超过一千种 `Instrument`，我们的测试不可能覆盖所有。
 
@@ -358,7 +358,7 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 
 同样，如果我们看到在执行查询时 **filesort_buffer::sort_keys** 分配的内存也超过了1G（内存总会）。这些 `Instrument` 工具向我们展示了一些带有排序操作（例如：`order by` 子句）查询语句参考指标。
 
-### 是时候加入一些虚线指标
+#### 是时候加入一些虚线指标
 
 我们尝试查找出在文件排序时占用大量内存这种情况下的罪魁祸首线程。第一个查询帮助我们找到主机和事件名称（`Instrument`）：
 
@@ -503,7 +503,7 @@ mysql> show processlist;
 | 54 | root   | localhost           | sysbench           | Sleep       |    689 |                                                                 | NULL             |    688740 |         0 |             1 |
 | 58 | root   | localhost           | NULL               | Sleep       |     44 |                                                                 | NULL             |     44263 |         1 |             1 |
 | 59 | root   | localhost           | sysbench           | Query       |      0 | init                                                            | show processlist |         0 |         0 |             0 |
-+----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-------------------+-------------------+-------------------+-------------------+
++----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-------------------+-------------------+
 ```
 
 现在思考这样一种情况，我们不知道该会话存在，并且正在尝试读取该表数据并需要等待[元数据锁定](https://dev.mysql.com/doc/refman/5.6/en/metadata-locking.html)。在这种情况下，我们需要借助与锁相关的 `Instrument`（找出哪个会话正在锁定该表），例如：**wait/table/lock/sql/handler**（`table_handles` 表负责存储表锁相关的 `Instrument`）：
