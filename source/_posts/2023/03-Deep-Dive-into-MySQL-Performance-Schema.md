@@ -108,7 +108,7 @@ select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from pe
 
 例如，如果我们需要观察 `MySQL` 实例的 `redo` 日志（日志文件或 `WAL` 文件）的性能，需要检查线程/连接在写入数据之前，是否需要等待 `redo` 日志文件刷新到磁盘，如果需要等待，将会等待多长时间？
 
-```shell
+```sql
 select * from setup_instruments where name like '%innodb_log_file%';
 
 +-----------------------------------------+---------+-------+------------+------------+---------------+
@@ -123,7 +123,7 @@ select * from setup_instruments where name like '%innodb_log_file%';
 
 示例二，我们需要找出可以计算花费时间的操作或工具，即批量更新需要多少时间。以下是所有可以帮助我们进行定位的 `Instrument`。
 
-```shell
+```sql
 select * from setup_instruments where PROPERTIES='progress';        
  
 +------------------------------------------------------+---------+-------+------------+------------+---------------+
@@ -154,7 +154,7 @@ select * from setup_instruments where PROPERTIES='progress';
 
 要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。我们查看一下默认情况下所使用版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
 
-```shell
+```sql
 select count(*) from setup_instruments where ENABLED='YES';
 
 +----------+
@@ -168,7 +168,7 @@ select count(*) from setup_instruments where ENABLED='YES';
 
 下面的查询列出了前 `30` 个启用的 `Instrument`，它们将在表中进行日志记录。
 
-```shell
+```sql
 select * from performance_schema.setup_instruments where enabled='YES' limit 30;
 
 
@@ -210,7 +210,7 @@ select * from performance_schema.setup_instruments where enabled='YES' limit 30;
 
 正如我之前提到的，还可以维护事件的历史记录。例如，如果我们正在进行负载测试并希望分析查询完成后的性能，则需要激活以下事件（如果尚未激活）。
 
-```shell
+```sql
 select * from performance_schema.setup_consumers;
  
 +----------------------------------+---------+
@@ -239,7 +239,7 @@ select * from performance_schema.setup_consumers;
 
 比如说我们想分析在查询哪个阶段花费了大量的时间，我们需要使用以下语句启用相应的日志记录。
 
-```shell
+```sql
 MySQL> update performance_schema.setup_consumers set ENABLED='YES' where NAME='events_stages_current';
 
 Query OK, 1 row affected (0.00 sec)
@@ -268,7 +268,7 @@ rate - 10
 
 举个例子，思考一下如果我们想知道内存被使用的情况，为了找出这一点，我们可以在与内存相关的表中执行以下查询。
 
-```shell
+```sql
 select * from memory_summary_global_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 3\G;
  
 *************************** 1. row ***************************
@@ -323,7 +323,7 @@ Above are the top three records, showing where the memory is getting mostly util
 
 是时候深入分析哪个连接正在使用内存了。为了找出这一点，我使用了表 **memory_summary_by_host_by_event_name** 并过滤出来自我的应用程序服务器的记录。
 
-```shell
+```sql
 select * from memory_summary_by_host_by_event_name where HOST='10.11.120.141' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 2\G;
 
 *************************** 1. row ***************************
@@ -362,7 +362,7 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 
 我们尝试查找出在文件排序时占用大量内存这种情况下的罪魁祸首线程。第一个查询帮助我们找到主机和事件名称（`Instrument`）：
 
-```shell
+```sql
 select * from memory_summary_by_host_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
  
 *************************** 1. row ***************************
@@ -382,7 +382,7 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 
 这是我的应用程序主机，让我们找出正在执行的用户及其各自的线程 `ID`。
 
-```shell
+```sql
 select * from memory_summary_by_account_by_event_name where HOST='10.11.54.152' order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 1\G;
 
 *************************** 1. row ***************************
@@ -419,7 +419,7 @@ CURRENT_NUMBER_OF_BYTES_USED: 0
 
 现在我们查到了用户及其线程 `ID` 的全部详细信息，让我们查一下这个线程正在执行哪种查询。
 
-```shell
+```sql
 select * from events_statements_history where THREAD_ID=84 order by SORT_SCAN desc\G;
 
 *************************** 1. row ***************************
@@ -477,13 +477,13 @@ CREATED_TMP_DISK_TABLES: 0
 
 我们先给一张表加上写锁：
 
-```shell
+```sql
 mysql> lock tables sbtest2 write;
 
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-```shell
+```sql
 mysql> show processlist;
 
 +----+--------+---------------------+--------------------+-------------+--------+-----------------------------------------------------------------+------------------+-----------+-----------+---------------+
@@ -508,7 +508,7 @@ mysql> show processlist;
 
 现在思考这样一种情况，我们不知道该会话存在，并且正在尝试读取该表数据并需要等待[元数据锁定](https://dev.mysql.com/doc/refman/5.6/en/metadata-locking.html)。在这种情况下，我们需要借助与锁相关的 `Instrument`（找出哪个会话正在锁定该表），例如：**wait/table/lock/sql/handler**（`table_handles` 表负责存储表锁相关的 `Instrument`）：
 
-```shell
+```sql
 mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_ID is not null;
 
 +-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
@@ -518,7 +518,7 @@ mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_
 +-------------+---------------+-------------+-----------------------+-----------------+----------------+---------------+----------------+
 ```
 
-```shell
+```sql
 mysql> select * from metadata_locks;
 
 +---------------+--------------------+------------------+-------------+-----------------------+----------------------+---------------+-------------+-------------------+-----------------+----------------+
@@ -537,13 +537,13 @@ mysql> select * from metadata_locks;
 
 通过查询结果我们知道 `ID` 为 `141` 的线程在 `sbtest2` 表上持有锁**SHARED_NO_READ_WRITE**，因此我们可以采取一些处理措施，例如我们可以根据实际情况，提交会话或者终止会话。我们需要从线程表中找到相应的 `processlist_id` 来杀死它。
 
-```shell
+```sql
 mysql> kill 63;
 
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-```shell
+```sql
 mysql> select * from table_handles where object_name='sbtest2' and OWNER_THREAD_ID is not null;
  
 Empty set (0.00 sec)
@@ -604,24 +604,24 @@ OBJECT_INSTANCE_BEGIN: 140087673437920
 
 ### 还有什么？
 
-为了让工作更轻松，能够更方便地监控这些 `Instrument`，[Percona Monitoring and Management(PMM)](https://docs.percona.com/percona-monitoring-and-management/index.html) 扮演着重要的角色。例如，请参见下面的快照信息。
+为了让工作更轻松，能够更方便地监控这些 `Instrument`，[Percona Monitoring and Management(PMM)](https://docs.percona.com/percona-monitoring-and-management/index.html) 扮演着重要的角色。例如，请参见下面的截图信息。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/01.png" />
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Deep-Dive-into-MySQL-Performance-Schema/02.png" />
 
-我们仅使用这些图表，几乎可以将所有的 `Instrument` 通过配置成进行监控，而不是使用 `SQL` 进行查询。如果要熟悉这些内容，请查看 PMM [示例](https://pmm2demo.percona.com/graph/d/mysql-performance-schema/mysql-performance-schema-details?from=now-12h&to=now&var-interval=$__auto_interval_interval&var-environment=All&var-node_name=&var-crop_host=&var-service_name=pxc57-2-mysql&var-region=&var-cluster=PXCCluster1&var-node_id=&var-agent_id=&var-service_id=%2Fservice_id%2F03d49df4-3870-460b-a5e4-94647b56a99d&var-az=&var-node_type=All&var-node_model=&var-replication_set=All&var-version=&var-service_type=All&var-database=All&var-username=All&var-schema=All&orgId=1&refresh=1m)。
+我们仅使用这些图表，几乎可以将所有的 `Instrument` 通过配置成进行监控，而不用进行数据查询。如果要熟悉这些内容，请查看 PMM [示例](https://pmm2demo.percona.com/graph/d/mysql-performance-schema/mysql-performance-schema-details?from=now-12h&to=now&var-interval=$__auto_interval_interval&var-environment=All&var-node_name=&var-crop_host=&var-service_name=pxc57-2-mysql&var-region=&var-cluster=PXCCluster1&var-node_id=&var-agent_id=&var-service_id=%2Fservice_id%2F03d49df4-3870-460b-a5e4-94647b56a99d&var-az=&var-node_type=All&var-node_model=&var-replication_set=All&var-version=&var-service_type=All&var-database=All&var-username=All&var-schema=All&orgId=1&refresh=1m)。
 
-显然，了解 `performance schema` 对我们有很大帮助，但同时启用这个特性会产生额外成本并影响性能。因此在许多场景下，[Percona Toolkit](https://docs.percona.com/percona-toolkit/) 能够在不影响数据库性能的情况下发挥很大有用。例如：`pt-index-usage`、`pt-online-schema-change`、`pt-query-digest`等工具。
+显然，了解 `performance schema` 对我们有很大帮助，但是启用这个特性会产生额外成本，会影响数据库性能。因此在许多场景下，[Percona Toolkit](https://docs.percona.com/percona-toolkit/) 能够在不影响数据库性能的情况下发挥很大有用。例如：`pt-index-usage`、`pt-online-schema-change`、`pt-query-digest`等工具。
 
 **几点重要说明**
 
-1. 历史表会在一段时间后加载，而不是立即加载。只有在一个线程活动完成之后。
-2. 启用所有工具可能会影响您的 MySQL 的性能，因为我们正在启用对这些内存表的更多写入。此外，它还会对您的预算施加额外的资金。因此仅根据要求启用。
-3. PMM 包含大部分仪器，也可以根据您的要求配置更多。
-4. 您不需要记住所有表的名称。您可以只使用 PMM 或使用连接来创建查询。本文将整个概念散列成更小的块，因此没有使用任何连接，以便读者可以理解它。
-5. 启用多种仪器的最佳方法是在暂存环境中优化您的发现，然后转移到生产环境中。
+1. 只有在一个线程执行完成之后，历史表数据会在一段时间后加载，而不会立即进行加载；
+2. 启用所有 `Instrument` 可能会影响 `MySQL` 性能，因为一旦开启后，会向内存表写入更多数据。此外我们可能需要投入更多额外的预算，所以尽量根据需要去启用 `Instrument`；
+3. `PMM` 包含大部分 `Instrument`，我们也可以根据需要配置更多 `Instrument` 监控；
+4. 我们不需要记住所有表的名称。我们可以只使用 `PMM` 或使用表连接来创建查询。本文将整个概念分散成多个小部分内容，因此没有使用任何连接操作，以便读者可以更好理解它；
+5. 启用多种 `Instrument` 的最佳方式是先在预生产环境进行优化，然后再转移到生产环境中。
 
 ### 总结
 
-在对 `MySQL` 服务器的行为进行故障排除时，性能模式非常有用。您需要找出您需要的仪器。如果您仍在为性能而苦恼，请随时联系我们，我们将非常乐意为您提供帮助。
+在对 `MySQL` 服务器进行故障排查时，`performance schema` 非常有用。我们需要找出所需要的 `Instrument`。如果我们仍在为数据库性能而烦恼，请随时联系我们，我们将非常乐意为您提供帮助。
