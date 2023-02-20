@@ -22,15 +22,15 @@ tags:
 
 > 原文链接：https://www.percona.com/blog/deep-dive-into-mysqls-performance-schema/
 
-最近我正在与一位客户合作，我们工作的重点是对其多个 `MySQL` 数据库节点进行性能审计。我们开始研究 `performance schema` 的统计数据。在工作中，客户提出了两个有趣的问题：他如何才能充分利用 `performance schema`，他又如何找到他需要的东西？我意识到了解 `performance schema` 的意义，以及如何有效地利用它是非常重要的。这个博客应该让每个人都更容易理解 `performance schema`。
+最近我正在与一位客户合作，我们工作的重点是对客户的多个 `MySQL` 数据库节点进行性能审计。我们开始研究 `performance schema` 的一些统计数据。在工作中客户提出了两个有趣的问题：他如何才能充分利用 `performance schema`，他又如何找到他需要的东西？我意识到理解 `performance schema` 的内部实现，并知道如何有效地利用它是非常重要的。这个博客的目的是让每个人都能够更容易理解 `performance schema`。
 
-`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便检查它是否已被启用。它完全建立在各种的工具集（也可以称为事件名称）之上，这些工具集（事件名称）分别服务于不同目的。
+`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便查看它是否已被启用。它完全建立在各种的工具集（也可以称为事件名称）之上，这些工具集（事件名称）分别服务于不同目的。
 
-`Instrument` 是性能模式的主要部分，当我想调查一个问题及其根本原因时，它非常有用；下面我列出了一些示例（但不限于如下内容）：
+`Instrument` 是 `performance schema` 的主要组成部分，当我们想调查一个问题及其出现的根本原因时，它非常有用；下面我列出了一些示例（但不限于如下内容）：
 
 - **1、哪个 `IO` 操作导致 `MySQL` 变慢？**
 - **2、进程/线程主要在等待哪个文件？**
-- **3、查询在哪个执行阶段需要时间，或者 `alter` 命令将花费多少时间？**
+- **3、查询在每个执行阶段需要花费时间，或者 `alter` 命令将花费多少时间？**
 - **4、哪个进程消耗了大部分内存或如何确定内存泄漏的原因？**
 
 > 1. Which IO operation is causing MySQL to slow down?
@@ -40,9 +40,9 @@ tags:
 
 ## 就 performance schema 而言，什么是 Instrument？
 
-`Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常意义的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，然后组件将添加分隔符“/”。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂或越具体，即 `Instrument` 越长，它就越复杂。
+`Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常有用的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，组件之间使用“/”分隔符进行分割。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂、越具体，即 `Instrument` 越长，它就越复杂。
 
-我们可以在表 `setup_instruments` 下找到所使用的 `MySQL` 版本中所有可用的 `Instrument`。值得注意的是，每个版本的 `MySQL` 都有不同数量的 `Instrument`。
+我们可以在所使用的 `MySQL` 版本 `setup_instruments` 表中找到所有可用的 `Instrument`。值得注意的是，每个版本的 `MySQL` 都有不同数量的 `Instrument`。
 
 ```sql
 select count(1) from performance_schema.setup_instruments;
@@ -56,7 +56,7 @@ select count(1) from performance_schema.setup_instruments;
 +----------+
 ```
 
-为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们曾经只有四个，因此如果您使用不同/较低版本，我们期望可能会看到不同类型的 `Instrument`。
+为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们只能使用其中四个部分，因此如果使用不同或者较低 `MySQL` 版本，我们可能会看到不同类型的 `Instrument`。
 
 ```sql
 select distinct(substring_index(name,'/',1)) from performance_schema.setup_instruments;
@@ -77,14 +77,14 @@ select distinct(substring_index(name,'/',1)) from performance_schema.setup_instr
 ```
 
 - **Stage** - 以 `stage` 开头的 `Instrument` 提供所有查询的执行阶段，如读取数据、发送数据、修改表、检查查询缓存等等。例如 `stage/sql/altering table`；
-- **Wait** - 以 `wait` 开头的 `Instrument` 放在这里，像互斥锁等待、文件等待、`I/O` 等待和表等待，这个 `Instrument` 可以是 **wait/io/file/sql/map**；
+- **Wait** - 以 `wait` 开头的 `Instrument` 放在这里，像互斥锁等待、文件等待、`I/O` 等待和表等待。这个 `Instrument` 的一个示例 **wait/io/file/sql/map**；
 - **Memory** - 以 `memory` 开头的 `Instrument` 提供有关每个线程内存使用情况的信息，例如 **memory/sql/MYSQL_BIN_LOG**；
 - **Statement** - 以 `statement` 开头的 `Instrument` 提供有关 `SQL` 类型和存储过程的信息；
-- **Idle** - 提供有关套接字连接的信息和与线程相关的信息；
+- **Idle** - 提供有关套接字连接的信息和与连接相关线程的信息；
 - **Transaction** - 提供与事务相关的信息并且只有一种 `Instrument`；
-- **Error** - 该单一 `Instrument` 提供与用户活动产生的错误相关的信息，该 `Instrument` 没有附加其他组件；
+- **Error** - `Error` 只有一种 `Instrument`，它提供用户操作过程中产生的错误信息，该 `Instrument` 没有附加其他组件。
 
-下面列出了这七个组件的 `Instrument` 总数，我们可以仅以这些名称开头来识别这些 `Instrument`。
+下面列出了这七个组件的 `Instrument` 总数，我们可以仅以这些名称起始来识别这些 `Instrument`。
 
 ```sql
 select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from performance_schema.setup_instruments group by instrument_name;
@@ -106,7 +106,7 @@ select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from pe
 
 我清楚地记得有位客户问我，既然有成千上万种 `Instrument` 可供选择，他如何才能找到他需要的那一种。正如我之前提到的，`Instrument` 是从左到右阅读的，我们可以找出我们需要的 `Instrument`，然后找到它各自代表的性能指标。
 
-例如 - 我需要观察我的 `MySQL` 实例的 `redo` 日志（日志文件或 `WAL` 文件）的性能，并且需要检查线程/连接在写入数据之前，是否需要等待重做日志文件被刷新到磁盘，如果需要会查询出多少内容。
+例如，如果我们需要观察 `MySQL` 实例的 `redo` 日志（日志文件或 `WAL` 文件）的性能，需要检查线程/连接在写入数据之前，是否需要等待 `redo` 日志文件刷新到磁盘，如果需要等待，将会等待多长时间？
 
 ```shell
 select * from setup_instruments where name like '%innodb_log_file%';
@@ -119,9 +119,9 @@ select * from setup_instruments where name like '%innodb_log_file%';
 +-----------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
-在这里你看到我有两个用于重做日志文件的工具。一个是关于重做日志文件的互斥锁统计信息，第二个是关于重做日志文件的 `IO` 等待统计信息。
+在这里显示我有两个用于 `redo` 日志文件的工具。一个是关于 `redo` 日志文件的互斥锁统计信息，第二个是关于 `redo` 日志文件的 `IO` 等待统计信息。
 
-示例二 - 您需要找出可以计算所需时间的操作或工具，即批量更新需要多少时间。以下是所有可以帮助您找到相同位置的工具。
+示例二，我们需要找出可以计算花费时间的操作或工具，即批量更新需要多少时间。以下是所有可以帮助我们进行定位的 `Instrument`。
 
 ```shell
 select * from setup_instruments where PROPERTIES='progress';        
@@ -148,11 +148,11 @@ select * from setup_instruments where PROPERTIES='progress';
 +------------------------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
-上述工具是可以跟踪其进展的工具。
+上述 `Instrument` 是可以进行跟踪定位的工具。
 
 ## 如何准备 `Instrument` 来解决性能问题
 
-要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。让我们看看，默认情况下我所使用的版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
+要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。我们查看一下默认情况下所使用版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
 
 ```shell
 select count(*) from setup_instruments where ENABLED='YES';
@@ -208,7 +208,7 @@ select * from performance_schema.setup_instruments where enabled='YES' limit 30;
 +---------------------------------------+---------+-------+------------+------------+---------------+
 ```
 
-正如我之前提到的，还可以维护事件的历史记录。例如，如果我们正在运行负载测试并希望分析查询完成后的性能，则需要激活以下消费者（如果尚未激活）。
+正如我之前提到的，还可以维护事件的历史记录。例如，如果我们正在进行负载测试并希望分析查询完成后的性能，则需要激活以下事件（如果尚未激活）。
 
 ```shell
 select * from performance_schema.setup_consumers;
@@ -235,9 +235,9 @@ select * from performance_schema.setup_consumers;
 +----------------------------------+---------+
 ```
 
-注意 – 上面行中的前 `15` 条记录的意思是不言自明的，但最后一条用于摘要意味着允许记录 `SQL` 语句的摘要文本。我的意思是摘要内容，将相似的查询分组并显示它们的性能。这是通过哈希算法完成的。
+注意：上面列出的前 `15` 条记录的意思是不言而喻的，但最后一条与摘要相关事件作用是允许记录 `SQL` 语句的摘要文本。我的意思是摘要内容，将相似的查询分组并显示它们的性能，这是通过哈希算法完成的。
 
-比方说，您想分析花费大部分时间的查询的阶段，您需要使用以下查询启用相应的日志记录。
+比如说我们想分析在查询哪个阶段花费了大量的时间，我们需要使用以下语句启用相应的日志记录。
 
 ```shell
 MySQL> update performance_schema.setup_consumers set ENABLED='YES' where NAME='events_stages_current';
@@ -249,9 +249,9 @@ Rows matched: 1  Changed: 1  Warnings: 0
 
 ## 如何充分利用 `performance schema`
 
-现在我们知道什么是 `Instrument`、如何启用它们以及我们要存储的数据量，是时候了解如何使用这些 `Instrument` 了。为了更容易理解，我从我的测试用例中提取了一些 `Instrument` 的输出，因为有超过一千种 `Instrument`，我们的测试不可能覆盖所有。
+现在我们知道什么是 `Instrument`、如何启用它们以及我们要存储的数据量，是时候了解如何使用这些 `Instrument` 了。为了更容易理解，我从测试用例中提取了一些 `Instrument` 的输出，因为有超过一千种 `Instrument`，我们的测试不可能覆盖所有。
 
-请注意为了生成模拟负载，我使用了 `sysbench`（如果不熟悉它，可以阅读[此处](https://github.com/akopytov/sysbench)文档）以使用以下详细信息创建读写流量：
+请注意为了生成模拟负载，我使用了 `sysbench`（如果不熟悉它，可以阅读[此处](https://github.com/akopytov/sysbench)文档）工具，它可以使用以下内容创建读写流量：
 
 ```lua
 lua : oltp_read_write.lua
@@ -266,7 +266,7 @@ rate - 10
 
 ```
 
-举个例子，请思考一下如果我们想知道内存在哪里被使用的情况。为了找出这一点，让我们在与内存相关的表中执行以下查询。
+举个例子，思考一下如果我们想知道内存被使用的情况，为了找出这一点，我们可以在与内存相关的表中执行以下查询。
 
 ```shell
 select * from memory_summary_global_by_event_name order by SUM_NUMBER_OF_BYTES_ALLOC desc limit 3\G;
@@ -311,15 +311,15 @@ CURRENT_NUMBER_OF_BYTES_USED: 2440
 Above are the top three records, showing where the memory is getting mostly utilized.
 ```
 
-`memory/innodb/buf_buf_pool` 这个 `Instrument` 与缓冲池相关，我们可以从 `SUM_NUMBER_OF_BYTES_ALLOC` 字段获取到缓冲池被分配了 `3GB` 空间。另一个对我们来说也很重要的数据是 `CURRENT_COUNT_USED`，它告诉我们当前使用了多少数据块，一旦工作完成，该列的值将被修改。看这条记录的统计数据，`3GB` 的消耗不是问题，即使 `MySQL` 使用缓冲池的频率很高（例如，写入数据、加载数据、修改数据等）。但是当我们遇到内存泄漏问题或缓冲池未被使用时，问题就来了，在这种情况下，该 `Instrument` 对分析问题非常有用。
+`memory/innodb/buf_buf_pool` 这个 `Instrument` 与缓冲池相关，我们可以从 `SUM_NUMBER_OF_BYTES_ALLOC` 字段了解到缓冲池被分配了 `3GB` 空间。另一个对我们来说也很重要的数据是 `CURRENT_COUNT_USED`，它告诉我们当前使用了多少数据块，一旦工作完成，该列的值将被修改。看这条记录的统计数据，`3GB` 的消耗不是问题，即使 `MySQL` 非常频繁地使用缓冲池（例如，写入数据、加载数据、修改数据等）。但是当我们遇到内存泄漏问题或缓冲池未被使用时，问题就来了，在这种情况下，该 `Instrument` 对分析问题非常有用。
 
-再看第二个 `Instrument`，`memory/sql/THD::main_mem_root` 占用了 `2G` 空间，这个 `Instrument` 跟 `sql` 相关（应该从最左边开始读）。`THD::main_mem_root` 是一种线程类型。让我们试着了解这个 `Instrument`：
+再看第二个 `Instrument`，`memory/sql/THD::main_mem_root` 占用了 `2G` 空间，这个 `Instrument` 跟 `SQL` 相关（应该从最左边开始读）。`THD::main_mem_root` 是一种线程类型。让我们试着了解这个 `Instrument`：
 
 **THD** 代表线程
 
-**main_mem_root** 是 `MEM_ROOT` 的一种类型。 `MEM_ROOT` 是一种为线程分配内存空间的结构体，这些线程用于解析查询、生成执行计划期间、执行嵌套查询/子查询期间或者其他执行查询分配资源操作。现在，在我们的例子中我们想要查看 **线程/主机** 内存消耗情况，以便我们可以进一步优化查询。在进一步深入之前，让我们先了解第三种 `Instrument`，这是一种用于搜索的重要 `Instrument`。
+**main_mem_root** 是 `MEM_ROOT` 的一种类型。 `MEM_ROOT` 是一种为线程分配内存空间的结构体，这些线程用于解析查询、生成执行计划期间、执行嵌套查询/子查询期间或者其他执行查询分配资源操作。现在，在我们的例子中我们想要查看 **线程/主机** 内存消耗情况，以便我们可以进一步优化查询。在进一步深入学习之前，让我们先了解第三种 `Instrument`，这是一种用于搜索的重要 `Instrument`。
 
-**memory/sql/filesort_buffer::sort_keys** —— 正如我之前提到的，`Instrument` 名称应该从左侧开始阅读。这是一个和 `sql` 内存分配有关的 `Instrument`，该 `Instrument` 中的下一个组件是 **filesort_buffer::sort_keys**，它负责对数据进行排序（它可以是一个缓冲区，用于存储数据并进行排序，这方面的各种示例很多，比如创建索引或常见的 `order by` 子句）。
+**memory/sql/filesort_buffer::sort_keys** —— 正如我之前提到的，`Instrument` 名称应该从左侧开始阅读。这是一个和 `SQL` 内存分配有关的 `Instrument`，该 `Instrument` 中的下一个组件是 **filesort_buffer::sort_keys**，它负责对数据进行排序（它可以是一个缓冲区，用于存储数据并进行排序，这方面的各种示例很多，比如索引创建或常见的 `order by` 子句）。
 
 是时候深入分析哪个连接正在使用内存了。为了找出这一点，我使用了表 **memory_summary_by_host_by_event_name** 并过滤出来自我的应用程序服务器的记录。
 
