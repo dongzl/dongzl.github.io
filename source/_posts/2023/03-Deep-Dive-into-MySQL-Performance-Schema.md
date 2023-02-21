@@ -24,9 +24,9 @@ tags:
 
 最近我正在与一位客户合作，我们工作的重点是对客户的多个 `MySQL` 数据库节点进行性能审计。我们开始研究 `performance schema` 的一些统计数据。在工作中客户提出了两个有趣的问题：他如何才能充分利用 `performance schema`，他又如何找到他需要的东西？我意识到理解 `performance schema` 的内部实现，并知道如何有效地利用它是非常重要的。这个博客的目的是让每个人都能够更容易理解 `performance schema`。
 
-`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便查看它是否已被启用。它完全建立在各种的工具集（也可以称为事件名称）之上，这些工具集（事件名称）分别服务于不同目的。
+`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便查看它是否已被启用。它完全建立在各种的 `Instrument` 集合（也可以称为事件名称）之上，这些 `Instrument` 集合分别服务于不同目的。
 
-`Instrument` 是 `performance schema` 的主要组成部分，当我们想调查一个问题及其出现的根本原因时，它非常有用；下面我列出了一些示例（但不限于如下内容）：
+`Instrument` 是 `performance schema` 的主要组成部分，当我们想排查一个问题及其出现的根本原因时，它非常有用；下面我列出了一些示例（但不限于如下内容）：
 
 - **1、哪个 `IO` 操作导致 `MySQL` 变慢？**
 - **2、进程/线程主要在等待哪个文件？**
@@ -38,7 +38,7 @@ tags:
 > 3. At which execution stage is a query taking time, or how much time will an alter command will take?
 > 4. Which process is consuming most of the memory or how to identify the cause of memory leakage?
 
-### 就 performance schema 而言，什么是 Instrument？
+### Instrument 在 performance schema 中的作用
 
 `Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常有用的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，组件之间使用“/”分隔符进行分割。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂、越具体，即 `Instrument` 越长，它就越复杂。
 
@@ -50,9 +50,7 @@ select count(1) from performance_schema.setup_instruments;
 +----------+
 | count(1) |
 +----------+
-
 |     1269 |
-
 +----------+
 ```
 
@@ -152,7 +150,7 @@ select * from setup_instruments where PROPERTIES='progress';
 
 ### 如何准备 Instrument 来解决性能问题
 
-要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。我们查看一下默认情况下所使用版本的数据库中启用了多少 `Instrument`。我没有明确启用任何其他工具。
+要利用这些 `Instrument`，首先需要启用它们来收集 `performance schema` 日志相关数据。除了记录运行线程的信息外，还可以维护此类线程的历史记录（`statement` / `stages` 或任何特定操作）。我们查看一下默认情况下所使用版本的数据库中启用了多少 `Instrument`，我没有明确启用过任何 `Instrument`。
 
 ```sql
 select count(*) from setup_instruments where ENABLED='YES';
@@ -170,8 +168,7 @@ select count(*) from setup_instruments where ENABLED='YES';
 
 ```sql
 select * from performance_schema.setup_instruments where enabled='YES' limit 30;
-
-
+ 
 +---------------------------------------+---------+-------+------------+------------+---------------+
 | NAME                                  | ENABLED | TIMED | PROPERTIES | VOLATILITY | DOCUMENTATION |
 +---------------------------------------+---------+-------+------------+------------+---------------+
@@ -618,8 +615,8 @@ OBJECT_INSTANCE_BEGIN: 140087673437920
 
 **几点重要说明**
 
-1. 只有在一个线程执行完成之后，历史表数据才会在一段时间后加载，而不会立即进行加载；
-2. 启用所有 `Instrument` 可能会影响 `MySQL` 性能，因为一旦开启后，会向内存表写入更多数据。此外我们可能需要投入更多额外的预算，所以尽量根据需要去启用 `Instrument`；
+1. 历史表数据会在一段时间后加载，而不是立即进行加载。只有在一个线程执行完成之后进行加载；
+2. 启用所有 `Instrument` 可能会影响 `MySQL` 性能，因为一旦开启后，会向内存表写入更多数据。此外也需要投入额外更多的成本，所以尽量根据实际需要去启用 `Instrument`；
 3. `PMM` 包含大部分 `Instrument`，我们也可以根据需要配置更多 `Instrument` 监控；
 4. 我们不需要记住所有表的名称。我们可以只使用 `PMM` 或使用表连接来创建查询。本文将整个概念分散成多个小部分内容，因此没有使用任何连接操作，以便读者可以更好理解它；
 5. 启用多种 `Instrument` 的最佳方式是先在预生产环境进行优化，然后再部署到生产环境中。
