@@ -10,7 +10,7 @@ author:
     link: https://www.percona.com/blog/author/ankit-kapoor/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何借助 `performance schema` 中 `Instrument` 工具来排查 `MySQL` 数据库的一些问题。
+subtitle: 在这篇博客文章中，我们将学习如何借助 performance schema 中 Instrument 工具来排查 `MySQL` 数据库的一些问题。
 
 categories: 
   - 数据库
@@ -22,9 +22,9 @@ tags:
 
 > 原文链接：https://www.percona.com/blog/deep-dive-into-mysqls-performance-schema/
 
-最近我正在与一位客户合作，我们工作的重点是对客户的多个 `MySQL` 数据库节点进行性能审计。我们开始研究 `performance schema` 的一些统计数据。在工作中客户提出了两个有趣的问题：他如何才能充分利用 `performance schema`，他又如何找到他需要的东西？我意识到理解 `performance schema` 的内部实现，并知道如何有效地利用它是非常重要的。这个博客的目的是让每个人都能够更容易理解 `performance schema`。
+最近我正在与一位客户合作，我们工作的重点是对客户的多个 `MySQL` 数据库节点进行性能审计。我们开始研究 `performance schema` 的一些统计数据。在工作中客户提出了两个有趣的问题：如何才能充分利用 `performance schema`，如何能够找到所需要的内容？我意识到理解 `performance schema` 的内部实现，并知道如何有效地利用它是非常重要的。这个博客的目的是让每个人都能够更容易理解 `performance schema`。
 
-`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便查看它是否已被启用。它完全建立在各种的 `Instrument` 集合（也可以称为事件名称）之上，这些 `Instrument` 集合分别服务于不同目的。
+`performance schema` 是 `MySQL` 中的一个引擎，我们可以使用 `SHOW ENGINES` 很方便查看它是否已被启用。它完全建立在各种的 `Instrument` 集合（也可以称为事件名称）之上，这些 `Instrument` 集合分别服务于不同的目的。
 
 `Instrument` 是 `performance schema` 的主要组成部分，当我们想排查一个问题及其出现的根本原因时，它非常有用；下面我列出了一些示例（但不限于如下内容）：
 
@@ -40,7 +40,7 @@ tags:
 
 ### Instrument 在 performance schema 中的作用
 
-`Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常有用的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件有关阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，组件之间使用“/”分隔符进行分割。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂、越具体，即 `Instrument` 越长，它就越复杂。
+`Instrument` 是将 **wait**、**IO**、**SQL**、**binlog**、**file** 等不同组件组合到一起。如果我们将这些组件组合起来，它们将成为帮助我们解决不同问题的非常有用的工具。例如，**wait/io/file/sql/binlog** 是提供二进制日志文件阻塞等待和 `I/O` 详细信息的工具之一。`Instrument` 从左边读取，组件之间使用“/”分隔符进行分割。我们添加到 `Instrument` 中的组件越多，它就会变得越复杂、越具体，即 `Instrument` 越长，它就越复杂。
 
 我们可以在所使用的 `MySQL` 版本 `setup_instruments` 表中找到所有可用的 `Instrument`。值得注意的是，每个版本的 `MySQL` 都有不同数量的 `Instrument`。
 
@@ -54,7 +54,7 @@ select count(1) from performance_schema.setup_instruments;
 +----------+
 ```
 
-为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们只能使用其中四个部分，因此如果使用不同或者较低 `MySQL` 版本，我们可能会看到不同类型的 `Instrument`。
+为了便于理解，`Instrument` 可以分为如下所示的七个不同的部分。**我这里使用的 `MySQL` 版本是 `8.0.30`**。在早期版本中，我们只能使用其中四个部分，因此如果使用不同或者较低的 `MySQL` 版本，我们可能会看到不同类型的 `Instrument`。
 
 ```sql
 select distinct(substring_index(name,'/',1)) from performance_schema.setup_instruments;
@@ -74,7 +74,7 @@ select distinct(substring_index(name,'/',1)) from performance_schema.setup_instr
 7 rows in set (0.01 sec)
 ```
 
-- **Stage** - 以 `stage` 开头的 `Instrument` 提供所有查询的执行阶段，如读取数据、发送数据、修改表、检查查询缓存等等。例如 `stage/sql/altering table`；
+- **Stage** - 以 `stage` 开头的 `Instrument` 提供所有查询所处执行阶段信息，如读取数据、发送数据、修改表、检查查询缓存等等。例如 `stage/sql/altering table`；
 - **Wait** - 以 `wait` 开头的 `Instrument` 放在这里，像互斥锁等待、文件等待、`I/O` 等待和表等待。这个 `Instrument` 的一个示例 **wait/io/file/sql/map**；
 - **Memory** - 以 `memory` 开头的 `Instrument` 提供有关每个线程内存使用情况的信息，例如 **memory/sql/MYSQL_BIN_LOG**；
 - **Statement** - 以 `statement` 开头的 `Instrument` 提供有关 `SQL` 类型和存储过程的信息；
@@ -100,7 +100,7 @@ select distinct(substring_index(name,'/',1)) as instrument_name,count(1) from pe
 +-----------------+----------+
 ```
 
-### 如何找到你需要的 Instrument
+### 如何找到所需要的 Instrument
 
 我清楚地记得有位客户问我，既然有成千上万种 `Instrument` 可供选择，他如何才能找到他需要的那一种。正如我之前提到的，`Instrument` 是从左到右阅读的，我们可以找出我们需要的 `Instrument`，然后找到它各自代表的性能指标。
 

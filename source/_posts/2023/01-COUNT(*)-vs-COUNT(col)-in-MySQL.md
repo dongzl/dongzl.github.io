@@ -9,7 +9,7 @@ author:
   link: https://www.percona.com/blog/author/denis-subbota/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将对比在 MySQL 数据库中 COUNT(*) 和 COUNT(col) 的不同之处。
+subtitle: 在这篇博客文章中，我们将对比在 MySQL 数据库中 COUNT(*) 和 COUNT(col) 的不同之处。
 
 categories:
 - 数据库
