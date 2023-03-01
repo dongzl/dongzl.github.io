@@ -49,7 +49,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 
 完整的流程如下所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/01.png" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/01.png" style="width:800px"/>
 
 - 应用程序调用 `read` 函数，向操作系统发起 `IO` 请求，调用线程的上下文从用户态切换到内核态；
 - `DMA` 控制器从磁盘读取数据到内核缓冲区；
@@ -83,7 +83,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 
 我们来看一下这个过程：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/02.png" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/02.png" style="width:800px"/>
 
 - 应用程序调用 `read` 函数，向操作系统发起 `IO` 请求，同时进入阻塞状态等待数据返回；
 - `CPU` 收到指令后，向 `DMA` 控制器发起指令调度；
@@ -110,7 +110,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 
 通过 `mmap + write` 实现零拷贝处理流程如下图所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/03.png" style="width:600px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
 
 与 `read()` 方法调用相比，这里的主要区别是用户进程通过调用 `mmap` 方法向操作系统内核发起 `IO` 调用，上下文从用户态切换到内核态，然后 `CPU` 使用 `DMA` 控制器将数据从硬盘复制到内核缓冲区。主要步骤是：
 
