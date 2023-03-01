@@ -110,7 +110,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 
 通过 `mmap + write` 实现零拷贝处理流程如下图所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Linux-Zero-Copy/03.png" style="width:800px"/>
 
 与 `read()` 方法调用相比，这里的主要区别是用户进程通过调用 `mmap` 方法向操作系统内核发起 `IO` 调用，上下文从用户态切换到内核态，然后 `CPU` 使用 `DMA` 控制器将数据从硬盘复制到内核缓冲区。主要步骤是：
 
@@ -121,3 +121,25 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 - `CPU` 通过 `DMA` 控制器将数据从 `socket` 缓冲区拷贝到网卡设备，上下文从内核态切换到用户态，最后 `write` 方法返回结果。
 
 我们发现通过 `mmap + write` 实现的零拷贝技术发生了 `4` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
+
+### sendfile()
+
+`sendfile` 是 `Linux 2.1` 版本后内核引入的系统函数，函数定义如下：
+
+```c
+ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
+```
+
+`sendfile` 是指在两个文件描述符之间传递数据，它是在操作系统内核中完成的，因此可以避免内核缓冲区和用户缓冲区数据的拷贝操作，可以用来实现零拷贝技术。
+
+流程如下图所示：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
+
+- 用户进程发起 `sendfile` 系统调用，上下文从用户态切换到内核态；
+- `DMA` 控制器从磁盘拷贝数据到内核缓冲区；
+- `CPU` 将读缓冲区中的数据复制到 `socket` 缓冲区；
+- `DMA` 控制器将 `socket` 缓冲区中的数据异步复制到网卡设备；
+- 上下文从内核缓冲区切换到用户缓冲区，`sendfile` 函数调用返回；
+
+我们发现通过 `sendfile` 实现的零拷贝技术只发生了 `2` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
