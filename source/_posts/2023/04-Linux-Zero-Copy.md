@@ -1,5 +1,5 @@
 ---
-title: （待完成）Linux 系统零拷贝--什么是零拷贝以及零拷贝实现原理
+title: Linux 系统零拷贝--什么是零拷贝以及零拷贝实现原理
 date: 2023-03-05 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/Linux-Zero-Copy.png
 
@@ -110,7 +110,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 
 通过 `mmap + write` 实现零拷贝处理流程如下图所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/03-Linux-Zero-Copy/03.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
 
 与 `read()` 方法调用相比，这里的主要区别是用户进程通过调用 `mmap` 方法向操作系统内核发起 `IO` 调用，上下文从用户态切换到内核态，然后 `CPU` 使用 `DMA` 控制器将数据从硬盘复制到内核缓冲区。主要步骤是：
 
@@ -134,7 +134,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 
 流程如下图所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/04.png" style="width:800px"/>
 
 - 用户进程发起 `sendfile` 系统调用，上下文从用户态切换到内核态；
 - `DMA` 控制器从磁盘拷贝数据到内核缓冲区；
