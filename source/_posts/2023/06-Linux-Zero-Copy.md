@@ -37,7 +37,7 @@ tags:
 
 例如我们要实现一个下载功能，服务器的任务就是将服务器主机磁盘上的文件从连接的 `socket` 中发送出去。关键代码如下：
 
-```shell
+```c
 while((n = read(diskfd, buf, BUF_SIZE)) > 0)
     write(sockfd, buf , n);
 ```
@@ -49,7 +49,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 
 完整的流程如下所示：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/01.png" />
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/01.png" style="width:600px"/>
 
 - 应用程序调用 `read` 函数，向操作系统发起 `IO` 请求，调用线程的上下文从用户态切换到内核态；
 - `DMA` 控制器从磁盘读取数据到内核缓冲区；
@@ -83,7 +83,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 
 我们来看一下这个过程：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/01.png" />
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/02.png" style="width:600px"/>
 
 - 应用程序调用 `read` 函数，向操作系统发起 `IO` 请求，同时进入阻塞状态等待数据返回；
 - `CPU` 收到指令后，向 `DMA` 控制器发起指令调度；
@@ -92,3 +92,32 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 - `DMA` 将数据从磁盘控制器缓冲区拷贝到内核缓冲区；
 - `DMA` 向 `CPU` 发送一个读取数据的信号，`CPU` 负责将数据从内核缓冲区复制到用户缓冲区；
 - 用户应用进程从内核态切换到用户态并解除阻塞状态。
+
+## 如何实现零拷贝
+
+我们已经理解了 `DMA` 的工作原理，下面我们来讨论一下如何实现零拷贝。首先，零拷贝并不意味着不进行数据拷贝，而是减少用户态和内核态上下文切换次数和 `CPU` 拷贝次数；有两种常见的方式实现零拷贝：
+
+- 方案一：`mmap` + `write`
+- 方案二：`sendfile`
+
+### mmap + write
+
+`mmap` 的函数定义如下：
+
+```c
+void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+```
+
+通过 `mmap + write` 实现零拷贝处理流程如下图所示：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Linux-Zero-Copy/03.png" style="width:600px"/>
+
+与 `read()` 方法调用相比，这里的主要区别是用户进程通过调用 `mmap` 方法向操作系统内核发起 `IO` 调用，上下文从用户态切换到内核态，然后 `CPU` 使用 `DMA` 控制器将数据从硬盘复制到内核缓冲区。主要步骤是：
+
+- 用户进程通过调用 `mmap` 方法向操作系统内核发起 `IO` 调用，上下文从用户态切换到内核态；
+- `CPU` 通过 `DMA` 控制器将数据从磁盘拷贝到内核缓冲区；
+- 上下文从内核态切换到用户态，`mmap` 方法调用返回结果；
+- 用户进程通过调用 `write` 方法再次对操作系统内核进行 `IO` 调用，上下文从用户态切换到内核状态，最终写入到 `socket` 缓冲区；
+- `CPU` 通过 `DMA` 控制器将数据从 `socket` 缓冲区拷贝到网卡设备，上下文从内核态切换到用户态，最后 `write` 方法返回结果。
+
+我们发现通过 `mmap + write` 实现的零拷贝技术发生了 `4` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
