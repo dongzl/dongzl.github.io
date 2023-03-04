@@ -24,7 +24,7 @@ tags:
 
 许多 `Web` 应用程序都会提供大量静态文件内容，这相当于从磁盘读取数据后再将完全相同的数据写回 `socket`。每次数据经过用户态内核边界时，都必须进行数据拷贝，这个过程会消耗 `CPU` 时间片，占用内存带宽。
 
-零拷贝技术在这种场景下就可以发挥作用，零拷贝的目的是消除内核态和用户态之间所有不必要的数据拷贝。无论是 `Kafka` 还是 `Netty`，都用到了零拷贝的知识。那么到底什么是零拷贝？在本文中我们将探索一下。
+**零拷贝**技术在这种场景下就可以发挥作用，**零拷贝**的目的是消除内核态和用户态之间所有不必要的数据拷贝。无论是 `Kafka` 还是 `Netty`，都用到了**零拷贝**的知识。那么到底什么是**零拷贝**？在本文中我们将探索一下。
 
 ## 什么是零拷贝
 
@@ -95,7 +95,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 
 ## 如何实现零拷贝
 
-我们已经理解了 `DMA` 的工作原理，下面我们来讨论一下如何实现零拷贝。首先，零拷贝并不意味着不进行数据拷贝，而是减少用户态和内核态上下文切换次数和 `CPU` 拷贝次数；有两种常见的方式实现零拷贝：
+我们已经理解了 `DMA` 的工作原理，下面我们来讨论一下如何实现**零拷贝**。首先，**零拷贝**并不意味着不进行数据拷贝，而是减少用户态和内核态上下文切换次数和 `CPU` 拷贝次数；有两种常见的方式实现**零拷贝**：
 
 - **方案一**：`mmap` + `write`
 - **方案二**：`sendfile`
@@ -108,7 +108,7 @@ while((n = read(diskfd, buf, BUF_SIZE)) > 0)
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 ```
 
-通过 `mmap + write` 实现零拷贝处理流程如下图所示：
+通过 `mmap + write` 实现**零拷贝**处理流程如下图所示：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/04-Linux-Zero-Copy/03.png" style="width:800px"/>
 
@@ -120,7 +120,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 - 用户进程通过调用 `write` 方法再次对操作系统内核进行 `IO` 调用，上下文从用户态切换到内核状态，最终写入到 `socket` 缓冲区；
 - `CPU` 通过 `DMA` 控制器将数据从 `socket` 缓冲区拷贝到网卡设备，上下文从内核态切换到用户态，最后 `write` 方法返回结果。
 
-我们发现通过 `mmap + write` 实现的零拷贝技术发生了 `4` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
+我们发现通过 `mmap + write` 实现的**零拷贝**技术发生了 `4` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
 
 ### sendfile()
 
@@ -130,7 +130,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 ```
 
-`sendfile` 是指在两个文件描述符之间传递数据，它是在操作系统内核中完成的，因此可以避免内核缓冲区和用户缓冲区数据的拷贝操作，可以用来实现零拷贝技术。
+`sendfile` 是指在两个文件描述符之间传递数据，它是在操作系统内核中完成的，因此可以避免内核缓冲区和用户缓冲区数据的拷贝操作，可以用来实现**零拷贝**技术。
 
 流程如下图所示：
 
@@ -142,4 +142,4 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 - `DMA` 控制器将 `socket` 缓冲区中的数据异步复制到网卡设备；
 - 上下文从内核缓冲区切换到用户缓冲区，`sendfile` 函数调用返回；
 
-我们发现通过 `sendfile` 实现的零拷贝技术只发生了 `2` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
+我们发现通过 `sendfile` 实现的**零拷贝**技术只发生了 `2` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
