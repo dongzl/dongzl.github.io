@@ -1,7 +1,7 @@
 ---
 title: （待完成）表不存在：MySQL 中 lower_case_table_names 问题探究
 date: 2023-03-10 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study_2.png
 
 # author information, multiple authors are set to array
 # single author
@@ -63,3 +63,53 @@ total 112K
 /var/lib/mysql/percona
 [root@centos12 percona]# 
 ```
+
+我认为这个问题是由于 `#` 标识引起的，所以我想创建一张带有 `#` 标识的表然后尝试删除它。但是令人惊讶的是我们可以创建表也可以删除它。但是，我们仍然未能删除客户提供的数据表。
+
+```shell
+mysql> show tables;
++--------------------------+
+| Tables_in_percona        |
++--------------------------+
+| #Tableau_01_bw_F2DD_test |
+| #tableau_01__test        |
++--------------------------+
+2 rows in set (0.00 sec)
+
+mysql> Drop table `#Tableau_01__Test`;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show tables;
++--------------------------+
+| Tables_in_percona        |
++--------------------------+
+| #Tableau_01_bw_F2DD_test |
++--------------------------+
+1 row in set (0.00 sec)
+
+mysql> Drop table `#Tableau_01_bw_F2DD_test`;
+ERROR 1051 (42S02): Unknown table 'percona.#tableau_01_bw_f2dd_test'
+mysql> show create table `#Tableau_01_bw_F2DD_test`G
+ERROR 1146 (42S02): Table 'percona.#tableau_01_bw_f2dd_test' doesn't exist
+mysql> 
+mysql> show global variables like '%lower_case_table%';
++------------------------+-------+
+| Variable_name          | Value |
++------------------------+-------+
+| lower_case_table_names | 1     |
++------------------------+-------+
+1 row in set (0.00 sec)
+```
+
+在这里我们注意到一件事——我们以大写字母创建数据表，而在显示表时它显示的是小写字母。 这给了我们检查 `lower_case_table_names` 配置的启示，它被设置为 `1`（在 `Unix` 中默认为 `0`）。
+所以我们想尝试让这个配置在一个值场景下中创建一个表，然后再将它配置为另一个值时将表删除。
+
+`lower_case_table_names` 属性配置值及其行为是：
+
+- **0**：数据表和数据库名称使用 `CREATE TABLE` 或 `CREATE DATABASE` 语句中指定的字母大小写存储在磁盘上。名称比较会区分大小写。如果在文件名不区分大小写的系统（例如 `Windows` 或 `MacOS`）上运行 `MySQL`，则不应将此变量设置为 `0`。如果在不区分大小写的文件系统上使用 `−−lower-case-table-names=0` 强制此变量为 `0` 并使用不同的字母大小写访问 `MyISAM` 表名，可能会导致索引文件损坏。
+
+- **1**：表名以小写形式存储在磁盘上，名称比较不区分大小写。`MySQL` 在存储和查找时将所有表名转换为小写。此行为也适用于数据库名称和表别名。
+
+- **2**：表和数据库名称使用 `CREATE TABLE` 或 `CREATE DATABASE` 语句中指定的字母大小写存储在磁盘上，但 `MySQL` 在查找时将它们转换为小写字母。名称比较不区分大小写。这仅适用于不区分大小写的文件系统！ `InnoDB` 表名和视图名以小写形式存储，如 `lower_case_table_names=1`。
+
+- **2**：Table and database names are stored on disk using the lettercase specified in the CREATE TABLE or CREATE DATABASE statement, but MySQL converts them to lowercase on lookup. Name comparisons are not case-sensitive. This works only on file systems that are not case-sensitive! InnoDB table names and view names are stored in lowercase, as for lower_case_table_names=1.
