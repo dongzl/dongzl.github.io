@@ -1,5 +1,5 @@
 ---
-title: （待完成）表不存在：MySQL 中 lower_case_table_names 问题探究
+title: 表不存在：MySQL 中 lower_case_table_names 问题探究
 date: 2023-03-10 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study_2.png
 
@@ -10,14 +10,13 @@ author:
   link: https://www.percona.com/blog/author/bhuvanes-waran/
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何借助 `performance schema` 中 `Instrument` 工具来排查 `MySQL` 数据库的一些问题。
+subtitle: 在这篇博客文章中，我们将排查一个由于 lower_case_table_names 配置变更引起的问题。
 
 categories:
 - 数据库
 
 tags:
 - MySQL
-- Performance Schema
 ---
 
 > 原文链接：https://www.percona.com/blog/table-doesnt-exist-mysql-lower_case_table_names-problems/
@@ -53,7 +52,7 @@ mysql>
 
 检查 `.ibd` 和 `.frm` 文件时，这些文件都是存在的，并且磁盘上物理文件没有问题。
 
-```shell
+```sql
 [root@centos12 percona]# ls -lrth
 total 112K
 -rw-r-----. 1 mysql mysql   65 Dec 20 02:44 db.opt
@@ -66,7 +65,7 @@ total 112K
 
 我认为这个问题是由于 `#` 标识引起的，所以我想创建一张带有 `#` 标识的表然后尝试删除它。但是令人惊讶的是我们可以创建表也可以删除它。但是，我们仍然未能删除客户提供的数据表。
 
-```shell
+```sql
 mysql> show tables;
 +--------------------------+
 | Tables_in_percona        |
@@ -116,7 +115,7 @@ mysql> show global variables like '%lower_case_table%';
 
 设置 `lower_case_table_names=0` 并创建名称包含大写字母的数据表和数据库。
 
-```shell
+```sql
 mysql> use percona;
 Database changed
 mysql> create table `#Table1_test2`(ct INT primary key);
@@ -166,7 +165,7 @@ mysql> show global variables like '%lower_case_table%';
 
 我们无法使用 Test_database 数据库，因为它是以大写形式创建的。因此，无论数据库中存在什么样的表，我们都将无法访问。简而言之，当设置 lower_case_table_names=1 时，大写字母出现在表和数据库中时，它们将被视为小写字母。
 
-```shell
+```sql
 mysql> use percona;
 Reading table information for completion of table and column names
 You can turn off this feature to get a quicker startup with -A
@@ -238,7 +237,7 @@ ERROR 1049 (42000): Unknown database 'test_database'
 当我们尝试创建名称包含大写字母的表和数据库，最终只创建了小写字母内容。`#table1_test2` 表创建失败，提示表已存在错误，因为 `#Table1_test2` 的第一个建表语句表名称被转换为小写并创建了表 `#table1_test2`。
 创建表 `Table1_test3` 成功时也是如此，创建名称为 `table1_test3` 的表，再次创建表 `table1_test3` 时提示失败。
 
-```shell
+```sql
 mysql> create database lower1_to_Lower0;
 Query OK, 1 row affected (0.00 sec)
 
@@ -279,7 +278,7 @@ mysql> show tables;
 
 要将 lower_case_table_names 的值从 1 更改为 0，我只是更改了配置中的值并重新启动了 MySQL 服务。当 lowercase_table_name=0 时，我们能够删除表和数据库，因为数据库和表不是用大写字母创建的。
 
-```shell
+```sql
 mysql> show global variables like '%lower_case_table%';
 +------------------------+-------+
 | Variable_name          | Value |
