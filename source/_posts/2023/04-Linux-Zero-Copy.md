@@ -143,3 +143,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 - 上下文从内核态切换到用户态，`sendfile` 函数调用返回；
 
 我们发现通过 `sendfile` 实现的**零拷贝**技术只发生了 `2` 次上下文切换和 `3` 次拷贝（`2` 次 `DMA` 拷贝和 `1` 次 `CPU` 拷贝）。
+
+### 扩展资料
+
+- [系统 CPU 效率高，DMA 技术功不可没！](https://mp.weixin.qq.com/s/0isthBue6fb1ayebiWVZSA)
