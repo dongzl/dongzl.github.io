@@ -161,9 +161,9 @@ mysql> show global variables like '%lower_case_table%';
 1 row in set (0.00 sec)
 ```
 
-为了修改 `lower_case_table_names` 值为 `1`，我不仅修改了配置文件，而且重启了 MySQL 服务。当 lower_case_table_names 设置为 1 时，可以看到第一次删除表 `#Table1_test2` 是成功的并且有结果显示，但是删除表 `#table1_test2` 失败了，并且没有显示到 `show tables` 列表中。这是由于设置不区分大小写，因为无论我们在哪里使用大写字母，它都只会以小写字母进行查找。这就是在删除表 #Table1_test2 时表 #table1_test2 被删除的原因。
+为了修改 `lower_case_table_names` 值为 `1`，我不仅修改了配置文件，而且重启了 `MySQL` 服务。当 `lower_case_table_names` 设置为 `1` 时，可以看到第一次删除表 `#Table1_test2` 是成功的并且有结果显示，但是删除表 `#table1_test2` 失败了，并且没有显示到 `show tables` 列表中。这是由于设置不区分大小写，因为无论我们在哪里使用大写字母，它都只会以小写字母进行查找。这就是在删除表 `#Table1_test2` 时表 `#table1_test2` 被删除的原因。
 
-我们无法使用 Test_database 数据库，因为它是以大写形式创建的。因此，无论数据库中存在什么样的表，我们都将无法访问。简而言之，当设置 lower_case_table_names=1 时，大写字母出现在表和数据库中时，它们将被视为小写字母。
+我们无法使用 `Test_database` 数据库，因为它是以大写形式创建的。因此，无论数据库中存在什么样的表，我们都将无法访问。简而言之，当设置 `lower_case_table_names=1` 时，大写字母出现在表和数据库中时，它们将被视为小写字母。
 
 ```sql
 mysql> use percona;
@@ -276,7 +276,7 @@ mysql> show tables;
 2 rows in set (0.00 sec)
 ```
 
-要将 lower_case_table_names 的值从 1 更改为 0，我只是更改了配置中的值并重新启动了 MySQL 服务。当 lowercase_table_name=0 时，我们能够删除表和数据库，因为数据库和表不是用大写字母创建的。
+要将 `lower_case_table_names` 的值从 `1` 更改为 `0`，我只是更改了配置中的值并重新启动了 `MySQL` 服务。当 `lowercase_table_name=0` 时，我们能够删除表和数据库，因为数据库和表不是用大写字母创建的。
 
 ```sql
 mysql> show global variables like '%lower_case_table%';
@@ -342,9 +342,9 @@ mysql> show schemas;
 6 rows in set (0.00 sec)
 ```
 
-场景一是我们在客户端环境中遇到的场景。客户很久以前在 `lower_case_table_names=0` 时创建了该表，一段时间后他们将配置更改为 lower_case_table_names=1。所以我们经过批准，先设置 lower_case_table_names=0 并删除了表，然后再将配置恢复为 1。由于这个配置修改不是动态的，因此我们需要重启服务。
+场景一是我们在客户端环境中遇到的场景。客户很久以前在 `lower_case_table_names=0` 时创建了该表，一段时间后他们将配置更改为 `lower_case_table_names=1`。所以我们经过批准，先设置 `lower_case_table_names=0` 并删除了表，然后再将配置恢复为 `1`。由于这个配置修改不是动态的，因此我们需要重启服务。
 
 ### 总结
 
-我不建议将 lower_case_table_names 设置为 1 或 0，因为这是基于应用程序的要求。但在将配置从 0 更改为 1 之前，需要仔细检查是否有大写的表或数据库。如果存在的话，需要将它们转换为小写，否则那些名称包含大写的表和数据库将无法访问。将配置从 1 更改为 0 时，我们没有遇到问题，因为不允许以大写字母创建表和数据库，并且完全忽略大小写仅以小写字母创建。
-在 MySQL 8.0 中，我们无法在创建数据库实例后更改 lower_case_table_names 配置值，因为此变量的值会影响数据字典表的定义，所以在服务器初始化后将不能被修改。
+我不建议将 `lower_case_table_names` 设置为 `1` 或 `0`，因为这是基于应用程序的要求。但在将配置从 `0` 更改为 `1` 之前，需要仔细检查是否有大写的表或数据库。如果存在的话，需要将它们转换为小写，否则那些名称包含大写的表和数据库将无法访问。将配置从 `1` 更改为 `0` 时，我们没有遇到问题，因为不允许以大写字母创建表和数据库，并且完全忽略大小写仅以小写字母创建。
+在 `MySQL 8.0` 中，我们无法在创建数据库实例后更改 `lower_case_table_names` 配置值，因为此变量的值会影响数据字典表的定义，所以在服务器初始化后将不能被修改。
