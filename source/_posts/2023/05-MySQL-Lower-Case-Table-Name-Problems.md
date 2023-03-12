@@ -21,9 +21,9 @@ tags:
 
 > 原文链接：https://www.percona.com/blog/table-doesnt-exist-mysql-lower_case_table_names-problems/
 
-在 [Managed Services](https://www.percona.com/services/managed-services) 系统中，我们有很多客户，由于每个客户都有不同的系统和配置环境，因此在他们的环境中工作总是会发现一些有趣事情。在这篇博文中，我将展示在删除表时遇到的一个问题及其解决方法。
+在 [Managed Services](https://www.percona.com/services/managed-services) 系统中，我们有很多客户，由于每个客户都有不同的系统和配置环境，因此在他们的环境中工作总是会发现一些有趣事情。在这篇博文中，我将总结在删除表时遇到的一个问题及其解决方法。
 
-在客户的生产环境（`MySQL 5.7`）中需要被删除的表都有一个标识，表名称以 `#` 符号开头。我认为可以很容易地使用引号或反引号来指定要删除的表。但实际效果并没有像我预期的那样，我才知道为什么客户将可以删除的表进行了标识。
+在客户的生产环境（`MySQL 5.7`）中需要被删除的表都有一个标识，表名称以 `#` 符号开头。我认为可以很容易地使用引号或反引号来指定要删除的表。但实际效果并没有像我预期的那样，我才知道为什么客户将可以删除的表进行了特殊标识。
 
 以下示例重现了该问题。示例中显示有一张表，但是我们无法查看表结构，也无法删除它。
 
@@ -100,14 +100,14 @@ mysql> show global variables like '%lower_case_table%';
 1 row in set (0.00 sec)
 ```
 
-在这里我们注意到一件事——我们以大写字母创建数据表，而在显示表时它显示的是小写字母。 这给了我们检查 `lower_case_table_names` 配置的启示，它被设置为 `1`（在 `Unix` 中默认为 `0`）。
+在这里我们注意到一件事——我们以大写字母创建数据表，而在显示表时它显示的是小写字母。 这给了我一些启示，我检查了 `lower_case_table_names` 配置，它被设置为 `1`（在 `Unix` 中默认为 `0`）。
 所以我想尝试将这个配置设置为某个值场景下中创建一张表，然后再将它设置为另一个值时将表删除。
 
 `lower_case_table_names` 属性值及其行为是：
 
-- **0**：数据表和数据库名称使用 `CREATE TABLE` 或 `CREATE DATABASE` 语句中指定的字母大小写存储在磁盘上。名称比较会区分大小写。如果在文件名不区分大小写的系统（例如 `Windows` 或 `MacOS`）上运行 `MySQL`，则不应将此变量设置为 `0`。如果在不区分大小写的文件系统上使用 `−−lower-case-table-names=0` 强制此配置设置为 `0` 并使用不同的字母大小写访问 `MyISAM` 表名，可能会导致索引文件损坏。
+- **0**：数据表和数据库名称使用 `CREATE TABLE` 或 `CREATE DATABASE` 语句中指定的字母大小写存储在磁盘上。名称比较会区分大小写。如果在文件名不区分大小写的系统（例如 `Windows` 或 `MacOS`）上运行 `MySQL`，则不应将此变量设置为 `0`。如果在不区分大小写的文件系统上使用 `−−lower-case-table-names=0` 强制此配置设置为 `0` 并使用不同的字母大小写访问 `MyISAM` 表名，可能会导致索引文件损坏；
 
-- **1**：表名都以小写形式存储在磁盘上，名称比较不区分大小写。`MySQL` 在存储和查找时将所有表名转换为小写。此行为也适用于数据库名称和表别名。
+- **1**：表名都以小写形式存储在磁盘上，名称比较不区分大小写。`MySQL` 在存储和查找时将所有表名转换为小写。此行为也适用于数据库名称和表别名；
 
 - **2**：表和数据库名称使用 `CREATE TABLE` 或 `CREATE DATABASE` 语句中指定的字母大小写存储在磁盘上，但 `MySQL` 在查找时将它们转换为小写字母。名称比较不区分大小写。这仅适用于不区分大小写的文件系统！ `InnoDB` 表名和视图名以小写形式存储，和 `lower_case_table_names=1` 配置效果一致。
 
@@ -276,7 +276,7 @@ mysql> show tables;
 2 rows in set (0.00 sec)
 ```
 
-要将 `lower_case_table_names` 的值从 `1` 更改为 `0`，我只是更改了配置中的值并重新启动了 `MySQL` 服务。当 `lowercase_table_name=0` 时，我们能够删除表和数据库，因为数据库和表不是用大写字母创建的。
+要将 `lower_case_table_names` 的值从 `1` 更改为 `0`，我只是更改了配置中的值并重启了 `MySQL` 服务。当 `lowercase_table_name=0` 时，我们能够删除表和数据库，因为数据库和表不是用大写字母创建的。
 
 ```sql
 mysql> show global variables like '%lower_case_table%';
@@ -342,7 +342,7 @@ mysql> show schemas;
 6 rows in set (0.00 sec)
 ```
 
-场景一是我们在客户端环境中遇到的场景。客户很久以前在 `lower_case_table_names=0` 时创建了该表，一段时间后他们将配置更改为 `lower_case_table_names=1`。所以我们经过批准，先设置 `lower_case_table_names=0` 并删除了表，然后再将配置恢复为 `1`。由于这个配置修改不是动态的，因此我们需要重启服务。
+场景一是我们在客户端环境中遇到的场景。客户很久以前在 `lower_case_table_names=0` 时创建了该表，一段时间后他们将配置更改为 `lower_case_table_names=1`。所以我们经过批准，先设置 `lower_case_table_names=0` 并删除了表，然后再将配置恢复为 `1`。由于这个配置修改不是动态生效的，因此我们需要重启服务。
 
 ### 总结
 
