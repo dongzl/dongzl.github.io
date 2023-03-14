@@ -1,7 +1,7 @@
 ---
 title: （待完成）深入学习：通过 Istio、ePBF 和 RSocket Broker 探索 Service Mesh 技术
 date: 2023-03-13 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/service_mesh.png
 
 # author information, multiple authors are set to array
 # single author
@@ -99,3 +99,42 @@ tags:
 ### Istio 架构
 
 `Istio` 的架构分为控制面和数据面。
+
+- **数据面**：它由遍布整个网格的 Sidecar 代理组成，它与应用服务一起以 sidecar 的形式部署。每个 Sidecar 都会接管服务的进出流量，配合控制平面完成流量控制等功能；
+- **控制面**：顾名思义，它在数据面之上，负责控制和管理 Sidecar 代理，完成配置分发、服务发现、授权认证等功能。
+
+### 核心组件
+
+下面简单介绍一下 `Istio` 架构中几个核心组件的主要功能。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/04.png" style="width:800px"/>
+
+<div style="color:DarkGray;font-size:14px"> https://ssup2.github.io/theory_analysis/Istio_Architecture/ </div>
+
+### Envoy
+
+Envoy 是 Istio 服务网格中使用的 C++ 语言实现的高性能代理，作为 Sidecar 容器，拦截所有进出流量，执行负载均衡、熔断和故障注入等功能，并为 `Prometheus` 和 `Jeager` 收集数据指标，它是 `Istio` 中数据平面的一部分。
+
+### Istiod
+
+`Istiod` 是一个控制面组件，它提供服务发现、配置和证书管理功能。 `Istiod` 采用 `YAML` 格式编写配置文件，并将其转换为 `Envoy` 可使用配置格式。然后它将此配置分发到网格中的所有 `Sidecar`。
+
+- **Pilot**：`Pilot` 组件的主要作用是将路由规则等配置信息转化为 `Sidecar` 可以识别的内容，发送给数据面。可以简单理解为配置分发器，辅助 `Sidecar` 完成流量控制相关功能；
+
+- **Citadel**：`Citadel` 是 `Istio` 中的一个安全组件，它负责证书生成，允许数据面代理之间进行安全的 `mTLS` 通信；
+
+- **Galley**：`Galley` 是在 `Istio 1.1` 版本中新增加的一个组件，目的是解耦 `Pilot` 和 `Kubernetes` 等底层平台。它共享了原有 `Pilot` 的部分功能，主要负责配置的校验、提取和处理功能。
+
+### Istio 流量转发
+
+流量路由分为流入和流出流程。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/05.png" style="width:800px"/>
+
+`Istio` + `Envoy` 实现的 Sidecar 是一种流行的 Service Mesh 架构，它将 `Envoy` 代理作为 `Sidecar` 容器注入，以拦截进出主容器的所有流量，并提供负载均衡、故障注入和指标收集等功能。
+
+但是，还需要考虑其它一些问题，例如存在性能下降、架构复杂性和运营成本增加等。 一个初始化的容器用于设置网络规则，但是添加代理也会增加资源使用，并且需要自动化操作设置，通常使用 Kubernetes 完成这些设置。
+
+## 5. eBPF 技术概述
+
+
