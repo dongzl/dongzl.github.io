@@ -62,9 +62,9 @@ tags:
 
 `Sidecar` 模式将应用程序功能划分为相同单元内的独立进程。它通过抽象非业务逻辑功能来降低重复代码和复杂性。`Sidecar` 容器可用于处理 `Kubernetes` `Pod` 中的服务可观测性、监控、日志记录、配置和服务熔断等问题。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/01.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/01.png" style="width:100%"/>
 
-<div style="color:DarkGray;font-size:14px"> https://apisix.apache.org/blog/2021/12/17/exposure-istio-with-apisix-ingress/ </div>
+<div style="color:DarkGray;font-size:14px;text-align:center;"> https://apisix.apache.org/blog/2021/12/17/exposure-istio-with-apisix-ingress/ </div>
 
 在 `Sidecar` 模式下，代理容器与 `Pod` 中的应用程序容器共享相同的网络命名空间，提供隔离的网络堆栈。这允许多个 `Pod` 都可以在 `80` 端口上运行 `Web` 应用程序，代理拦截进出应用程序容器的流量。
 
@@ -78,9 +78,9 @@ tags:
 
 `Service Mesh` 位于基础设施层，通过 `Sidecar` 模式处理服务之间的通信，以透明代理的形式提供安全、快速、可靠的服务间通信。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/02.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/02.png" style="width:100%"/>
 
-<div style="color:DarkGray;font-size:14px"> https://servicemesh.es </div>
+<div style="color:DarkGray;font-size:14px;text-align:center;"> https://servicemesh.es </div>
 
 借助 `Service Mesh`，微服务通用能力被从应用程序中移除并存放在 `Sidecar` 容器中。这使得微服务只专注于业务逻辑，而基础设施团队负责管理微服务通用能力，从而实现两者高效的独立演进。
 
@@ -90,7 +90,7 @@ tags:
 
 ## 4. Istio 快速入门
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/03.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/03.png" style="width:100%"/>
 
 `Istio` 是一个开发的服务治理平台，面向云原生场景以 `Service Mesh` 的形式提供服务，并与 `Kubernetes` 紧密结合。
 
@@ -107,9 +107,9 @@ tags:
 
 下面简单介绍一下 `Istio` 架构中几个核心组件的主要功能。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/04.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/04.png" style="width:100%"/>
 
-<div style="color:DarkGray;font-size:14px"> https://ssup2.github.io/theory_analysis/Istio_Architecture/ </div>
+<div style="color:DarkGray;font-size:14px;text-align:center;"> https://ssup2.github.io/theory_analysis/Istio_Architecture/ </div>
 
 ### Envoy
 
@@ -129,7 +129,7 @@ Envoy 是 Istio 服务网格中使用的 C++ 语言实现的高性能代理，�
 
 流量路由分为流入和流出流程。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/05.png" style="width:800px"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/05.png" style="width:100%"/>
 
 `Istio` + `Envoy` 实现的 Sidecar 是一种流行的 Service Mesh 架构，它将 `Envoy` 代理作为 `Sidecar` 容器注入，以拦截进出主容器的所有流量，并提供负载均衡、故障注入和指标收集等功能。
 
