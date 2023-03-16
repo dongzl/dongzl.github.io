@@ -149,21 +149,26 @@ tags:
 说到 `Service Mesh`，我们可能首先想到的就是 `Istio` + `Envoy` 构成的 `Sidecar` 的 `Service Mesh` 架构，目前这个架构非常流行。虽然乍一看这个架构没有明显的问题，但仍有几点值得深入考虑：
 
 - 性能下降：`Proxy` 是一个独立的应用程序，需要特定的资源，例如 `CPU` 和`内存`。 `Envoy` 运行通常需要大约 `1G` 的内存；
-- 架构复杂：需要Control Plane、Data Plane、不同应用的规则推送、Proxy之间的通信安全等。
+- 架构复杂：需要控制面、数据面、不同应用的规则推送、`Proxy` 之间的通信安全等；
+- 运维成本增加：没有自动化运维工具，就无法部署 `Sidecar`，`Service Mesh` 的典型解决方案是基于 `Kubernetes`，能够减少了很多工作量。
 
-## 5. eBPF 技术概述
+## 5. eBPF 介绍
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/06.png" style="width:100%"/>
 
 正如我们已经观察到的情况，使用 `Sidecar` 模式，我们需要在每个单元上正确部署配置一个容器；如果仔细观察，每个节点只有一个内核，在同一个节点上运行的所有容器都共享同一个内核，我们能不能利用它来将部署的 Sidecar 代理的数量减少到与节点的数量一致？`eBPF` 正是用于解决这个问题。
 
 eBPF 是一种内核技术，可以运行自定义程序以响应各种事件，包括网络数据包、函数访问等事件。
 
+`eBPF` 是一种内核技术，允许自定义程序在内核中运行，这些运行的程序可以响应数以千计的各种事件，`eBPF` 程序可以附加到这些事件上，这些事件包括轨迹点、访问或退出各种功能（在内核或用户空间中）或对服务网格很重要的网络数据包。如果你将一个 `eBPF` 程序添加到一个内核事件中，它就会被触发，无论是哪个进程引起了这个事件，也无论事件是运行在应用程序容器中还是直接运行在主机上。无论你是在可观测性、安全性还是网络，`eBPF` 驱动的解决方案无需部署 `sidecar` 就可以检测到应用程序。
+
 该技术允许自定义程序直接在主机上运行，无需额外部署 `Sidecar`，从而减少了服务网格中部署的 `Sidecar` 代理的数量。`eBPF` 驱动的解决方案可以提供可观察性、安全性，同时由于不需要在每个单元上额外部署 `Sidecar` 容器所以具备了一定网络优势。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/05.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/07.png" style="width:100%"/>
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://isovalent.com/blog/post/2021-12-08-ebpf-servicemesh </div>
 
-2021 年 12 月 2 日，Cilium 项目宣布了 Cilium Service Mesh 的 Beta 测试计划。基于 eBPF 的 Cilium 项目将这种**Sidecarless**模型引入到 `Service Mesh`，以处理 `Service Mesh` 的大部分 `Sidecar` 代理功能，包括 `L7` 路由、负载均衡、`TLS`、访问策略、健康检查、日志记录和追踪。
+2021 年 12 月 2 日，Cilium 项目宣布了 [Cilium Service Mesh](https://cilium.io/blog/2021/12/01/cilium-service-mesh-beta/) 的 Beta 测试计划。基于 `eBPF` 的 [Cilium](https://cilium.io/) 项目将这种**Sidecarless**模型引入到 `Service Mesh`，以处理 `Service Mesh` 的大部分 `Sidecar` 代理功能，包括 `L7` 路由、负载均衡、`TLS`、访问策略、健康检查、日志记录和链路追踪。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/06.png" style="width:100%"/>
 
