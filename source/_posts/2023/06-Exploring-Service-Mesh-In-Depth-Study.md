@@ -170,7 +170,7 @@ tags:
 
 `2021` 年 `12` 月 `2` 日，`Cilium` 项目宣布了 [Cilium Service Mesh](https://cilium.io/blog/2021/12/01/cilium-service-mesh-beta/) 的 `Beta` 测试计划。基于 `eBPF` 的 [Cilium](https://cilium.io/) 项目将这种**Sidecarless**模型引入到 `Service Mesh`，以处理 `Service Mesh` 的大部分 `sidecar` 代理功能，包括 `L7` 路由、负载均衡、`TLS`、访问策略、健康检查、日志记录和链路追踪。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/07.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/08.png" style="width:100%"/>
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://thenewstack.io/how-ebpf-streamlines-the-service-mesh/ </div>
 
@@ -192,7 +192,7 @@ tags:
 
 在启用 `eBPF` 的网络中，数据包可以绕过内核的一些网络堆栈，从而提高性能。我们研究一下如何将它应用到服务网格数据面。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/08.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/09.png" style="width:100%"/>
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://thenewstack.io/how-ebpf-streamlines-the-service-mesh/ </div>
 
