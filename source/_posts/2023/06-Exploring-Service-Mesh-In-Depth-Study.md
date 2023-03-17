@@ -202,6 +202,74 @@ eBPF 是一种内核技术，可以运行自定义程序以响应各种事件，
 
 ### 网络加密
 
-服务网格通常用于确保所有应用程序流量都经过身份验证和加密。通过双向 `TLS` (`mTLS`)，服务网格代理组件充当网络连接的端点，并与远程对等方协商安全 `TLS` 连接。该连接在不更改应用程序的情况下加密代理之间的通信。
+服务网格通常用于确保所有应用程序流量都经过身份认证和加密。通过双向 `TLS` (`mTLS`)，服务网格代理组件充当网络连接的端点，并与远程端点协商安全 `TLS` 连接，该连接在不更改应用程序的情况下加密代理之间的通信。
 
-`TLS` 的应用层实现并不是实现组件间认证和加密流量的唯一方式。也可以使用 `IPSec` 或 `WireGuard` 在网络层加密流量。因为它在网络层运行，所以这种加密不仅对应用程序完全透明，而且对代理也完全透明——无论是否有服务网格，都可以启用它。如果您使用服务网格的唯一原因是提供加密，您可能需要考虑网络级加密。它不仅更简单，而且还用于验证和加密节点上的任何流量——它不仅限于启用了 sidecar 的工作负载。
+`TLS` 的应用层实现并不是实现组件之间认证和流量加密的唯一方式，也可以使用 `IPSec` 或 `WireGuard` 在网络层进行流量加密，因为它在网络层运行，所以这种加密不仅对应用程序完全透明，而且对代理也完全透明——无论是否有服务网格，都可以启用它。如果我们使用服务网格的唯一原因是提供加密，我们可能需要考虑网络级加密，它不仅更简单，而且还用于验证和加密节点上的任何流量——它不仅限于启用了 sidecar 的工作负载。
+
+## 6. RSocket Broker
+
+RSocket 路由代理是使用 RSocket 协议在泛应用程序之间进行通信的系统。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/10.png" style="width:100%"/>
+
+<div style="color:DarkGray;font-size:14px;text-align:center;"> https://rsocketbyexample.info/java/ </div>
+
+RSocket Broker 的工作原理是：服务调用者（Requester）向 broker 发起服务调用请求，broker 将请求转发给服务提供者（Responder），broker 最终在将 responder 的处理结果返回给服务调用者。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/11.png" style="width:100%"/>
+
+当一个服务提供者应用程序启动时，它会主动与 Broker 创建一个TCP长连接，然后告诉 Broker 它可以提供的服务列表。
+
+当一个服务消费者应用程序启动时，它同样会与 Broker 创建一个 TCP 长连接。当消费者应用程序想要调用一个远程服务时，服务消费者将服务调用请求封装为消息（用唯一的消息ID标识）发送给Broker。broker 收到消息后，根据浮出水面的元信息解析出需要调用的服务，然后在内部服务路由表中查找可以调用的服务。
+服务提供者处理请求后，将处理结果封装为消息返回给Broker。Broker 根据消息 ID 将返回的消息转发给服务调用者。请求消费响应消息并执行相应的业务逻辑。
+
+这种基于 Broker 的消息通信方式具有以下优点：
+
+- 不需要第三方健康检查，因为我们知道连接何时启动；
+- 无端口监听：服务提供者不再监听端口，与HTTP REST API和gRPC完全不同，更加安全；
+- 通信透明：服务调用者和服务提供者无需感知对方的存在；
+- 流量控制：如果服务提供者压力过大，broker会自动将消息转发给其他服务提供者（智能负载均衡），可以通过租约来实现；
+- 服务注册和发现：无需 `Eureka`、`Consul`、`ZooKeeper` 等第三方注册中心，降低基础设施依赖成本；
+- 安全：`Broker` 会验证服务提供者和服务消费者的访问权限，只需要在 `Broker` 上部署 `TLS` 支持即可保证通信通道的安全。
+
+### 没有免费的午餐
+
+Broker 也有一些缺点。由于双方之间没有通信，性能会有所下降。此外，所有通信流量都通过 Broker 转发，因此存在网络瓶颈，但这可以通过集群和 Broker 的高可靠性来缓解。
+
+## 7. 通过 RSocket Broker 进行服务治理
+
+Istio 作为 Service Mesh 的解决方案，其实很难在数据中心之外应用。物联网设备呢？每个手机都安装sidecar？这就是 RSocket 代理发挥作用的地方。
+
+RSocket 路由代理可用于实现服务网格。在下面的方案中，没有运行 sidecar，也没有重复进程。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/12.png" style="width:100%"/>
+
+下面是两种架构方案的典型特征对比：
+
+- 基础设施层：一个是 `sidecar` 代理 + 控制面，另一个是集成了控制面功能的中心化 broker；
+- 集中管理：集中化会让管理更全面，比如 `Logging`、`Metrics` 等；
+- 通信协议：`RSocket` 方案的一个缺点是应用程序之间必须使用 `RSocket` 通信协议；
+- 应用程序或设备访问：并非所有设备都可以安装代理；主要有几个原因：设备和系统本身不支持，比如物联网设备；这是基于 `RSocket` 的方案具有巨大优势的地方；
+- 增加运维成本：管理一个由 `10` 台服务器组成的 `RSocket` `Broker` 集群和管理 `10K` 个 `Proxy` 实例是不一样的；
+- 效率：`RSocket` 协议性能比 `HTTP` 高 `10` 倍；
+- 安全性：`RSocket` 的安全性实现更简单。`Broker` 主要是用 `TLS` + `JWT` 实现，不是 `mTLS`，不需要证书管理。同时，借助 `JWT` 的安全模型，很容易实现更细粒度的权限控制，使用 `RSocket` 代理方案，可以减少攻击面；
+- 网络和基础设施依赖：`RSocket` `Broker` 相对于 `Istio` 的一大优势就是不依赖 `Kubernetes`，虽然 `Istio` 也声称不依赖 `Kubernetes`，但是在 `Kubernetes` 之外部署和管理 `sidecar` 代理并不简单，而 `RSocket` `Broker` 可以部署在任何地方；
+- ... ...
+
+## 最后总结
+
+服务治理是微服务时代一个非常重要的成长话题。我们研究了通过 `Istio`、`eBPF` 和 `RSocket` `Router` 实现它的不同方法。
+
+## 参考链接
+
+- https://thenewstack.io/how-ebpf-streamlines-the-service-mesh/
+- https://www.infoq.com/presentations/rsocket-spring-cloud-gateway/
+- https://www.alibabacloud.com/blog/a-brief-on-rsocket-and-reactive-programming_598219
+- https://www.slideshare.net/Pivotal/weaving-through-the-mesh-making-sense-of-istio-and-overlapping-technologies
+- https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/
+- https://kknews.cc/code/kk5bqn8.html
+- https://blog.birost.com/a?ID=00900-415484c9-b8a9-4762-8da9-daf675dcd626
+- https://knner.wang/2019/12/27/ServiceMesh-Istio-Series--microservice-kubernetes-istio-relation.html
+- https://www.jianshu.com/p/dd818114ab4b
+- https://knner.wang/2019/12/27/ServiceMesh-Istio-Series--microservice-kubernetes-istio-relation.html
+- https://www.infoq.cn/article/q65ddirtdsbf*e6ki2p4
