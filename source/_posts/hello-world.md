@@ -1,7 +1,7 @@
 ---
 title: Hello World
 date: 2019-12-26 21:35:58
-cover: https://gitee.com/dongzl/article-images/raw/master/cover/hexo_study.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/hexo_study.png
 # author information, multiple authors are set to array
 # single author
 author:
