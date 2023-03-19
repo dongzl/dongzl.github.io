@@ -10,7 +10,7 @@ author:
   link: https://medium.com/@deepkondah
 
 # post subtitle in your index page
-subtitle: 本文是一篇翻译文章，在这篇博客文章中，我们将学习如何借助 `performance schema` 中 `Instrument` 工具来排查 `MySQL` 数据库的一些问题。
+subtitle: 在这篇博客文章中，我们将通过 Istio、eBPF 和 RSocket Broker 技术深入探索 Service Mesh 解决方案。
 
 categories:
 - 架构设计
@@ -56,7 +56,7 @@ tags:
 
 ### 负载均衡
 
-负载均衡是一种请求调度策略，它可以协调多台服务器共同处理网络请求，从而扩展系统的处理能力。在后面的部分中，我们将尝试使用 `RSocket` 技术实现跨服务器资源池的智能的负载均衡策略，来平衡客户端请求。
+负载均衡是一种请求调度策略，它可以协调多台服务器共同处理网络请求，从而扩展系统的处理能力。在后面的部分中，我们将尝试使用 `RSocket` 技术实现跨服务器资源池的智能负载均衡策略，来平衡客户端请求。
 
 ## 2. Sidecar 模式
 
@@ -66,13 +66,13 @@ tags:
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://apisix.apache.org/blog/2021/12/17/exposure-istio-with-apisix-ingress/ </div>
 
-在 `sidecar` 模式下，代理容器可以与 `Pod` 中的应用程序容器共享相同的网络命名空间。网络命名空间是 `Linux` 内核的结构，它允许容器和 `Pod` 拥有自己独立的网络堆栈，将容器化应用程序相互隔离，这使得应用程序彼此互不影响，这就是为什么我们可以让尽可能多的 `Pod` 在 `80` 端口上运行 `Web` 应用程序。代理将共享相同的网络命名空间，以便它可以拦截和处理进出应用容器的流量。
+在 `sidecar` 模式下，代理容器可以与 `Pod` 中的应用程序容器共享相同的网络命名空间。网络命名空间是 `Linux` 内核的结构，它允许容器和 `Pod` 拥有自己独立的网络堆栈，将容器化应用程序相互隔离，这使得应用程序彼此互不影响，这就是为什么我们可以让尽可能多的 `Pod` 在 `80` 端口上运行 `Web` 应用程序。`Sidecar` 代理将共享相同的网络命名空间，以便它可以拦截和处理进出应用容器的流量。
 
 ## 3. Service Mesh 探索
 
 微服务是一种架构风格，它可以将具有单一职责和功能的多个单元以模块化的方式组合起来，形成一个非常复杂的、大型的应用程序。
 
-第一代微服务依赖于内置的 `SDK` 实现服务发现、熔断重试等功能（如 `Spring Cloud`）。从开发的角度来看，这种方式存在很大的不足，因为开发人员需要将 `SDK` 包含在软件调用堆栈中并最终完全依赖特定的编程语言，更不用说升级/部署成本、敏捷性原则（当 `SDK` 升级时，应用程序也需要升级）、版本碎片化和较高的学习曲线。即使业务逻辑未发生改变，如果 `SDK` 需要升级，应用程序也需要更新发布新版本，这就是非功能代码与业务代码耦合的结果。
+第一代微服务依赖于内置的 `SDK` 实现服务发现、熔断重试等功能（如 `Spring Cloud`）。从开发的角度来看，这种方式存在很大的不足，因为开发人员需要将 `SDK` 包含在软件调用堆栈中并最终完全依赖特定的编程语言，更不用说升级/部署成本、敏捷性原则（当 `SDK` 升级时，应用程序也需要升级）、版本碎片化和较高的学习曲线。即使业务逻辑未发生改变，如果 `SDK` 需要升级，应用程序也需要更新发布新版本，这就是非业务代码与业务代码耦合的结果。
 
 ### Service Mesh
 
@@ -115,11 +115,11 @@ tags:
 
 ### Envoy
 
-`Envoy` 是使用 `C++` 语言实现的高性能代理。 `Istio` 服务网格将 `Envoy` 代理作为 `sidecar` 容器注入到应用程序容器旁边，并拦截服务的所有进出流量，执行不同的功能，例如负载平衡、服务熔断、故障注入和暴露 `Prometheus` 和 `Jeager` 收集数据的代理指标，被注入的代理共同构成了服务网格的**数据面**。
+`Envoy` 是使用 `C++` 语言实现的高性能代理。 `Istio` 服务网格将 `Envoy` 代理作为 `sidecar` 容器注入到应用程序容器旁边，并拦截服务的所有进出流量，执行不同的功能，例如负载均衡、服务熔断、故障注入和暴露 `Prometheus` 和 `Jeager` 收集数据的代理指标，被注入的代理共同构成了服务网格的**数据面**。
 
 ### Istiod
 
-`Istiod` 是一个控制面组件，它提供服务发现、配置和证书管理功能。 `Istiod` 采用 `YAML` 格式编写配置文件，并将其转换为 `Envoy` 可使用配置格式。然后它将此配置分发到网格中的所有 `sidecar`。
+`Istiod` 是一个控制面组件，它提供服务发现、配置和证书管理功能。 `Istiod` 采用 `YAML` 格式编写配置文件，并将其转换为 `Envoy` 可使用配置格式，然后它将此配置分发到网格中的所有 `sidecar`。
 
 - **Pilot**：`Pilot` 组件的主要作用是将路由规则等配置信息转化为 `sidecar` 可以识别的内容，发送给数据面。可以简单理解为配置分发器，辅助 `sidecar` 完成流量控制相关功能；
 
@@ -144,7 +144,7 @@ tags:
 
 说到 `Service Mesh`，我们可能首先想到的就是 `Istio` + `Envoy` 构成的 `sidecar` 模式的 `Service Mesh` 架构，目前这个架构非常流行；虽然乍一看这个架构没有明显的问题，但仍有几点值得深入考虑：
 
-- 性能下降：`Proxy` 是一个独立的应用程序，需要特定的资源，例如 `CPU` 和 `内存`，`Envoy` 运行通常需要大约 `1G` 的内存；
+- 性能下降：代理是一个独立的应用程序，需要特定的资源，例如 `CPU` 和 `内存`，`Envoy` 运行通常需要大约 `1G` 的内存；
 - 架构复杂：需要控制面、数据面、不同应用的规则推送、代理之间的通信安全等；
 - 运维成本增加：没有自动化运维工具，就无法部署 `sidecar`，`Service Mesh` 的典型解决方案是基于 `Kubernetes`，能够减少很多工作量。
 
@@ -152,15 +152,15 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/06.png" style="width:100%"/>
 
-正如我们已经观察到的情况，使用 `sidecar` 模式，我们需要在每个单元上正确部署配置一个容器；如果仔细观察，每个节点只有一个内核，在同一个节点上运行的所有容器都共享同一个内核，我们能不能利用它来将部署的 `sidecar` 代理的数量减少到与节点的数量一致？`eBPF` 正是用于解决这个问题。
+正如我们已经观察到的情况，使用 `sidecar` 模式需要在每个单元上正确部署一个容器；如果仔细观察，每个节点只有一个内核，在同一个节点上运行的所有容器都共享同一个内核，我们能不能利用它来将部署的 `sidecar` 代理的数量减少到与节点的数量一致？`eBPF` 正是用于解决这个问题。
 
-`eBPF` 是一种内核技术，允许自定义程序在内核中运行，这些运行的程序可以响应数以千计的各种事件，`eBPF` 程序可以附加到这些事件上，这些事件包括轨迹点、访问或退出各种功能（在内核或用户空间中）或对服务网格很重要的网络数据包。如果我们将一个 `eBPF` 程序添加到一个内核事件中，它就会被触发，无论是哪个进程引起了这个事件，也无论事件是运行在应用程序容器中还是直接运行在主机上。无论你是在可观测性、安全性还是网络，`eBPF` 驱动的解决方案无需部署 `sidecar` 就可以检测到应用程序。
+`eBPF` 是一种内核技术，允许自定义程序在内核中运行，这些运行的程序可以响应数以千计的各种事件，`eBPF` 程序可以附加到这些事件上，这些事件包括轨迹点、访问或退出各种功能（在内核或用户空间中）或对服务网格很重要的网络数据包。如果我们将一个 `eBPF` 程序添加到一个内核事件中，它就会被触发，无论是哪个进程引起了这个事件，也无论事件是运行在应用程序容器中还是直接运行在主机上。无论是在可观测性、安全性还是网络，`eBPF` 驱动的解决方案无需部署 `sidecar` 就可以检测到应用程序。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/07.png" style="width:100%"/>
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://isovalent.com/blog/post/2021-12-08-ebpf-servicemesh </div>
 
-`2021` 年 `12` 月 `2` 日，`Cilium` 项目宣布了 [Cilium Service Mesh](https://cilium.io/blog/2021/12/01/cilium-service-mesh-beta/) 的 `Beta` 测试计划。基于 `eBPF` 的 [Cilium](https://cilium.io/) 项目将这种**Sidecarless**模型引入到 `Service Mesh`，以实现 `Service Mesh` 的大部分 `sidecar` 代理能量，包括 `L7` 路由、负载均衡、`TLS`、访问策略、健康检查、日志记录和链路追踪。
+`2021` 年 `12` 月 `2` 日，`Cilium` 项目宣布了 [Cilium Service Mesh](https://cilium.io/blog/2021/12/01/cilium-service-mesh-beta/) 的 `Beta` 测试计划。基于 `eBPF` 的 [Cilium](https://cilium.io/) 项目将这种 **Sidecarless** 模型引入到 `Service Mesh`，以实现 `Service Mesh` 的大部分 `sidecar` 代理能量，包括 `L7` 路由、负载均衡、`TLS`、访问策略、健康检查、日志记录和链路追踪。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/08.png" style="width:100%"/>
 
@@ -170,11 +170,11 @@ tags:
 
 ### 减少 YAML 配置
 
-在 `sidecar` 模式中，需要修改每个指定应用程序 `Pod` 的 `YAML` 文件来添加 `sidecar` 容器，这通常是自动化完成的——例如，使用变异的 `webhook` 在部署每个应用程序 `Pod` 时注入 `sidecar`。
+在 `sidecar` 模式中，需要修改每个指定应用程序 `Pod` 的 `YAML` 文件来添加 `sidecar` 容器，通常是自动化完成的——例如，使用变异的 `webhook` 在部署每个应用程序 `Pod` 时注入 `sidecar`。
 
 以 `Istio` 为例，它需要标记 `Kubernetes` 命名空间和（或） `Pod` 来定义是否应该注入 `sidecar`。
 
-但是，如果出现问题怎么办？如果命名空间或 `Pod` 没有被正确标记，`sidecar` 将不会被注入，`Pod` 也无法连接到服务网格；更糟糕的是，如果攻击者破坏集群并运行恶意程序，则通过服务网格提供的流量观测能力是无法发现的。
+如果出现问题怎么办？如果命名空间或 `Pod` 没有被正确标记，`sidecar` 将不会被注入，`Pod` 也就无法连接到服务网格；更糟糕的是，如果攻击者破坏集群并运行恶意程序，通过服务网格提供的流量观测能力是无法发现的。
 
 相比之下，在支持 `eBPF` 的无 `sidecar` 代理模型中，无需任何额外的 `YAML` 配置即可检测到 `Pod`。相反，`CRD` 用于配置集群内的服务网格，甚至现有的 `Pod` 无需重新启动也可以成为服务网格的一部分。
 
@@ -198,7 +198,7 @@ tags:
 
 服务网格通常用于确保所有应用程序流量都经过身份认证和加密。通过双向 `TLS` (`mTLS`)，服务网格代理组件充当网络连接的端点，并与远程端点协商安全 `TLS` 连接，该连接在不更改应用程序的情况下加密代理之间的通信。
 
-`TLS` 的应用层实现并不是实现组件之间认证和流量加密的唯一方式，也可以使用 `IPSec` 或 `WireGuard` 在网络层进行流量加密，因为它在网络层运行，所以这种加密不仅对应用程序完全透明，而且对代理也完全透明——无论是否存在服务网格，都可以启用它。如果我们使用服务网格的唯一原因是提供加密，我们可能需要考虑网络层加密，它不仅更简单，而且还用于验证和加密节点上的所有流量——不仅限于启用了 `sidecar` 的程序。
+`TLS` 的应用层实现并不是实现组件之间认证和流量加密的唯一方式，也可以使用 `IPSec` 或 `WireGuard` 在网络层进行流量加密，因为它在网络层运行，所以这种加密不仅对应用程序完全透明，而且对代理也完全透明——无论是否存在服务网格，都可以启用它。如果我们使用服务网格的唯一原因是提供加密，我们可能需要考虑网络层加密，它不仅更简单，而且还用于验证和加密节点上的所有流量——能够不局限于启用了 `sidecar` 的程序。
 
 ## 6. RSocket Broker
 
@@ -208,7 +208,7 @@ tags:
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> https://rsocketbyexample.info/java/ </div>
 
-`RSocket Broker` 的工作原理是：服务调用者（`Requester`）向 `Broker` 发起服务调用请求，`Broker` 将请求转发给服务提供者（`Responder`），`Broker` 最终将 `responder` 的处理结果返回给服务调用者。
+`RSocket Broker` 的工作原理是：服务调用者（`Requester`）向 `Broker` 发起服务调用请求，`Broker` 将请求转发给服务提供者（`Responder`），`Broker` 最终将 `Responder` 的处理结果返回给服务调用者。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/06-Exploring-Service-Mesh-In-Depth-Study/11.png" style="width:100%"/>
 
@@ -219,7 +219,7 @@ tags:
 
 这种基于 `Broker` 的消息通信方式具有以下优点：
 
-- 不需要第三方健康检查，因为我们知道连接何时启动；
+- 不需要第三方健康检查，因为我们知道连接何时建立；
 - 无端口监听：服务提供者不再监听端口，与 `HTTP REST API` 和 `gRPC` 完全不同，它更加安全；
 - 通信透明：服务调用者和服务提供者无需感知对方的存在；
 - 流量控制：如果服务提供者压力过大，`Broker` 会自动将消息转发给其他服务提供者（智能负载均衡），可以通过租约来实现；
@@ -243,15 +243,15 @@ tags:
 - 基础设施层：一个是 `sidecar` 代理 + 控制面，另一个是集成了控制面功能的中心化 `Broker`；
 - 集中管理：集中化会让管理更全面，比如 `Logging`、`Metrics` 等；
 - 通信协议：`RSocket` 方案的一个缺点是应用程序之间必须使用 `RSocket` 通信协议；
-- 应用程序或设备访问：并非所有设备都可以安装代理；主要有几个原因：设备和系统本身不支持，比如物联网设备；这是基于 `RSocket` 的方案具有巨大优势的地方；
-- 增加运维成本：管理一个由 `10` 台服务器组成的 `RSocket` `Broker` 集群和管理 `10K` 个 `Proxy` 实例是不一样的；
+- 应用程序或设备访问：并非所有设备都可以安装代理，主要有几个原因：设备和系统本身不支持，比如物联网设备，这是基于 `RSocket` 的方案具有巨大优势的地方；
+- 增加运维成本：管理一个由 `10` 台服务器组成的 `RSocket Broker` 集群和管理 `10K` 个 `Proxy` 实例是不一样的；
 - 效率：`RSocket` 协议性能比 `HTTP` 高 `10` 倍；
 - 安全性：`RSocket` 的安全实现更简单。`Broker` 主要是用 `TLS` + `JWT` 实现，不使用 `mTLS`，不需要证书管理。同时，借助 `JWT` 的安全模型，很容易实现更细粒度的权限控制，使用 `RSocket` 代理方案，可以减少攻击面；
-- 网络和基础设施依赖：`RSocket` `Broker` 相对于 `Istio` 的一大优势就是不依赖 `Kubernetes`，虽然 `Istio` 也声称不依赖 `Kubernetes`，但是在 `Kubernetes` 之外部署和管理 `sidecar` 代理并不简单，而 `RSocket` `Broker` 可以部署在任何地方。
+- 网络和基础设施依赖：`RSocket Broker` 相对于 `Istio` 的一大优势就是不依赖 `Kubernetes`，虽然 `Istio` 也声称不依赖 `Kubernetes`，但是在 `Kubernetes` 之外部署和管理 `sidecar` 代理会很麻烦，而 `RSocket Broker` 可以部署在任何地方。
 
 ## 最后总结
 
-服务治理是微服务时代一个重要性不断增长的话题。通过本文，我们研究了通过 `Istio`、`eBPF` 和 `RSocket` `Router` 实现服务治理的不同解决方案。
+服务治理是微服务时代一个重要性不断增长的话题。通过本文，我们研究了通过 `Istio`、`eBPF` 和 `RSocket Router` 实现服务治理的不同解决方案。
 
 ## 参考链接
 
