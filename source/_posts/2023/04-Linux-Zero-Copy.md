@@ -10,7 +10,7 @@ author:
     link: https://tonylixu.medium.com/
 
 # post subtitle in your index page
-subtitle: 在这篇博客文章中，我们将介绍 Linux 系统中零拷贝概念以及零拷贝实现原理。
+subtitle: 本文将介绍 Linux 系统中零拷贝概念以及零拷贝实现原理。
 
 categories: 
   - 数据库

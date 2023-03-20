@@ -9,7 +9,7 @@ author:
     link: https://yuchen52.medium.com/
 
 # post subtitle in your index page
-subtitle: 在这篇博客文章中，我们将学习如何使用 Rust 语言一步一步构建一个 gRPC 服务端程序。
+subtitle: 本文将学习如何使用 Rust 语言一步一步构建一个 gRPC 服务端程序。
 
 categories: 
   - 架构设计

@@ -10,7 +10,7 @@ author:
     link: https://www.percona.com/blog/author/ankit-kapoor/
 
 # post subtitle in your index page
-subtitle: 在这篇博客文章中，我们将学习如何借助 performance schema 中 Instrument 工具来排查 `MySQL` 数据库的一些问题。
+subtitle: 本文将学习如何借助 performance schema 中 Instrument 工具来排查 MySQL 数据库的一些问题。
 
 categories: 
   - 数据库

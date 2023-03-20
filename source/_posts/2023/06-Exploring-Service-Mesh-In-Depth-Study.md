@@ -10,7 +10,7 @@ author:
   link: https://medium.com/@deepkondah
 
 # post subtitle in your index page
-subtitle: 在这篇博客文章中，我们将通过 Istio、eBPF 和 RSocket Broker 技术深入探索 Service Mesh 解决方案。
+subtitle: 本文将通过 Istio、eBPF 和 RSocket Broker 技术深入探索 Service Mesh 解决方案。
 
 categories:
 - 架构设计
