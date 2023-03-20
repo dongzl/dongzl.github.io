@@ -10,7 +10,7 @@ author:
   link: https://www.percona.com/blog/author/michael-villegas/
 
 # post subtitle in your index page
-subtitle: 在这篇博客文章中，我们将排查一个由于 lower_case_table_names 配置变更引起的问题。
+subtitle: 本文将排查一个由于 lower_case_table_names 配置变更引起的问题。
 
 categories:
 - 数据库
