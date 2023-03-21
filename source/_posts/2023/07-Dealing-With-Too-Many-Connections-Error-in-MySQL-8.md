@@ -1,5 +1,5 @@
 ---
-title: （待完成）Dealing With “Too Many Connections” Error in MySQL 8
+title: （待完成）如何处理 MySQL 8 中 "Too Many Connections" 错误
 date: 2023-03-18 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 
@@ -20,3 +20,5 @@ tags:
 ---
 
 > 原文链接：https://www.percona.com/blog/dealing-with-too-many-connections-error-in-mysql-8/
+
+
