@@ -1,5 +1,5 @@
 ---
-title: （待完成）如何处理 MySQL 8 中 "Too Many Connections" 错误
+title: 在 MySQL 8 中处理 "Too Many Connections" 错误
 date: 2023-03-18 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 
@@ -10,7 +10,7 @@ author:
   link: https://www.percona.com/blog/author/michael-villegas/
 
 # post subtitle in your index page
-subtitle: 本文将排查一个由于 lower_case_table_names 配置变更引起的问题。
+subtitle: 本文将用示例演示如何在 MySQL 8 中处理 "Too Many Connections"  错误。
 
 categories:
 - 数据库
@@ -205,4 +205,58 @@ Enter password:
 
 ## 总结
 
-如果我们使用的是 `MySQL 8.0.14` 或更高版本，我们应用启用管理连接功能；正如我们所见，启用此功能非常简单，并且通过在发生“错误”事件时允许 DBA 访问数据库来利用一个很棒的功能1040 (08004): 连接太多”。这一新特性不会影响正常的数据库性能，并为 DBA 带来强大的力量。请考虑仅向管理用户添加权限“SERVICE_CONNECTION_ADMIN”，而不是应用程序用户，这样做的目的是不要滥用此功能。如果您仍在使用较低版本的 Percona Server for MySQL，请记住您可以配置变量“extra_port”和“extra_max_connections”来访问您的数据库，以防您遇到最大连接问题。
+如果我们使用的是 `MySQL 8.0.14` 或更高版本，我们应用启用管理连接功能；正如示例所见开启这个能非常简单，使用这个新特性在触发 `ERROR 1040 (08004): Too many connections` 错误时允许 `DBA` 继续访问数据库来。这个新特性不会影响正常的数据库性能，但是可以对 `DBA` 工作发挥很大作用。
+
+我们应当考虑仅向管理员用户添加 `SERVICE_CONNECTION_ADMIN` 权限，而不是普通应用程序用户，这样做的目的是不要滥用此功能。如果我们还在使用较低版本的 `Percona Server for MySQL` 时，如果遇到最大连接问题，我们可以配置变量 `extra_port` 和 `extra_max_connections` 来访问数据库。
+
+> https://www.percona.com/blog/too-many-connections-no-problem/
+
+你在生产中遇到过这种情况吗？
+
+```shell
+[percona@sandbox msb_5_0_87]$ ./use
+ERROR 1040 (00000): Too many connections
+```
+
+刚刚发生在我们的一位客户身上。想知道我们是怎么处理的吗？
+
+出于演示目的，我将在此处使用沙箱（因此 ./use 实际上正在执行 mysql cli）。哦，请注意，这不是通用的最佳实践，而是服务器被淹没时的闯入式黑客攻击。因此，当这种情况发生在生产中时，问题是——您如何快速重新获得对 mysql 服务器的访问权限以查看所有会话在做什么，以及如何在不重新启动应用程序的情况下执行此操作？这是诀窍：
+
+```shell
+[percona@sandbox msb_5_0_87]$ gdb -p $(cat data/mysql_sandbox5087.pid) \
+                                     -ex "set max_connections=5000" -batch
+[Thread debugging using libthread_db enabled]
+[New Thread 0x2ad3fe33b5c0 (LWP 1809)]
+[New Thread 0x4ed19940 (LWP 27302)]
+[New Thread 0x41a8b940 (LWP 27203)]
+...
+[New Thread 0x42ec5940 (LWP 1813)]
+[New Thread 0x424c4940 (LWP 1812)]
+0x00000035f36cc4c2 in select () from /lib64/libc.so.6
+```
+
+结果如下：
+
+```shell
+[percona@test9 msb_5_0_87]$ ./use 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 5.0.87-percona-highperf-log MySQL Percona High Performance Edition, Revision 61 (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql [localhost] {msandbox} ((none)) > select @@global.max_connections;
++--------------------------+
+| @@global.max_connections |
++--------------------------+
+|                     5000 | 
++--------------------------+
+1 row in set (0.00 sec)
+```
+
+[gdb magic](https://dom.as/tag/gdb/) 的能力需要归功于 [Domas](https://dom.as/)。
+
+**几点注意事项**：
+- 我们通常会为 `SUPER` 权限用户保留一个连接，但如果应用程序正在使用 `SUPER` 用户身份连接数据库（无论如何这不是一个好主意），这个方法就行不通了；
+- 这个办法在 `5.0.87-percona-highperf` 上是有效的，但使用这个方案需要承担一些风险，并且在实际生产环境中使用之前需要进行充分测试；
+- 这个示例假设配置的 `max_connections` 数量小于 `5000`。
