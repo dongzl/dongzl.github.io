@@ -1,5 +1,5 @@
 ---
-title: 在 MySQL 8 中处理 "Too Many Connections" 错误
+title: MySQL 8 中处理 "Too Many Connections" 错误
 date: 2023-03-18 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_study.png
 

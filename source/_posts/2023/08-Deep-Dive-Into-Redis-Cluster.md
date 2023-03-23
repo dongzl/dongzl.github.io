@@ -1,5 +1,5 @@
 ---
-title: Deep dive into Redis cluster: sharding algorithms and architecture
+title: Deep dive into Redis cluster：sharding algorithms and architecture
 date: 2013-03-24 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
