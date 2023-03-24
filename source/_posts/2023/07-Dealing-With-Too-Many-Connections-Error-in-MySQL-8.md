@@ -29,7 +29,7 @@ tags:
 
 我准备用一个示例演示这个功能，对于这个示例，我需要一个 `max_connections=20` 的数据库实例，并创建三个用户，用户 `monitor1` 只有 `PROCESS` 权限，用户 `admin1` 拥有 `PROCESS` 和 `CONNECTION_ADMIN` 权限，最后一个用户 `admin2` 有权限超级（已废弃）。我们将演示 `MySQL` 在用户连接数达到最大值的情况下如何处理这些连接：
 
-```shell
+```sql
 -- execute all 20 concurrent connections
 sysbench oltp_read_write --table-size=1000000 --db-driver=mysql --mysql-host=localhost --mysql-db=sbtest --mysql-user=root --mysql-password="***" --num-threads=20 --time=0 --report-interval=1 run
 -- test with user monitor1 
@@ -106,7 +106,7 @@ mysql> select count(1) from information_schema.processlist;
 
 正如我们所演示的，`MySQL` 允许与拥有 `CONNECTION_ADMIN` 或者 `SUPER` 权限的用户进行连接，但是当用户 `monitor1` 尝试进行连接时是不允许的，因为它没有被授予这些权限。一旦我们获得了对数据库的访问权限，我们就可以通过在线更改参数 `max_connections` 轻松增加连接数量，然后排查导致连接数量不够的问题根源。重要的是我们要记住只是授予这些权限的用户连接才可以执行这个操作，所以我们不要轻易将这些权限授予某个用户，否则我们仍然可能无法执行这个操作。
 
-```shell
+```sql
 – trying a second connection with user admin1
 
 [root@rocky-test1 ~]# mysql -u admin1 -p
@@ -126,13 +126,13 @@ ERROR 1040 (HY000): Too many connections
 
 启用 `Administrative Connections` 最简单的方式是设置 `admin_address` 参数，这是管理连接将会监听的 `IP` 地址；例如，如果我们只允许本地连接，我们可以将这个参数设置为 `127.0.0.1`，或者如果我们想通过网络进行连接，我们可以将这个变参数定义为服务器的 `IP` 地址。这个参数不能够动态设置，这意味着修改这个参数需要重启数据库；默认情况下，此参数值为空，表示禁用管理连接功能。另一个相关变量是 `admin_port`；此参数定义 `MySQL` 作为管理连接所监听的端口，此参数的默认值为 `33062`，定义这两个参数并重新启动数据库后，我们将会在错误日志中看到一条消息，显示管理接口已准备好并等待连接：
 
-```shell
+```sql
 2023-02-28T14:42:44.383663Z 0 [System] [MY-013292] [Server] Admin interface ready for connections, address: '127.0.0.1'  port: 33062
 ```
 
 现在管理接口已配置就绪，我们需要定义可以访问此管理连接的用户。这些用户将需要拥有 `SERVICE_CONNECTION_ADMIN` 权限；否则将没有权限进行连接。按照我们的初始示例，我已将 `SERVICE_CONNECTION_ADMIN` 授予用户 `admin1` 但未授予用户 `admin2`。
 
-```shell
+```sql
 mysql> show grants for admin1;
 +------------------------------------------------------------------------+
 | Grants for admin1@%                                                    |
@@ -153,7 +153,7 @@ mysql> show grants for admin2;
 
 测试与管理接口的连接，我们看到只允许用户 `admin1` 进行连接，而用户 `admin2` 连接因缺乏 `SERVICE_CONNECTION_ADMIN` 权限而被拒绝。此外，我们可以确认用户 `admin1` 用户连接到了 33062 端口，这是用于管理连接特性的端口。
 
-```shell
+```sql
 -- testing user admin1
 
 [root@rocky-test1 ~]# mysql -h 127.0.0.1 -P 33062 -u admin1 -p
@@ -209,20 +209,29 @@ Enter password:
 
 我们应当考虑仅向管理员用户添加 `SERVICE_CONNECTION_ADMIN` 权限，而不是普通应用程序用户，这样做的目的是不要滥用此功能。如果我们还在使用较低版本的 `Percona Server for MySQL` 时，如果遇到最大连接问题，我们可以配置变量 `extra_port` 和 `extra_max_connections` 来访问数据库。
 
+<hr />
+
+# Too many connections? No problem!
+
 > https://www.percona.com/blog/too-many-connections-no-problem/
 
 你在生产中遇到过这种情况吗？
 
-```shell
+```sql
 [percona@sandbox msb_5_0_87]$ ./use
 ERROR 1040 (00000): Too many connections
 ```
 
 刚刚发生在我们的一位客户身上。想知道我们是怎么处理的吗？
 
-出于演示目的，我将在此处使用沙箱（因此 ./use 实际上正在执行 mysql cli）。哦，请注意，这不是通用的最佳实践，而是服务器被淹没时的闯入式黑客攻击。因此，当这种情况发生在生产中时，问题是——您如何快速重新获得对 mysql 服务器的访问权限以查看所有会话在做什么，以及如何在不重新启动应用程序的情况下执行此操作？这是诀窍：
+出于演示目的，我在此处使用沙箱环境（因为 `./use` 实际上正在执行 `MySQL CLI` 工具）。请注意这不是通用的最佳实践，而是类似于服务器恶意闯入式的黑客攻击。因此当这种情况发生在生产环境中时，我们需要处理的问题是：
 
-```shell
+- 如何快速重新获得对 `MySQL` 服务器的访问权限以便查看所有会话都在执行什么操作；
+- 如何能够不重启应用程序的情况下连接到 `MySQL` 服务器。
+
+下面方法是一个小窍门：
+
+```sql
 [percona@sandbox msb_5_0_87]$ gdb -p $(cat data/mysql_sandbox5087.pid) \
                                      -ex "set max_connections=5000" -batch
 [Thread debugging using libthread_db enabled]
@@ -237,7 +246,7 @@ ERROR 1040 (00000): Too many connections
 
 结果如下：
 
-```shell
+```sql
 [percona@test9 msb_5_0_87]$ ./use 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
