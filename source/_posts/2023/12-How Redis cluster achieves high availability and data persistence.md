@@ -1,5 +1,5 @@
 ---
-title: Deep dive into Redis cluster：sharding algorithms and architecture
+title: How Redis cluster achieves high availability and data persistence
 date: 2013-03-24 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
 
@@ -19,5 +19,4 @@ tags:
 - Service Mesh
 ---
 
-> 原文链接：https://medium.com/@bb8s/deep-dive-into-redis-cluster-sharding-algorithms-and-architecture-a093a92e97af
-
+> 原文链接：https://medium.com/@bb8s/how-redis-cluster-achieves-high-availability-and-data-persistence-8cdc899764e8
