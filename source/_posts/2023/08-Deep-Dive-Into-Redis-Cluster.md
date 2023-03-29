@@ -1,7 +1,7 @@
 ---
 title: 深入探索 Redis 集群：分片算法和分片架构
-date: 2013-03-24 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
+date: 2023-03-24 20:03:22
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_server.png
 
 # author information, multiple authors are set to array
 # single author
@@ -91,3 +91,41 @@ Redis 是在许多公司中被广泛使用的缓存框架。由于所有的操�
 - 同样当我们从集群中移除 `A` 节点时，只需要把 `A` 中的槽迁移到 `B` 和 `C` 上即可，这样就可以安全移除节点 `A` 了。
 
 总之，将哈希槽从一个节点移动到另一个节点不需要集群停止操作；添加和删除节点，或调整某个节点上哈希槽的百分比，不需要任何集群停机时间。
+
+## 分片架构
+
+### 原生 Redis 集群
+
+原生集群的实现与上述算法完全相同。所有功能，例如**路由/分片**、**集群拓扑元数据**、**实例健康监控**等等都集成在集群中，没有其他依赖项，实例之间使用 `gossip` 协议来相互交互。
+
+原生集群通常可以支持 `300 ~ 400` 个实例，每个实例可以处理 `8` 万 `QPS` 的读操作，集群总共可以处理 `2000 ~ 3000` 万 `QPS`。
+
+但是，如果需要处理更高的 `QPS`，一旦集群超过 `400` 个实例，添加更多的 `Redis` 实例就不再是一个好主意。原因是随着集群中实例数量的增加，`gossip` 协议的资源占用也会迅速增加；当系统架构需要进一步扩展时，其他架构的使用更为广泛。
+
+### Twemproxy + 原生 Redis 集群
+
+下图展示了 `Twemproxy` 在多个 `Redis` 实例环境下工作的基本架构。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/08-Deep-Dive-Into-Redis-Cluster/08.png" style="width:100%"/>
+
+`Twemproxy` 是前面描述具有集中代理的服务器端分片的架构示例。 `Twemproxy` 是由 `Twitter` 开源的。`Twemproxy` 可以接受来自多个客户端服务的请求，并将请求定向到底层的 `Redis` 节点等待响应，然后直接将响应结果返回给客户端。`Twemproxy` 还支持如下一些非常有用的功能：
+
+- 自动删除故障 Redis 节点；
+- 支持 Hashtag 能力。例如，如果我们想要确保一组 Key 被哈希到同一个 Redis 实例节点，我们就可以给这些 Key 设置相同的 `Hashtag`；
+- 支持多种哈希算法。
+
+`Twemproxy` 可以与原生 `Redis` 集群协同工作，如图：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/08-Deep-Dive-Into-Redis-Cluster/09.png" style="width:100%"/>
+
+在这种情况下，`Twemproxy` 不再处理**路由/分片**，而是用于存储元数据，例如高级 `Redis` 集群拓扑、访问控制列表，并可用于监控常见的可能导致本机 `Redis` 集群出现故障的**热 Key**、**大 Key**问题等。**分片/路由**仍然由底层原生 `Redis` 集群处理。换句话说，一个 `Twemproxy` 节点维护与所有 `Redis` 节点的连接，并且可以向底层所有的 `Redis` 节点发送请求，接收请求的 `Redis` 节点将在需要时将请求重新路由到集群内的另一个 `Redis` 节点。
+
+`AWS` `ElasticCache` 就是使用的这种架构。`ElasticCache` 由一个代理服务器和一个支持主从复制的 `Redis` 集群组成，其中 `primary` 节点主要用于数据写入，`replicas` 用于数据读取。
+
+### 使用 Codis 进行集中分片
+
+`Codis` 引入了 `group` 的概念，每个 `group` 包含一个 `Redis` 主节点（`Redis master`），和 `1` 到多个 `Redis` 副本节点（`Redis slave`），如果主节点挂掉，一个副本节点可以被提升为新的主节点。
+
+`Codis` 同样使用了预分片机制，与原生的 `Redis` 集群的哈希槽功能类似，所有的 `Key` 被分布到 `1024` 个槽中，这意味着总共可以有多达 `1024` 个 `group`。路由信息（即元数据）存储在强一致性的数据存储框架中，例如 `Etcd` 或 `Zookeeper`。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/08-Deep-Dive-Into-Redis-Cluster/10.png" style="width:100%"/>
