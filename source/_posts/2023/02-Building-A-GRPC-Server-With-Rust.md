@@ -39,7 +39,7 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/01.png" style="width:600px"/>
 
-<font color=DarkGray size=2>gRPC（蓝）和 Apache Thrift（红）对比。[Google Trends](https://trends.google.com/trends/explore?date=all&q=GRPC,%2Fm%2F02qd4d1)</font>
+<font color=DarkGray size=2>gRPC（红）和 Apache Thrift（蓝）对比。[Google Trends](https://trends.google.com/trends/explore?date=all&q=GRPC,%2Fm%2F02qd4d1)</font>
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/02-Building-A-GRPC-Server-With-Rust/02.png" style="width:600px"/>
 

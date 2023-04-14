@@ -29,11 +29,11 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/09-Deep-Dive-Into-MySQL-Inner-Details/01.webp" style="width:100%"/>
 
-一切看起来都很简单，但是 `MySQL` 如何在后台处理 `SQL` 查询呢？换句话说，工程师和数据科学家编写的 `SQL` 查询语句通常都是纯文本字符串内容，并发送到 `MySQL` 的。那么 `MySQL` 是如何解析这个字符串并知道要查找哪个数据表以及要获取哪些记录呢？
+一切看起来都很简单，但是 `MySQL` 如何在后台处理 `SQL` 请求呢？换句话说，工程师和数据科学家编写的 `SQL` 查询语句通常都是纯文本字符串内容，并发送到 `MySQL` 的。那么 `MySQL` 是如何解析这个字符串并知道要查找哪个数据表以及要获取哪些记录呢？
 
 ## 连接池
 
-就像我们此时正在浏览这个页面一样，`Web` 浏览器（`chrome`、`safari`）会保持与 `Medium` 网站的连接；同样我们的应用服务器需要通过网络连接到 `MySQL` 服务器，然后发送 `SQL` 查询文本内容，连接池通常用于管理网路连接。
+就像我们此时正在浏览这个页面一样，`Web` 浏览器（`chrome`、`safari`）会保持与 `Medium` 网站的连接；同样我们的应用服务器需要通过网络连接到 `MySQL` 服务器，然后发送 `SQL` 查询文本内容，连接池通常用于管理网络连接。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/09-Deep-Dive-Into-MySQL-Inner-Details/02.webp" style="width:100%"/>
 
@@ -170,7 +170,7 @@ SELECT name FROM employee_table WHERE employee_id = 1;
 > 
 > 相反二级索引的叶子节点存储主键信息，当查询命中二级索引时，首先从二级索引中检索主键值，一旦我们知道了主键值，就可以使用主键索引检索目标数据行。
 
-至于为什么使用 `B+` 树而不是 `B` 树（`B` 树，不是读作 `B` 减树）：
+至于为什么使用 `B+` 树而不是 `B-` 树（`B` 树，不是读作 `B` 减树）：
 
 - `B+` 树减少了所需要的 `IO` 操作；
 - 查询效率更稳定；
