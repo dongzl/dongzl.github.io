@@ -1,7 +1,7 @@
 ---
 title: （进行中）探索 MySQL 索引优化神器
-date: 2023-04-04 10:24:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_inner_details.png
+date: 2023-04-22 10:24:22
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_index_optimize.png
 
 # author information, multiple authors are set to array
 # single author
@@ -234,5 +234,119 @@ select* from test2
 ```
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/10.png" style="width:100%"/>
+
+表 test2 是 UNION 关键字之后的查询，所以它被标识为 UNION，表 test1 是主表，被标识为 PRIMARY。而 `<union1,2>` 表示 `id=1` 和 `id=2` 的表并集，结果被标记为 `UNION RESULT`。
+
+所以 UNION 和 UNION RESULT 通常是成对出现的。
+
+### table 列
+
+该列的值表示输出行所引用的表名，如前面的：`test1`、`test2` 等。
+
+但它也可以是以下值之一：
+
+- `<unionM,N>`：`M` 和 `N` 并集操作的行记录和记录 `id`；
+- `<derivedN>`：用于与此行关联的派生表结果 id 的值 N。派生表可能来自（例如）FROM 子句中的子查询；
+- `<subqueryN>`：子查询的结果，其 id 值为 N。
+
+### partitions 列
+
+此列的值表示匹配查询记录结果的分区。
+
+### type 列
+
+该列的值表示连接类型，是索引执行情况的重要指标。
+
+这包含以下类型：
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/11.png" style="width:100%"/>
+
+执行结果从最好到最差的顺序是从上到下。
+
+我们需要关注以下类型：
+
+```shell
+system > const > eq_ref > ref > range > index > all
+```
+
+```shell
+# test2 table structure
+id    code    name
+1     001     city1
+```
+
+在 `code` 字段上建立一个普通索引。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/12.png" style="width:100%"/>
+
+下面我们一一看看几种常见的连接类型是如何出现的。
+
+#### 1. System
+
+这种类型只需要数据库表中的一条数据，是 `const` 类型的特例，一般不会出现。
+
+#### 2. Const
+
+通过一个索引可以找到数据，一般用在以主键或唯一索引为条件的查询 SQL 语句中。
+
+```sql
+explain select * from test2 where id=1;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/13.png" style="width:100%"/>
+
+#### 3. Eq_ref
+
+通常用于主键或唯一索引扫描。
+
+```sql
+explain select * from test2 t1 inner join test2 t2 on t1.id=t2.id;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/14.png" style="width:100%"/>
+
+const 和 eq_ref 都是对主键或唯一索引的扫描，那这两种类型有什么区别？
+
+答案：const 只会被索引一次，eq_ref 的主键与数据记录的主键匹配。由于表中有多条数据，一般情况下，需要对数据进行多次索引才能全部匹配。
+
+#### 4. Ref
+
+常用于非主键所以和唯一索引扫描。
+
+```sql
+explain select * from test2 where code = '001';
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/15.png" style="width:100%"/>
+
+#### 5. Range
+
+通常用于范围查询，例如：`between...and` 或者是 `in` 操作。
+
+```sql
+explain select * from test2 where id between 1 and 2;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/16.png" style="width:100%"/>
+
+#### 6. Index
+
+全索引扫描。
+
+```sql
+explain select code from test2;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/17.png" style="width:100%"/>
+
+##### 7. All
+
+全表扫描。
+
+```sql
+explain select *  from test2;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/18.png" style="width:100%"/>
 
 
