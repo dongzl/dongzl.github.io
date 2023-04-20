@@ -477,3 +477,65 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 Rows 结果显示估算会扫描的行数，rows × filtered 结果表示与后面的表进行连接操作的行数。
 
 例如，如果行数为 1,000，过滤为 50.00（50%），则与下表连接的行数为 1000 × 50% = 500。
+
+### extra 列
+
+该字段包含有关 MySQL 如何解析查询的其他信息。这个列信息还是很重要的，但是里面的值太多了，就不一一介绍了，只列举几个常见的。
+
+#### 1. Impossible WHERE
+
+假设指定 WHERE 后面的条件始终为 `false`。
+
+```sql
+explain select code  from test1 where 'a' = 'b';
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/28.png" style="width:100%"/>
+
+#### 2. Using filesort
+
+表示按文件排序，一般出现在指定排序和索引排序不一致的情况下。
+
+```sql
+explain select code  from test1 order by name desc;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/29.png" style="width:100%"/>
+
+这里创建了 `code` 和 `name` 的联合索引，顺序是 `code` 列在前，`name` 列在后；SQL 语句里按 `name` 字段直接降序，与之前的联合索引排序不同。
+
+#### 3. Using index
+
+表示是否使用了覆盖索引，说白了就是获取的列值是否都经过了索引。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/30.png" style="width:100%"/>
+
+在上面的例子中，实际使用的是：`Using index`，因为只返回一列代码，所以对其字段进行了索引。
+
+#### 4. Using temporary
+
+表示是否使用临时表，一般见于 `order by` 和 `group by` 语句。
+
+```sql
+explain select name  from test1 group by name;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/30.png" style="width:100%"/>
+
+#### 5. Using where
+
+表示使用了 `where` 条件过滤器。
+
+#### 6. Using join buffer
+
+指示是否使用连接缓冲。来自早期连接的表被部分读入连接缓冲区，并且使用缓冲区中的行来执行与当前表的连接。
+
+下面是索引优化的过程：
+
+1. 首先，使用慢查询日志定位需要优化的 SQL 语句；
+2. 使用 explain 查询计划查询索引使用情况；
+3. 关注 key, key_len, type, extra 信息，一般情况下，根据这四列就可以找到索引问题了。
+4. 根据第 3 步发现的索引问题优化 SQL 语句；
+5. 返回到第 2 步重复操作。
+
+感谢您阅读本文，敬请期待更多精彩文章。
