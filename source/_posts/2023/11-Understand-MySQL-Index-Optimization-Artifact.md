@@ -55,7 +55,7 @@ tags:
 
 我们来看看 MySQL 的官方文档是怎么描述 explain 的：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/01.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/01.webp" style="width:100%"/>
 
 <div style="color:DarkGray;font-size:14px;text-align:center;"> [Click to read documentation](https://dev.mysql.com/doc/refman/8.0/en/explain.html) </div>
 
@@ -95,13 +95,13 @@ explainable_stmt: {
 explain select * from test1;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/02.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/02.webp" style="width:100%"/>
 
 从上图可以看出，执行结果中会显示 `12` 列信息。
 
 每个列具体信息如下：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/03.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/03.webp" style="width:100%"/>
 
 说白了，我们需要了解这些列的具体含义，才能正常判断索引的使用情况。事不宜迟，让我们马上开始。
 
@@ -123,7 +123,7 @@ explain select * from test1;
 explain select * from test1 t1 inner join test1 t2 on t1.id=t2.id
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/04.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/04.webp" style="width:100%"/>
 
 我们可以看到执行结果中的两条数据 id 是相同的，都是 `1`。
 
@@ -137,7 +137,7 @@ explain select * from test1 t1 inner join test1 t2 on t1.id=t2.id
 explain select * from test1 t1 where t1.id = (select id from  test1 t2 where  t2.id=2);
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/05.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/05.webp" style="width:100%"/>
 
 我们可以看到执行结果中的两条数据 id 是不同的，第一条数据 `1`，第二条数据是 `2`。
 
@@ -154,7 +154,7 @@ inner join (select max(id) mid from test1 group by id) t2
 on t1.id=t2.mid
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/06.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/06.webp" style="width:100%"/>
 
 我们在执行结果中看到了三条数据。前两条数据 id 相同，第三条数据 id 与前一条不同。
 
@@ -197,7 +197,7 @@ on t1.id=t2.mid
 explain select * from test1;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/07.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/07.webp" style="width:100%"/>
 
 它只出现在简单的 `SELECT` 查询中，不包含子查询和 UNION 操作，这种类型比较直观，就不多说了。
 
@@ -207,7 +207,7 @@ explain select * from test1;
 explain select * from test1 t1 where t1.id = (select id from  test1 t2 where  t2.id=2);
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/08.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/08.webp" style="width:100%"/>
 
 我们看到在这个嵌套查询的 SQL 中，最外层的 `t1` 表是 PRIMARY 类型，最里面的子查询 `t2` 表是 SUBQUERY 类型。
 
@@ -220,7 +220,7 @@ inner join (select max(id) mid from test1 group by id) t2
 on t1.id=t2.mid
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/09.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/09.webp" style="width:100%"/>
 
 最后一条记录是派生表，一般是 FROM 列表中包含的子查询，这里是 SQL 语句中的分组子查询。
 
@@ -233,7 +233,7 @@ union
 select* from test2
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/10.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/10.webp" style="width:100%"/>
 
 表 test2 是 UNION 关键字之后的查询，所以它被标识为 UNION，表 test1 是主表，被标识为 PRIMARY。而 `<union1,2>` 表示 `id=1` 和 `id=2` 的表并集，结果被标记为 `UNION RESULT`。
 
@@ -259,7 +259,7 @@ select* from test2
 
 这包含以下类型：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/11.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/11.webp" style="width:100%"/>
 
 执行结果从最好到最差的顺序是从上到下。
 
@@ -277,7 +277,7 @@ id    code    name
 
 在 `code` 字段上建立一个普通索引。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/12.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/12.webp" style="width:100%"/>
 
 下面我们一一看看几种常见的连接类型是如何出现的。
 
@@ -293,7 +293,7 @@ id    code    name
 explain select * from test2 where id=1;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/13.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/13.webp" style="width:100%"/>
 
 #### 3. Eq_ref
 
@@ -303,7 +303,7 @@ explain select * from test2 where id=1;
 explain select * from test2 t1 inner join test2 t2 on t1.id=t2.id;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/14.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/14.webp" style="width:100%"/>
 
 const 和 eq_ref 都是对主键或唯一索引的扫描，那这两种类型有什么区别？
 
@@ -317,7 +317,7 @@ const 和 eq_ref 都是对主键或唯一索引的扫描，那这两种类型有
 explain select * from test2 where code = '001';
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/15.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/15.webp" style="width:100%"/>
 
 #### 5. Range
 
@@ -327,7 +327,7 @@ explain select * from test2 where code = '001';
 explain select * from test2 where id between 1 and 2;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/16.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/16.webp" style="width:100%"/>
 
 #### 6. Index
 
@@ -337,7 +337,7 @@ explain select * from test2 where id between 1 and 2;
 explain select code from test2;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/17.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/17.webp" style="width:100%"/>
 
 ##### 7. All
 
@@ -347,7 +347,7 @@ explain select code from test2;
 explain select *  from test2;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/18.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/18.webp" style="width:100%"/>
 
 ### possible_keys 列
 
@@ -355,7 +355,7 @@ explain select *  from test2;
 
 请注意，此列完全独立于表顺序，这意味着在实际中 `possible_keys` 列显示的某些索引可能不适用于生成的表顺序。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/19.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/19.webp" style="width:100%"/>
 
 如果此列结果为 `NULL`，则表示没有关联索引；在这种情况下，我们可以通过检查 `WHERE` 子句，查看是否引用了一些符合索引条件的列来提高查询性能。
 
@@ -372,13 +372,13 @@ id(bigint)    code(varchar30)    name(varchar30)
 
 `code` 和 `name` 列创建了联合索引。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/20.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/20.webp" style="width:100%"/>
 
 ```sql
 explain select code from test1;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/21.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/21.webp" style="width:100%"/>
 
 这条 SQL 预计不会使用索引，但实际上使用了全索引扫描索引。
 
@@ -386,7 +386,7 @@ explain select code from test1;
 
 此列表示被使用到的索引的长度。上面的 key 列可以看出索引是否被使用，key_len 列可以进一步看出索引是否被充分利用，毫无疑问，它是非常重要的列。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/22.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/22.webp" style="width:100%"/>
 
 key_len 是如何计算的呢？
 
@@ -432,7 +432,7 @@ MySQL 一些常用字段类型占用的字节数：
 explain select code  from test1;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/23.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/23.webp" style="width:100%"/>
 
 ```shell
 183 = 30 * 3 + 1 + 30 * 3 + 2
@@ -444,7 +444,7 @@ explain select code  from test1;
 explain select code  from test1 where code='001';
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/24.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/24.webp" style="width:100%"/>
 
 上图中使用了联合索引：idx_code_name。如果索引匹配所有的 key_len，应该是 183，但实际上是 92，也就是说没有使用到所有的索引，索引没有被完全使用。
 
@@ -456,7 +456,7 @@ explain select code  from test1 where code='001';
 explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code='001';
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/25.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/25.webp" style="width:100%"/>
 
 我们看到表 t1 命中的索引是 const（常量），t2 命中的索引是 `sue` 库的 `t1` 表的 `id` 字段。
 
@@ -464,7 +464,7 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 
 此列表示 MySQL 认为执行查询需要扫描的行数。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/26.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/26.webp" style="width:100%"/>
 
 对于 InnoDB 引擎表，这个数字是一个估计值，可能并不总是准确的。
 
@@ -472,7 +472,7 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 
 此列表示按条件过滤的行数所占表行数百分比的估算值。最大值为 `100`，这意味着不过滤任何记录。从 `100` 开始减小值表示增加数据过滤。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/27.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/27.webp" style="width:100%"/>
 
 Rows 结果显示估算会扫描的行数，rows × filtered 结果表示与后面的表进行连接操作的行数。
 
@@ -490,7 +490,7 @@ Rows 结果显示估算会扫描的行数，rows × filtered 结果表示与后�
 explain select code  from test1 where 'a' = 'b';
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/28.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/28.webp" style="width:100%"/>
 
 #### 2. Using filesort
 
@@ -500,7 +500,7 @@ explain select code  from test1 where 'a' = 'b';
 explain select code  from test1 order by name desc;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/29.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/29.webp" style="width:100%"/>
 
 这里创建了 `code` 和 `name` 的联合索引，顺序是 `code` 列在前，`name` 列在后；SQL 语句里按 `name` 字段直接降序，与之前的联合索引排序不同。
 
@@ -508,7 +508,7 @@ explain select code  from test1 order by name desc;
 
 表示是否使用了覆盖索引，说白了就是获取的列值是否都经过了索引。
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/30.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/30.webp" style="width:100%"/>
 
 在上面的例子中，实际使用的是：`Using index`，因为只返回一列代码，所以对其字段进行了索引。
 
@@ -520,7 +520,7 @@ explain select code  from test1 order by name desc;
 explain select name  from test1 group by name;
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/30.png" style="width:100%"/>
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/31.webp" style="width:100%"/>
 
 #### 5. Using where
 
