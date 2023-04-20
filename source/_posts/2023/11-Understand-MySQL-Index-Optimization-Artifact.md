@@ -349,4 +349,131 @@ explain select *  from test2;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/18.png" style="width:100%"/>
 
+### possible_keys 列
 
+此列表示可能被选择使用的索引。
+
+请注意，此列完全独立于表顺序，这意味着在实际中 `possible_keys` 列显示的某些索引可能不适用于生成的表顺序。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/19.png" style="width:100%"/>
+
+如果此列结果为 `NULL`，则表示没有关联索引；在这种情况下，我们可以通过检查 `WHERE` 子句，查看是否引用了一些符合索引条件的列来提高查询性能。
+
+### Key 列
+
+此列表示实际使用的索引。有可能会出现 possible_keys 列是空，但是 key 列不为空的情况。
+
+```shell
+# test1 table structure
+id(bigint)    code(varchar30)    name(varchar30)
+1             001                foo
+2             002                bar
+```
+
+`code` 和 `name` 列创建了联合索引。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/20.png" style="width:100%"/>
+
+```sql
+explain select code from test1;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/21.png" style="width:100%"/>
+
+这条 SQL 预计不会使用索引，但实际上使用了全索引扫描索引。
+
+### key_len 列
+
+此列表示被使用到的索引的长度。上面的 key 列可以看出索引是否被使用，key_len 列可以进一步看出索引是否被充分利用，毫无疑问，它是非常重要的列。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/22.png" style="width:100%"/>
+
+key_len 是如何计算的呢？
+
+有三个因素决定了 key_len 的结果：
+
+1. 字符集（Character set）
+2. 字段长度（Length）
+3. 是否为空（Is it empty）
+
+常用字符编码占用的字节数如下：
+
+- GBK：2 字节；
+- UTF8：3字节；
+- ISO8859–1：1 字节；
+- GB2312：2 字节；
+- UTF-16：2 字节。
+
+MySQL 一些常用字段类型占用的字节数：
+
+- char(n)：n 字节；
+- varchar(n)：n + 2 字节；
+- tinyint：1 字节；
+- smallint：2 字节；
+- int：4 字节；
+- bigint：8 字节；
+- date：3 字节；
+- timestamp：4 字节；
+- datetime：8 字节。
+
+另外，如果字段类型允许为空，则添加一个字节。
+
+上图中 `184` 的值是怎么计算出来的？
+
+首先，我使用的数据库的字符编码格式：UTF8，占三个字节。
+
+```shell
+184 = 30 * 3 + 2 + 30 * 3 + 2
+```
+
+然后，把 test1 表的 code 字段类型改成 char，改成允许为空，再测试。
+
+```sql
+explain select code  from test1;
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/23.png" style="width:100%"/>
+
+```shell
+183 = 30 * 3 + 1 + 30 * 3 + 2
+```
+
+还有一个问题：为什么这一列显示索引是否被完全使用？
+
+```sql
+explain select code  from test1 where code='001';
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/24.png" style="width:100%"/>
+
+上图中使用了联合索引：idx_code_name。如果索引匹配所有的 key_len，应该是 183，但实际上是 92，也就是说没有使用到所有的索引，索引没有被完全使用。
+
+### ref 列
+
+此列表示索引命中的列或常量。
+
+```sql
+explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code='001';
+```
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/25.png" style="width:100%"/>
+
+我们看到表 t1 命中的索引是 const（常量），t2 命中的索引是 `sue` 库的 `t1` 表的 `id` 字段。
+
+### rows 列
+
+此列表示 MySQL 认为执行查询需要扫描的行数。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/26.png" style="width:100%"/>
+
+对于 InnoDB 引擎表，这个数字是一个估计值，可能并不总是准确的。
+
+### filtered 列
+
+此列表示按条件过滤的行数所占表行数百分比的估算值。最大值为 `100`，这意味着不过滤任何记录。从 `100` 开始减小值表示增加数据过滤。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/27.png" style="width:100%"/>
+
+Rows 结果显示估算会扫描的行数，rows × filtered 结果表示与后面的表进行连接操作的行数。
+
+例如，如果行数为 1,000，过滤为 50.00（50%），则与下表连接的行数为 1000 × 50% = 500。
