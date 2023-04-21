@@ -1,5 +1,5 @@
 ---
-title: （进行中）探索 MySQL 索引优化神器
+title: 探索 MySQL 索引优化神器
 date: 2023-04-22 10:24:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/mysql_index_optimize.png
 
@@ -31,29 +31,29 @@ tags:
 
 主要的解决方式有如下一些：
 
-- 监控执行的 SQL，发送邮件和手机短信告警，方便快速定位慢查询 SQL；
+- 监控执行的 `SQL`，发送邮件和手机短信告警，方便快速定位慢查询 `SQL`；
 - 开启数据库慢查询日志功能；
 - 简化业务逻辑；
 - 代码重构和优化；
 - 异步处理；
-- SQL 优化；
+- `SQL` 优化；
 - 索引优化。
 
-这篇文章我主要会关注索引优化，因为索引优化是解决慢查询 SQL 问题最有效的一种方式。
+这篇文章我主要会关注索引优化，因为索引优化是解决慢查询 `SQL` 问题最有效的一种方式。
 
-如何查看SQL索引的执行状态？
+如何查看 `SQL` 索引的执行状态？
 
-是的，通过在 SQL 语句前面添加 `explain` 关键字，我们可以查看 SQL 的执行计划。通过执行计划，我们可以清晰地看到表和索引的执行情况，索引是否使用，索引执行的顺序，使用索引的类型等等。
+是的，通过在 `SQL` 语句前面添加 `explain` 关键字，我们可以查看 `SQL` 的执行计划。通过执行计划，我们可以清晰地看到表和索引的执行情况，索引是否使用，索引执行的顺序，使用索引的类型等等。
 
 优化索引的步骤如下：
 
-- 使用 explain 查看SQL执行计划；
+- 使用 `explain` 查看 `SQL` 执行计划；
 - 确定哪些索引使用不当；
-- 优化 SQL，可能需要多次优化 SQL 才能达到索引使用的最佳效果。
+- 优化 `SQL`，可能需要多次优化 `SQL` 才能达到索引使用的最佳效果。
 
 ## Explain 是什么
 
-我们来看看 MySQL 的官方文档是怎么描述 explain 的：
+我们来看看 MySQL 的官方文档是怎么描述 `explain` 的：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/01.webp" style="width:100%"/>
 
@@ -89,7 +89,7 @@ explainable_stmt: {
 }
 ```
 
-用一个简单的SQL看看使用explain关键字的效果：
+用一个简单的 `SQL` 看看使用 `explain` 关键字的效果：
 
 ```sql
 explain select * from test1;
@@ -109,11 +109,11 @@ explain select * from test1;
 
 该列的值为 `select` 查询中的序号，如 `1、2、3、4` 等，决定了表的执行顺序。
 
-一条 SQL 的执行计划一般有三种情况：
+一条 `SQL` 的执行计划一般有三种情况：
 
-- 相同 id；
-- 不同 id；
-- 相同 id 和 不同 id 同时出现。
+- 相同 `id`；
+- 不同 `id`；
+- 相同 `id` 和不同 `id` 同时出现。
 
 那么，在这三个 `case` 中表的执行顺序是怎样的呢？
 
@@ -125,11 +125,11 @@ explain select * from test1 t1 inner join test1 t2 on t1.id=t2.id
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/04.webp" style="width:100%"/>
 
-我们可以看到执行结果中的两条数据 id 是相同的，都是 `1`。
+我们可以看到执行结果中的两条数据 `id` 是相同的，都是 `1`。
 
 在这个场景中表的执行顺序是什么样的呢？
 
-答案：从上到下开始执行，首先执行表 t1，接着执行表 t2.
+答案：从上到下开始执行，首先执行表 `t1`，接着执行表 `t2`。
 
 #### 2. 不同 id
 
@@ -139,11 +139,11 @@ explain select * from test1 t1 where t1.id = (select id from  test1 t2 where  t2
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/05.webp" style="width:100%"/>
 
-我们可以看到执行结果中的两条数据 id 是不同的，第一条数据 `1`，第二条数据是 `2`。
+我们可以看到执行结果中的两条数据 `id` 是不同的，第一条数据 `1`，第二条数据是 `2`。
 
 在这个场景中表的执行顺序是什么样的呢？
 
-答案：序号大的会首先被执行。在这里将会从下到上开始执行，表 t2 将首先被执行，接着表 t1 将被执行。
+答案：序号大的会首先被执行。在这里将会从下到上开始执行，表 `t2` 将首先被执行，接着表 `t1` 将被执行。
 
 #### 3. 相同 id 和 不同 id 同时出现
 
@@ -156,7 +156,7 @@ on t1.id=t2.mid
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/06.webp" style="width:100%"/>
 
-我们在执行结果中看到了三条数据。前两条数据 id 相同，第三条数据 id 与前一条不同。
+我们在执行结果中看到了三条数据。前两条数据 `id` 相同，第三条数据 `id` 与前一条不同。
 
 在这个场景中表的执行顺序是什么样的呢？
 
@@ -199,7 +199,7 @@ explain select * from test1;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/07.webp" style="width:100%"/>
 
-它只出现在简单的 `SELECT` 查询中，不包含子查询和 UNION 操作，这种类型比较直观，就不多说了。
+它只出现在简单的 `SELECT` 查询中，不包含子查询和 `UNION` 操作，这种类型比较直观，就不多说了。
 
 #### 2. PRIMARY 和 SUBQUERY
 
@@ -209,7 +209,7 @@ explain select * from test1 t1 where t1.id = (select id from  test1 t2 where  t2
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/08.webp" style="width:100%"/>
 
-我们看到在这个嵌套查询的 SQL 中，最外层的 `t1` 表是 PRIMARY 类型，最里面的子查询 `t2` 表是 SUBQUERY 类型。
+我们看到在这个嵌套查询的 `SQL` 中，最外层的 `t1` 表是 `PRIMARY` 类型，最里面的子查询 `t2` 表是 `SUBQUERY` 类型。
 
 #### 3. DERIVED
 
@@ -222,7 +222,7 @@ on t1.id=t2.mid
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/09.webp" style="width:100%"/>
 
-最后一条记录是派生表，一般是 FROM 列表中包含的子查询，这里是 SQL 语句中的分组子查询。
+最后一条记录是派生表，一般是 `FROM` 列表中包含的子查询，这里是 `SQL` 语句中的分组子查询。
 
 #### 4. UNION and UNION RESULT
 
@@ -235,9 +235,9 @@ select* from test2
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/10.webp" style="width:100%"/>
 
-表 test2 是 UNION 关键字之后的查询，所以它被标识为 UNION，表 test1 是主表，被标识为 PRIMARY。而 `<union1,2>` 表示 `id=1` 和 `id=2` 的表并集，结果被标记为 `UNION RESULT`。
+表 `test2` 是 `UNION` 关键字之后的查询，所以它被标识为 `UNION`，表 `test1` 是主表，被标识为 `PRIMARY`。而 `<union1,2>` 表示 `id=1` 和 `id=2` 的表并集，结果被标记为 `UNION RESULT`。
 
-所以 UNION 和 UNION RESULT 通常是成对出现的。
+所以 `UNION` 和 `UNION RESULT` 通常是成对出现的。
 
 ### table 列
 
@@ -287,7 +287,7 @@ id    code    name
 
 #### 2. Const
 
-通过一个索引可以找到数据，一般用在以主键或唯一索引为条件的查询 SQL 语句中。
+通过一个索引可以找到数据，一般用在以主键或唯一索引为条件的查询 `SQL` 语句中。
 
 ```sql
 explain select * from test2 where id=1;
@@ -305,9 +305,9 @@ explain select * from test2 t1 inner join test2 t2 on t1.id=t2.id;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/14.webp" style="width:100%"/>
 
-const 和 eq_ref 都是对主键或唯一索引的扫描，那这两种类型有什么区别？
+`const` 和 `eq_ref` 都是对主键或唯一索引的扫描，那这两种类型有什么区别？
 
-答案：const 只会被索引一次，eq_ref 的主键与数据记录的主键匹配。由于表中有多条数据，一般情况下，需要对数据进行多次索引才能全部匹配。
+答案：`const` 只会被索引一次，`eq_ref` 的主键与数据记录的主键匹配。由于表中有多条数据，一般情况下，需要对数据进行多次索引才能全部匹配。
 
 #### 4. Ref
 
@@ -361,7 +361,7 @@ explain select *  from test2;
 
 ### Key 列
 
-此列表示实际使用的索引。有可能会出现 possible_keys 列是空，但是 key 列不为空的情况。
+此列表示实际使用的索引。有可能会出现 `possible_keys` 列为空，但是 `key` 列不为空的情况。
 
 ```shell
 # test1 table structure
@@ -380,53 +380,53 @@ explain select code from test1;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/21.webp" style="width:100%"/>
 
-这条 SQL 预计不会使用索引，但实际上使用了全索引扫描索引。
+这条 `SQL` 预计不会使用索引，但实际上使用了全索引扫描索引。
 
 ### key_len 列
 
-此列表示被使用到的索引的长度。上面的 key 列可以看出索引是否被使用，key_len 列可以进一步看出索引是否被充分利用，毫无疑问，它是非常重要的列。
+此列表示被使用到的索引的长度。上面的 `key` 列可以看出索引是否被使用，`key_len` 列可以进一步看出索引是否被充分利用，毫无疑问，它是非常重要的列。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/22.webp" style="width:100%"/>
 
-key_len 是如何计算的呢？
+`key_len` 是如何计算的呢？
 
-有三个因素决定了 key_len 的结果：
+有三个因素决定了 `key_len` 的结果：
 
-1. 字符集（Character set）
-2. 字段长度（Length）
-3. 是否为空（Is it empty）
+1. 字符集（`Character set`）
+2. 字段长度（`Length`）
+3. 是否为空（`Is it empty`）
 
 常用字符编码占用的字节数如下：
 
-- GBK：2 字节；
-- UTF8：3字节；
-- ISO8859–1：1 字节；
-- GB2312：2 字节；
-- UTF-16：2 字节。
+- `GBK`：`2` 字节；
+- `UTF8`：`3` 字节；
+- `ISO8859–1`：`1` 字节；
+- `GB2312`：`2` 字节；
+- `UTF-16`：`2` 字节。
 
 MySQL 一些常用字段类型占用的字节数：
 
-- char(n)：n 字节；
-- varchar(n)：n + 2 字节；
-- tinyint：1 字节；
-- smallint：2 字节；
-- int：4 字节；
-- bigint：8 字节；
-- date：3 字节；
-- timestamp：4 字节；
-- datetime：8 字节。
+- `char(n)`：`n` 字节；
+- `varchar(n)`：`n + 2` 字节；
+- `tinyint`：`1` 字节；
+- `smallint`：`2` 字节；
+- `int`：`4` 字节；
+- `bigint`：`8` 字节；
+- `date`：`3` 字节；
+- `timestamp`：`4` 字节；
+- `datetime`：`8` 字节。
 
 另外，如果字段类型允许为空，则添加一个字节。
 
 上图中 `184` 的值是怎么计算出来的？
 
-首先，我使用的数据库的字符编码格式：UTF8，占三个字节。
+首先，我使用的数据库的字符编码格式：`UTF8`，占三个字节。
 
 ```shell
 184 = 30 * 3 + 2 + 30 * 3 + 2
 ```
 
-然后，把 test1 表的 code 字段类型改成 char，改成允许为空，再测试。
+然后，把 `test1` 表的 `code` 字段类型改成 `char`，改成允许为空，再测试。
 
 ```sql
 explain select code  from test1;
@@ -446,7 +446,7 @@ explain select code  from test1 where code='001';
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/24.webp" style="width:100%"/>
 
-上图中使用了联合索引：idx_code_name。如果索引匹配所有的 key_len，应该是 183，但实际上是 92，也就是说没有使用到所有的索引，索引没有被完全使用。
+上图中使用了联合索引：`idx_code_name`。如果索引匹配所有的 `key_len`，应该是 `183`，但实际上是 `92`，也就是说没有使用到所有的索引，索引没有被完全使用。
 
 ### ref 列
 
@@ -458,15 +458,15 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/25.webp" style="width:100%"/>
 
-我们看到表 t1 命中的索引是 const（常量），t2 命中的索引是 `sue` 库的 `t1` 表的 `id` 字段。
+我们看到表 `t1` 命中的索引是 `const`（常量），`t2` 命中的索引是 `sue` 库的 `t1` 表的 `id` 字段。
 
 ### rows 列
 
-此列表示 MySQL 认为执行查询需要扫描的行数。
+此列表示 `MySQL` 认为执行查询需要扫描的行数。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/26.webp" style="width:100%"/>
 
-对于 InnoDB 引擎表，这个数字是一个估计值，可能并不总是准确的。
+对于 `InnoDB` 引擎表，这个数字是一个估计值，可能并不总是准确的。
 
 ### filtered 列
 
@@ -474,17 +474,17 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/27.webp" style="width:100%"/>
 
-Rows 结果显示估算会扫描的行数，rows × filtered 结果表示与后面的表进行连接操作的行数。
+`Rows` 结果显示估算会扫描的行数，`rows × filtered` 结果表示与后面的表进行连接操作的行数。
 
-例如，如果行数为 1,000，过滤为 50.00（50%），则与下表连接的行数为 1000 × 50% = 500。
+例如，如果行数为 `1,000`，过滤为 `50.00（50%）`，则与下表连接的行数为 `1000 × 50% = 500`。
 
 ### extra 列
 
-该字段包含有关 MySQL 如何解析查询的其他信息。这个列信息还是很重要的，但是里面的值太多了，就不一一介绍了，只列举几个常见的。
+该字段包含有关 `MySQL` 如何解析查询的其他信息。这个列信息还是很重要的，但是里面的值太多了，就不一一介绍了，只列举几个常见的。
 
 #### 1. Impossible WHERE
 
-假设指定 WHERE 后面的条件始终为 `false`。
+假设指定 `WHERE` 后面的条件始终为 `false`。
 
 ```sql
 explain select code  from test1 where 'a' = 'b';
@@ -502,7 +502,7 @@ explain select code  from test1 order by name desc;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/29.webp" style="width:100%"/>
 
-这里创建了 `code` 和 `name` 的联合索引，顺序是 `code` 列在前，`name` 列在后；SQL 语句里按 `name` 字段直接降序，与之前的联合索引排序不同。
+这里创建了 `code` 和 `name` 的联合索引，顺序是 `code` 列在前，`name` 列在后；`SQL` 语句里按 `name` 字段直接降序，与之前的联合索引排序不同。
 
 #### 3. Using index
 
@@ -524,7 +524,7 @@ explain select name  from test1 group by name;
 
 #### 5. Using where
 
-表示使用了 `where` 条件过滤器。
+表示使用了 `WHERE` 条件过滤器。
 
 #### 6. Using join buffer
 
@@ -532,10 +532,10 @@ explain select name  from test1 group by name;
 
 下面是索引优化的过程：
 
-1. 首先，使用慢查询日志定位需要优化的 SQL 语句；
-2. 使用 explain 查询计划查询索引使用情况；
-3. 关注 key, key_len, type, extra 信息，一般情况下，根据这四列就可以找到索引问题了。
-4. 根据第 3 步发现的索引问题优化 SQL 语句；
-5. 返回到第 2 步重复操作。
+1. 首先，使用慢查询日志定位需要优化的 `SQL` 语句；
+2. 使用 `explain` 查询计划查询索引使用情况；
+3. 关注 `key`、`key_len`、`type`、`extra` 信息，一般情况下，根据这四列就可以找到索引问题了。
+4. 根据第 `3` 步发现的索引问题优化 `SQL` 语句；
+5. 返回到第 `2` 步重复操作。
 
 感谢您阅读本文，敬请期待更多精彩文章。
