@@ -53,7 +53,7 @@ tags:
 
 ## Explain 是什么
 
-我们来看看 MySQL 的官方文档是怎么描述 `explain` 的：
+我们来看看 `MySQL` 的官方文档是怎么描述 `explain` 的：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/01.webp" style="width:100%"/>
 
@@ -170,24 +170,24 @@ on t1.id=t2.mid
 
 - `SIMPLE`：简单查询；
 - `PRIMARY`：最外层查询；
-- `UNION`：UNION 之后的第二个或以后的查询；
-- `DEPENDENT UNION`：UNION 之后的第二个或后面的查询，取决于外部查询；
-- `UNION RESULT`：UNION 的结果；
+- `UNION`：`UNION` 之后的第二个或以后的查询；
+- `DEPENDENT UNION`：`UNION` 之后的第二个或后面的查询，取决于外部查询；
+- `UNION RESULT`：`UNION` 的结果；
 - `SUBQUERY`：第一个子查询；
 - `DEPENDENT SUBQUERY`：第一个子查询，取决于外部查询；
 - `DERIVED`：派生表；
 - `MATERIALIZED`：物化子查询；
 - `UNCACHEABLE SUBQUERY`：结果无法缓存的子查询；
-- `UNCACHEABLE UNION`：无法缓存结果的 UNION 之后的第二个查询或后面的查询。
+- `UNCACHEABLE UNION`：无法缓存结果的 `UNION` 之后的第二个查询或后面的查询。
 
 最常用的有以下几种类型。
 
 - `SIMPLE`：简单的 `SELECT` 查询，不包含子查询和 `UNION` 操作；
-- `PRIMARY`：复杂查询中最外层的查询，代表主要查询；
-- `SUBQUERY`：包含在 SELECT 或 WHERE 列表中的子查询；
-- `DERIVED`：FROM 列表中包含的子查询，即派生的；
+- `PRIMARY`：复杂查询中最外层的查询，代表主查询；
+- `SUBQUERY`：包含在 `SELECT` 或 `WHERE` 列表中的子查询；
+- `DERIVED`：`FROM` 列表中包含的子查询，即派生的；
 - `UNION`：`UNION` 关键字之后的查询；
-- `UNION RESULT`：UNION 操作之后从表中获取结果集。
+- `UNION RESULT`：`UNION` 操作之后从表中获取结果集。
 
 让我们看一下这些 `SELECT` 类型是如何出现的？
 
@@ -230,7 +230,7 @@ on t1.id=t2.mid
 explain
 select * from test1
 union
-select* from test2
+select * from test2
 ```
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/10.webp" style="width:100%"/>
@@ -246,8 +246,8 @@ select* from test2
 但它也可以是以下值之一：
 
 - `<unionM,N>`：`M` 和 `N` 并集操作的行记录和记录 `id`；
-- `<derivedN>`：用于与此行关联的派生表结果 id 的值 N。派生表可能来自（例如）FROM 子句中的子查询；
-- `<subqueryN>`：子查询的结果，其 id 值为 N。
+- `<derivedN>`：用于与此行关联的派生表结果 `id` 的值 `N`。派生表可能来自（例如）`FROM` 子句中的子查询；
+- `<subqueryN>`：子查询的结果，其 `id` 值为 `N`。
 
 ### partitions 列
 
@@ -311,7 +311,7 @@ explain select * from test2 t1 inner join test2 t2 on t1.id=t2.id;
 
 #### 4. Ref
 
-常用于非主键所以和唯一索引扫描。
+常用于非主键索引和唯一索引扫描。
 
 ```sql
 explain select * from test2 where code = '001';
@@ -353,11 +353,11 @@ explain select *  from test2;
 
 此列表示可能被选择使用的索引。
 
-请注意，此列完全独立于表顺序，这意味着在实际中 `possible_keys` 列显示的某些索引可能不适用于生成的表顺序。
+请注意，此列完全独立于表顺序，这意味着在实际中 `possible_keys` 列显示的某些索引可能与生成的表顺序并不完全一致。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/19.webp" style="width:100%"/>
 
-如果此列结果为 `NULL`，则表示没有关联索引；在这种情况下，我们可以通过检查 `WHERE` 子句，查看是否引用了一些符合索引条件的列来提高查询性能。
+如果此列结果为 `NULL`，则表示没有关联索引，在这种情况下，我们可以通过检查 `WHERE` 子句，查看是否引用了一些符合索引条件的列来提高查询性能。
 
 ### Key 列
 
@@ -380,7 +380,7 @@ explain select code from test1;
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/21.webp" style="width:100%"/>
 
-这条 `SQL` 预计不会使用索引，但实际上使用了全索引扫描索引。
+这条 `SQL` 预计不会使用索引，但实际上使用了全索引扫描。
 
 ### key_len 列
 
@@ -438,7 +438,7 @@ explain select code  from test1;
 183 = 30 * 3 + 1 + 30 * 3 + 2
 ```
 
-还有一个问题：为什么这一列显示索引是否被完全使用？
+还有一个问题：为什么这一列可以显示索引是否被完全使用？
 
 ```sql
 explain select code  from test1 where code='001';
@@ -470,7 +470,7 @@ explain select *  from test1 t1 inner join test1 t2 on t1.id=t2.id where t1.code
 
 ### filtered 列
 
-此列表示按条件过滤的行数所占表行数百分比的估算值。最大值为 `100`，这意味着不过滤任何记录。从 `100` 开始减小值表示增加数据过滤。
+此列表示按条件过滤的行数所占表行数百分比的估算值。最大值为 `100`，这意味着没有过滤任何数据。从 `100` 开始数值减小表示增加数据过滤。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/11-Understand-MySQL-Index-Optimization-Artifact/27.webp" style="width:100%"/>
 
@@ -528,13 +528,13 @@ explain select name  from test1 group by name;
 
 #### 6. Using join buffer
 
-指示是否使用连接缓冲。来自早期连接的表被部分读入连接缓冲区，并且使用缓冲区中的行来执行与当前表的连接。
+表示是否使用了连接缓冲，优先被连接的表的一部分数据被读入连接缓冲区，然后使用缓冲区中的数据与当前表执行连接操作。
 
 下面是索引优化的过程：
 
 1. 首先，使用慢查询日志定位需要优化的 `SQL` 语句；
 2. 使用 `explain` 查询计划查询索引使用情况；
-3. 关注 `key`、`key_len`、`type`、`extra` 信息，一般情况下，根据这四列就可以找到索引问题了。
+3. 关注 `key`、`key_len`、`type`、`extra` 信息，一般情况下，根据这四列就可以找到索引问题了；
 4. 根据第 `3` 步发现的索引问题优化 `SQL` 语句；
 5. 返回到第 `2` 步重复操作。
 
