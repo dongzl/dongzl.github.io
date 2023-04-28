@@ -1,5 +1,5 @@
 ---
-title:（进行中）面向 5 到 10 年经验丰富的开发人员的十大微服务问题解决方案
+title: 面向 5 到 10 年经验丰富的开发人员的十大微服务问题解决方案
 date: 2023-04-27 10:24:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/microservices_study.png
 
