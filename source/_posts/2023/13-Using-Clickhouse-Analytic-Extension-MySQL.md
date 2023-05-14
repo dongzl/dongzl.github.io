@@ -40,7 +40,7 @@ tags:
 
 ### 复杂的聚合管道
 
-分析处理产生聚合结果，这些聚合操作能够汇总大型数据集生成统计数据以帮助用户进行模式识别。这些示例包括每周站点唯一访问者、平均页面用户流失率或网络流量来源技术。`MySQL` 可能需要几分钟甚至几小时来计算这些数值结果，为了提高性能，通常会预先添加聚合计算的复杂批处理流程。如果我们看到这样的聚合管道，通常表明添加单独的分析数据库可以减少操作应用程序的工作量，并可以更快、更及时地为用户提供结果。
+分析处理产生聚合结果，这些聚合操作能够汇总大型数据集生成统计数据以帮助用户进行模式识别。这些示例包括每周站点唯一访问者、平均页面用户流失率或网络流量来源。`MySQL` 可能需要几分钟甚至几小时来计算这些数值结果，为了提高性能，通常会预先添加聚合计算的复杂批处理流程。如果我们看到这样的聚合管道，通常表明添加单独的分析数据库可以减少操作应用程序的工作量，并可以更快、更及时地为用户提供结果。
 
 ### MySQL 太慢或不够灵活，无法解答重要的业务问题
 
@@ -87,7 +87,7 @@ tags:
 
 ## 将 ClickHouse 集成进 MySQL
 
-有三种方式可以将 `MySQL` 数据与 `ClickHouse` 分析功能集成到一起，他们建立在彼此之上。
+有三种方式可以将 `MySQL` 数据与 `ClickHouse` 分析功能集成到一起，它们建立在彼此之上。
 
 - 从 `ClickHouse` 查看 `MySQL` 数据，可以使用原生 `ClickHouse` `SQL` 语法通过 `ClickHouse` 查询 `MySQL` 数据，这对于查询 `MySQL` 数据以及与 `MySQL` 的数据进行 `join` 操作的场景是非常有用的；
 - 将数据从 `MySQL` 永久迁移到 `ClickHouse`，`ClickHouse` 成为数据的存储系统，这会降低 `MySQL` 负载并提供更好的数据分析结果；
@@ -141,7 +141,7 @@ ENGINE=MySQLDatabase('mydb:3306', 'sakila', 'user', 'password')
 
 ### 在 ClickHouse 中存储 MySQL 数据镜像
 
-另一种扩展 `MySQL` 的方法是将数据做为镜像存储到 `ClickHouse` 中，并使用复制机制保持数据同步。镜像允许用户在不更改 `MySQL` 及其应用程序，并且不影响生产系统性能的情况下，对交易数据执行复杂的查询分析操作。
+另一种扩展 `MySQL` 的方法是将数据作为镜像存储到 `ClickHouse` 中，并使用复制机制保持数据同步。镜像允许用户在不更改 `MySQL` 及其应用程序，并且不影响生产系统性能的情况下，对交易数据执行复杂的查询分析操作。
 
 以下是镜像设置的工作机制。
 
@@ -155,7 +155,7 @@ ENGINE=MySQLDatabase('mydb:3306', 'sakila', 'user', 'password')
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/13-Using-Clickhouse-Analytic-Extension-MySQL/altinity-5.png" style="width:100%"/>
 
-由于[ReplacingMergeTree](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/replacingmergetree)表的独特功能，`ClickHouse` 可以从 `MySQL` 拉取镜像数据。它有一种处理插入、更新和删除的有效方法，非常适合用于复制数据。如前所述，`ClickHouse` 无法轻松更新单行数据，但它插入数据的速度非常快，并且可以在后台高效的合并数据行。`ReplicatingMergeTree` 以这些功能为基础，以**ClickHouse 方式**处理数据变更。
+由于[ReplacingMergeTree](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/replacingmergetree)表的独特功能，`ClickHouse` 可以从 `MySQL` 拉取镜像数据。它有一种处理插入、更新和删除的有效方法，非常适合用于复制数据。如前所述，`ClickHouse` 无法轻松更新单行数据，但它插入数据的速度非常快，并且可以在后台高效地合并数据行。`ReplicatingMergeTree` 以这些功能为基础，以**ClickHouse 方式**处理数据变更。
 
 复制的表行使用版本和符号列来标识更改行的版本以及更改是插入还是删除操作。`ReplacingMergeTree` 只会保留一行的最后一个版本，实际上这一行可能已被删除。符号列让我们使用另一个 `ClickHouse` 特性使那些已被删除的行不可访问，被称为[行策略](https://clickhouse.com/docs/en/sql-reference/statements/create/row-policy)。使用行策略，我们可以确保符号列为负数的任何行不可见。
 
