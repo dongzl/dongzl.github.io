@@ -28,7 +28,7 @@ tags:
 
 幸运的是，还有 `ClickHouse`：一个功能强大的分析型数据库，可以与 `MySQL` 完美搭配。[Percona](https://www.percona.com/) 与我们的合作伙伴 [Altinity](https://altinity.com/) 密切合作，帮助用户轻松地将 `ClickHouse` 嵌入到现有的 `MySQL` 应用程序中。您可以在我们最近的新闻稿中阅读更多关于我们合作伙伴关系的信息，以及我们实现的 `MySQL-to-ClickHouse` 解决方案。
 
-这篇文章给出了一些提示，如何识别 `MySQL` 何时分析任务过重以及如何使用 `ClickHouse` 的独特功能并从中受益。然后，我们展示了将 `MySQL` 和 `ClickHouse` 集成到一起的三种重要模式。充分利用这两种数据库的优势的结果是可以创建更强大、更具成本效益的应用程序。
+这篇文章给出了一些提示，如何识别 `MySQL` 何时分析任务过重以及如何使用 `ClickHouse` 的独特功能并从中受益。然后，我们展示了将 `MySQL` 和 `ClickHouse` 集成到一起的三种重要方式。充分利用这两种数据库的优势的结果是可以创建更强大、更具成本效益的应用程序。
 
 ## MySQL 需要辅助分析工具的迹象
 
@@ -48,9 +48,9 @@ tags:
 
 ## 为什么 ClickHouse 是 MySQL 的天然补充？
 
-`MySQL` 是用于事务处理的杰出数据库。然而，使 `MySQL` 高效运行的特性——按行存储数据、单线程查询和针对高并发特性的优化——与在大型数据集上执行聚合计算的分析查询所需要的特性恰恰相反。
+`MySQL` 是用于事务处理的杰出数据库。然而，使 `MySQL` 高效运行的特性——**按行存储数据**、**单线程查询**和**针对高并发特性的优化**——与在大型数据集上执行聚合计算的分析查询所需要的特性恰恰相反。
 
-另一方面，`ClickHouse` 是为分析处理而设计的。它将数据存储在列中，并进行了优化，以最小化 `I/O` 非常高效地执行聚合计算，并进行并行化查询处理。在许多情况下，`ClickHouse` 几乎可以立即响应复杂的分析问题处理，从而使用户可以快速筛选数据，因为 `ClickHouse` 计算聚合的效率很高，所以最终用户可以在没有应用程序设计人员帮助的情况下以多种方式处理问题。
+另一方面，`ClickHouse` 是为分析处理而设计的。它将数据存储在列中，并进行了优化，以最小化 `I/O` 非常高效地执行聚合计算，并进行并行化查询优化。在许多情况下，`ClickHouse` 几乎可以立即响应复杂的分析问题处理，从而使用户可以快速筛选数据，因为 `ClickHouse` 计算聚合的效率很高，所以最终用户可以在没有应用程序设计人员帮助的情况下以多种方式处理问题。
 
 这些都是非常有力特性说明，要了解它们，了解 `ClickHouse` 与 `MySQL` 的不同之处会很有帮助，下图说明了每种数据库为读取某张表的三列数据是如何通过查询提取数据的。
 
@@ -69,8 +69,8 @@ tags:
 `ClickHouse` 最大的一个优势是：可以与 `MySQL` 进行出色集成，这里有一些例子。
 
 - `ClickHouse` 可以将 `mysqldump` 和 `CSV` 的数据直接提取到 `ClickHouse` 表中；
-- `ClickHouse` 可以对 `MySQ`L 表执行远程查询，这提供了另一种快速提取数据的方法；
-- `ClickHouse` 查询方言与 `MySQL` 非常类似，包括例如 `SHOW PROCESSLIST` 等系统命令；
+- `ClickHouse` 可以对 `MySQL` 表执行远程查询，这提供了另一种快速提取数据的方法；
+- `ClickHouse` 查询方言与 `MySQL` 非常类似，支持例如 `SHOW PROCESSLIST` 等系统命令；
 - `ClickHouse` 甚至在 `3306` 端口上支持 `MySQL` 协议。
 
 由于以上这些原因，`ClickHouse` 是扩展 `MySQL` 分析处理能力的天然选择。
@@ -80,20 +80,18 @@ tags:
 正如 `ClickHouse` 可以为 `MySQL` 扩展有益的功能一样，重要的是 `MySQL` 同样为 `ClickHouse` 扩展了有益的功能。`ClickHouse` 在分析处理方面非常出色，但它在很多方面做得并不好，这里有一些示例。
 
 - **事务处理**——`ClickHouse` 没有完整的 `ACID` 事务能力，我们不要使用 `ClickHouse` 来处理在线订单业务，`MySQL` 在这方面做得很出色；
-- **单行快速更新**——读取某一行数据的所有列在 `ClickHouse` 中效率非常低，因为我们必须读取许多文件；更新单行可能需要重写大量数据，我们不要将电子商务会话数据放在 `ClickHouse` 中，这是 `MySQL` 的典型应用场景；
-- **大量并发查询**——`ClickHouse` 查询旨在使用尽可能多的资源，而不是在许多用户之间共享这些资源，我们不要使用 `ClickHouse` 来保存微服务的元数据，但 `MySQL` 通常用于此类场景；
+- **单行快速更新**——读取某一行数据的所有列在 `ClickHouse` 中效率非常低，因为我们必须读取许多文件；更新单行可能需要重写大量数据，我们不要将电子商务会话数据存储到 `ClickHouse` 中，这是 `MySQL` 的典型应用场景；
+- **大量并发查询**——`ClickHouse` 查询旨在使用尽可能多的资源，而不是在许多用户之间共享这些资源，我们不要使用 `ClickHouse` 来保存微服务的元数据，但 `MySQL` 通常用于此类场景。
 
 事实上，`MySQL` 和 `ClickHouse` 是高度互补的。当 `ClickHouse` 和 `MySQL` 一起使用时，用户可以构建非常强大的应用程序。
-
-============================================================================================
 
 ## 将 ClickHouse 集成进 MySQL
 
 有三种方式可以将 `MySQL` 数据与 `ClickHouse` 分析功能集成到一起，他们建立在彼此之上。
 
-- 从 `ClickHouse` 查看 `MySQL` 数据，可以使用原生 `ClickHouse` `SQL` 语法通过 `ClickHouse` 查询 `MySQL` 数据，这对于查询 `MySQL` 数据以及与 `MySQL` 的数据进行 join 操作的场景是非常有用的；
-- 将数据从 `MySQL` 永久移动到 `ClickHouse`，`ClickHouse` 成为数据的存储系统，这会降低 `MySQL` 负载并提供更好的数据分析结果；
-- 在 `ClickHouse` 存储 `MySQL` 数据镜像，将数据快照存入 `ClickHouse` 并使用复制机制保持数据同步，这允许用户在不增加交易处理系统负担的情况下解决一些交易数据的复杂问题。
+- 从 `ClickHouse` 查看 `MySQL` 数据，可以使用原生 `ClickHouse` `SQL` 语法通过 `ClickHouse` 查询 `MySQL` 数据，这对于查询 `MySQL` 数据以及与 `MySQL` 的数据进行 `join` 操作的场景是非常有用的；
+- 将数据从 `MySQL` 永久迁移到 `ClickHouse`，`ClickHouse` 成为数据的存储系统，这会降低 `MySQL` 负载并提供更好的数据分析结果；
+- 在 `ClickHouse` 存储 `MySQL` 数据镜像，将数据快照存入 `ClickHouse` 并使用复制机制保持数据同步，这允许用户在不增加交易处理系统负担的情况下分析交易数据的一些复杂问题。
 
 ### 通过 ClickHouse 访问 MySQL 数据
 
@@ -118,9 +116,9 @@ ENGINE=MySQLDatabase('mydb:3306', 'sakila', 'user', 'password')
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/13-Using-Clickhouse-Analytic-Extension-MySQL/altinity-3.png" style="width:100%"/>
 
-1. **分区**——`MergeTree` 使用分区键将表分成多个部分。访问日志内容或其他大数据内容往往是按时间排序的，因此通常按天、按周或按月来划分数据；为获得最佳性能，建议设置的分区数少于 `1000`；
+1. **分区**——`MergeTree` 使用分区键将数据分成多个部分。访问日志内容或其他大数据内容往往是按时间排序的，因此通常按天、按周或按月来划分数据；为获得最佳性能，建议设置的分区数少于 `1000`；
 2. **排序**——`MergeTree` 可以对数据进行排序并在行上构建索引以匹配我们所选择的排序。重要的是确定一种排序方式，以便在扫描数据时为我们提供大型“运行”场景；例如我们可以选择按租户排序，然后再按时间排序，这意味着对租户数据的查询不需要跳来跳去查找与该租户相关的数据行；
-3. **压缩和[编解码器](https://en.wikipedia.org/wiki/Codec) **——`ClickHouse` 默认使用 `LZ4` 压缩，但也提供 `ZSTD` 压缩和编解码器；编解码器在将列数据转为压缩之前减少数据列内容。
+3. **压缩和[编解码器](https://en.wikipedia.org/wiki/Codec)** ——`ClickHouse` 默认使用 `LZ4` 压缩，但也提供 `ZSTD` 压缩和编解码器；编解码器在将列数据转为压缩之前减少数据列内容。
 
 这些特性可以在性能上产生巨大的差异，我们在 `Altinity` 视频（查看[此处](https://www.youtube.com/watch?v=phTu24qCIw0)和[此处](https://www.youtube.com/watch?v=rawoPXXGiYY)）以及博客文章中介绍了它们并添加了更多性能说明。
 
@@ -130,10 +128,10 @@ ENGINE=MySQLDatabase('mydb:3306', 'sakila', 'user', 'password')
 
 1. 为 `ClickHouse` 上的访问日志数据创建匹配的 `schema` 结构；
 2. 使用以下几种工具将数据从 `MySQL` 转储/加载到 `ClickHouse`：
-   - [Mydumper](https://github.com/mydumper/mydumper) - 一种处理 `mysqldump` 和 `CSV` 格式的并行转储/加载工具；
-   - [MySQL Shell](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-features.html) - 用于管理 `MySQL` 导入和导出表的的通用工具；
+   - [Mydumper](https://github.com/mydumper/mydumper) —— 一种处理 `mysqldump` 和 `CSV` 格式的并行转储/加载工具；
+   - [MySQL Shell](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-features.html) —— 用于管理 `MySQL` 导入和导出表的的通用工具；
    - 在 `MySQL` 数据库引擎表上使用 `SELECT` 复制数据；
-   - 本机数据库命令 – 使用 `MySQL SELECT OUTFILE` 将数据转储到 `CSV` 并使用 `ClickHouse INSERT SELECT FROM file()` 读回数据，`ClickHouse` 甚至可以读取 `mysqldump` 格式数据。
+   - 本机数据库命令 – 使用 `MySQL SELECT OUTFILE` 将数据转储到 `CSV` 并使用 `ClickHouse INSERT SELECT FROM file()` 读取数据，`ClickHouse` 甚至可以读取 `mysqldump` 格式数据。
 3. 关注性能，确保查询操作是否恰当；对 `schema` 进行调整并在必要时重新加载；
 4. 收集前端访问日志存储到 `ClickHouse`；
 5. 并行运行两个系统进行测试工作；
@@ -185,7 +183,7 @@ ENGINE=MySQLDatabase('mydb:3306', 'sakila', 'user', 'password')
 
 我们也在仔细观察 `MaterializedMySQL` 的改进以及其他高效集成 `ClickHouse` 和 `MySQL` 的方法。我们可以期待将来有更多关于这些和相关主题的博客文章。敬请关注！
 
-## 总结和开始
+## 总结并重新起航
 
 `ClickHouse` 是对现有 `MySQL` 应用程序的强大补充。具有不可变数据的大型表、复杂的聚合管道操作以及有关 `MySQL` 事务的未解决问题都是明确的特征，表明集成 `ClickHouse` 是为用户提供快速、高效的数据分析的下一步选择。
 
