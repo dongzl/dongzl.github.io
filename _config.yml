@@ -129,7 +129,8 @@ language: zh-cn
 subtitle: 董宗磊的博客--靡不有初，鲜克有终
 
 # introduction  in the banner header
-subtitle_desc: 取法乎上，得乎其中；取法乎中，得乎其下；取法呼下，无所得矣。
+# subtitle_desc: 取法乎上，得乎其中；取法乎中，得乎其下；取法呼下，无所得矣。
+subtitle_desc: 芝兰生于深谷，不以无人而不芳；君子修身养德，不以穷困而改志。
 
 # seo keyword
 keywords: 程序员, java, web, 数据库, 架构, 设计模式, 数据结构, 算法
