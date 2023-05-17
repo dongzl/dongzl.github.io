@@ -16,7 +16,9 @@ categories:
 - 架构设计
 
 tags:
-- Service Mesh
+- JWT
+- OAuth
+- SAML
 ---
 
 > 原文链接：https://medium.com/@bb8s/deep-dive-into-redis-cluster-sharding-algorithms-and-architecture-a093a92e97af
