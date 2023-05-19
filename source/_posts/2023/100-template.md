@@ -20,3 +20,5 @@ tags:
 ---
 
 > 原文链接：https://medium.com/@bb8s/deep-dive-into-redis-cluster-sharding-algorithms-and-architecture-a093a92e97af
+
+https://medium.com/javarevisited/what-is-consistent-hashing-what-problem-does-it-solve-9c161fc6147d
