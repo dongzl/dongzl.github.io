@@ -8,6 +8,8 @@ cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/co
 author:
 - nick: Soma
   link: https://medium.com/@somasharma_81597
+- nick: 董宗磊
+  link: https://www.github.com/dongzl
 
 # post subtitle in your index page
 subtitle: 解决大规模分布式系统问题的 10 个必备系统设计算法和分布式数据结构。
@@ -16,9 +18,7 @@ categories:
 - 架构设计
 
 tags:
-- JWT
-- OAuth
-- SAML
+
 ---
 
 > 原文链接：https://medium.com/javarevisited/10-system-design-algorithms-protocols-and-distributed-data-structure-to-solve-large-scales-40bd24d9a57f
