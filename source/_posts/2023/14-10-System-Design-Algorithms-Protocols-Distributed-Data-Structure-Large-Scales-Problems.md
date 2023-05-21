@@ -1,5 +1,5 @@
 ---
-title: （进行中）解决大规模问题的 10 个系统设计算法、协议和分布式数据结构
+title: 解决大规模问题的 10 个系统设计算法、协议和分布式数据结构
 date: 2023-05-20 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/microservices_algorithms.png
 
@@ -31,16 +31,16 @@ tags:
 
 事不宜迟，以下是可用于解决大规模分布式系统问题的 `10` 种系统设计算法和分布式数据结构：
 
-1. 一致性哈希（Consistent Hashing）
-2. MapReduce
-3. 分布式哈希表（Distributed Hash Tables (DHT)）
-4. 布隆过滤器（Bloom Filters）
-5. 两阶段提交（Two-phase commit (2PC)）
-6. Paxos
-7. Raft
-8. Gossip 协议（Gossip protocol）
-9. Chord
-10. CAP 理论（CAP theorem）
+1. 一致性哈希（`Consistent Hashing`）
+2. `MapReduce`
+3. 分布式哈希表（`Distributed Hash Tables` (`DHT`)）
+4. 布隆过滤器（`Bloom Filters`）
+5. 两阶段提交（`Two-phase commit` (`2PC`)）
+6. `Paxos`
+7. `Raft`
+8. `Gossip` 协议（`Gossip protocol`）
+9. `Chord`
+10. `CAP` 理论（`CAP theorem`）
 
 这些算法和分布式数据结构只是用于解决大规模分布式系统问题的众多技术中的几个例子。
 
@@ -116,6 +116,8 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/14-10-System-Design-Algorithms-Protocols-Distributed-Data-Structure-Large-Scales-Problems/04.png" style="width:100%"/>
 
+<hr />
+
 ## 5. 2阶段提交
 
 [2阶段提交（2PC）](https://medium.com/javarevisited/difference-between-saga-pattern-and-2-phase-commit-in-microservices-e1d814e12a5a)是一种用于保证分布式系统中事务的原子性和一致性的协议，它能够保证参与事务的所有节点一起提交或回滚的思想。
@@ -131,6 +133,8 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/14-10-System-Design-Algorithms-Protocols-Distributed-Data-Structure-Large-Scales-Problems/05.png" style="width:100%"/>
 
+<hr />
+
 ## 6. Paxos
 
 `Paxos` 是一种分布式共识算法，即使在某个节点出现故障的情况下，也允许一组节点就某个结果值达成一致。它是由 `Leslie Lamport` 于 `1998` 年提出，现已成为分布式系统的基本算法。
@@ -142,3 +146,71 @@ tags:
 `Paxos` 是一种复杂的算法，它有多种变体和优化，例如 `Multi-Paxos`、`Fast Paxos` 等；这些变体目的是减少交换的消息数量，优化算法的延迟，并减少需要参与共识的节点数量。`Paxos` 被广泛应用于分布式数据库、分布式文件系统等需要高度容错性的分布式系统中。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/14-10-System-Design-Algorithms-Protocols-Distributed-Data-Structure-Large-Scales-Problems/06.png" style="width:100%"/>
+
+<hr />
+
+## 7. Raft
+
+`Raft` 是一种共识算法，旨在确保分布式系统的容错性。它负责维护一个复制的日志，该日志存储跨集群中多个节点的一系列变更状态。`Raft` 通过选举一个领导者来达成共识，领导者协调各个节点之间的通信，并确保日志在整个集群中的状态是一致的。
+
+`Raft` 算法由三个主要部分组成：**领导者选举**、**日志复制**和**安全性**。在领导者选举阶段，集群中的节点使用随机超时机制选举领导者。
+
+领导者通过接收从客户端发送的数据变更并将它们复制到集群中的其他从节点来协调日志复制，从节点还可以向领导者请求日志条目以确保整个集群的一致性。
+
+`Raft` 的安全组件确保共识算法对系统故障具备容错性，并确保日志在整个集群中保持一致；`Raft` 算法确保在任何给定时间只有一个领导者节点并通过在集群中强制执行严格的日志条目排序来实现安全性。
+
+`Raft` 广泛用于分布式系统，以提供容错性和高可用性。它通常用于需要保证强一致性的系统，例如分布式数据库和分布式键值存储。
+
+<hr />
+
+## 8. Gossip
+
+`Gossip` 协议是分布式系统中快速有效地传播信息的点对点通信协议。它是一种概率协议，允许节点以去中心化的方式与相邻节点交换状态信息数据。该协议的名称来源于传播谣言或八卦等信息的方式。
+
+在 `gossip` 协议中，某个节点随机选择一组其他节点来与之交换信息。当一个节点从另一个节点接收到信息时，它将将该信息转发给其相邻的其他节点，然后该过程会继续进行。随着时间的推移，当信息从一个节点传播到另一个节点时，整个网络中节点就全部能够识别到这些信息。
+
+`Gossip` 协议的主要优点之一是它的容错性。由于该协议依赖于概率通信而不是中心化节点，因此即使某些节点出现故障或退出网络，它也可以继续运行。这使它成为分布式系统中的一个有用工具，能够解决分布式系统中可靠性这个关键问题。
+
+`Gossip` 协议已用于各种应用程序，包括分布式数据库、`P2P` 文件共享网络和大规模传感器网络。它们特别适合需要在大量节点之间快速有效地传播信息的应用程序。
+
+<hr />
+
+## 9. Chrod
+
+`Chord` 是一种分布式哈希表 (`DHT`) 协议，用于去中心化 (P2P) 系统。它提供了一种在给定标识符的情况下在 `P2P` 网络中定位某个节点（或一组节点）的有效方法。`Chord` 允许 `P2P` 系统扩展到大量节点，同时能够保持较低系统开销。
+
+在 `Chord` 网络中，每个节点都分配有一个唯一的标识符，可以是任意 `m` 位数字。所有节点排列成一个环，节点之间根据它们的标识符按顺时针方向排序，每个节点负责存储一组键，键可以是 `0` 到 `2^m-1` 范围内的任意值。
+
+为了在网络中找到某一个键，某个节点首先计算这个键的哈希值，然后定位其标识符是该哈希值的顺时针第一个后继者节点；如果后继节点上没有所需的键，它将请求继续转发给它的后继节点，依此类推，直到找到这个键。这个过程被称为 `finger lookup`，它通常需要对数级别的消息才能找到所需的节点。
+
+为了保持网络的一致性，`Chord` 使用一种称为 `finger table` 的协议，它负责存储网络中其他节点的信息。每个节点都维护一个 `finger table`，其中包含环中距离越来越远的后继者的标识符；这使得某个节点有效地定位网络中的其他节点，而无需维护所有节点的完整列表。
+
+`Chord` 还能够确保在网络中添加或删除节点时保持一致性。当网络中添加一个节点时，它会通知它的直接后继者，后者相应地更新它的 `finger table`；当在网络中删除某个节点时，这个节点上的键被迁移到它的后继节点，后继节点更新它的 `finger table` 以记录节点被删除。
+
+总的来说，`Chord` 提供了一种高效且可扩展的方式，使用简单且去中心化协议在 `P2P` 网络中定位某个节点。
+
+<hr />
+
+## 10. CAP 理论
+
+`CAP` 定理，也称为 `Brewer` 定理，是分布式系统中的一个基本概念，它指出分布式系统不可能同时保证以下三个特性：
+
+1. **一致性**：每次读取都会返回最新写入的新数据或错误；
+2. **可用性**：每次请求都会接收到一个响应结果，但不保证它返回的是最新版本的信息；
+3. **分区容错性**：即使发生网络分区，系统也能继续运行并提供一致且可用的服务。
+
+换句话说，[分布式系统](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)只能满足上述三个特性中的两个；这个定理意味着在出现网络分区的情况下，分布式系统必须在一致性和可用性之间做出选择。
+
+例如在分区系统中，如果一个节点无法与另一个节点通信，则它必须返回错误或返回可能已经过时的响应结果。
+
+`CAP` 定理对设计分布式系统具有重要意义，因为它要求开发人员在一致性、可用性和分区容错性之间进行权衡。
+
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/14-10-System-Design-Algorithms-Protocols-Distributed-Data-Structure-Large-Scales-Problems/07.png" style="width:100%"/>
+
+## 总结
+
+这就是我们可以在 `2023` 年学习的基本系统设计数据结构、算法和协议。总而言之，系统设计是软件工程师的一项基本技能，尤其是那些从事大规模分布式系统的工程师。
+
+这十种算法、数据结构和协议为解决复杂问题而生，并为构建可扩展、可靠的系统提供了坚实的基础。通过了解这些算法并在使用中做出取舍权衡，我们可以在设计和构建系统时做出明智的选择。
+
+此外，学习这些算法可以帮助我们准备系统设计面试并提高大家解决问题的能力。但是请务必注意，这些算法只是一个起点，我们应该随着技术的发展不断学习和适应新的技术。
