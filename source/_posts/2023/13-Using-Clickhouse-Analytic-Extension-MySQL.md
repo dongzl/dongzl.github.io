@@ -8,6 +8,8 @@ cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/co
 author:
 - nick: Vadim Tkachenko
   link: https://www.percona.com/blog/author/vadim/
+- nick: 董宗磊
+  link: https://www.github.com/dongzl
 
 # post subtitle in your index page
 subtitle: 本文将介绍使用 ClickHouse 作为 MySQL 的数据分析扩展工具，并介绍三种常用的集成方式。

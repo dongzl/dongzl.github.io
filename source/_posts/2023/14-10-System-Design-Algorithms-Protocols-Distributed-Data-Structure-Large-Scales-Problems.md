@@ -120,9 +120,9 @@ tags:
 
 <hr />
 
-## 5. 2阶段提交
+## 5. 两阶段提交
 
-[2阶段提交（2PC）](https://medium.com/javarevisited/difference-between-saga-pattern-and-2-phase-commit-in-microservices-e1d814e12a5a)是一种用于保证分布式系统中事务的原子性和一致性的协议，它能够保证参与事务的所有节点一起提交或回滚的思想。
+[两阶段提交（2PC）](https://medium.com/javarevisited/difference-between-saga-pattern-and-2-phase-commit-in-microservices-e1d814e12a5a)是一种用于保证分布式系统中事务的原子性和一致性的协议，它能够保证参与事务的所有节点一起提交或回滚的思想。
 
 两阶段提交协议分两个步骤：
 
@@ -131,7 +131,7 @@ tags:
 
 如果协调者收到所有参与者的确认消息，它会向所有节点发送一条消息，表明事务已提交；如果协调器收到某个参与者的回滚消息，它会向所有节点发送一条消息，指示事务已回滚。
 
-[2阶段提交协议](https://medium.com/javarevisited/difference-between-saga-pattern-and-2-phase-commit-in-microservices-e1d814e12a5a)能够确保分布式系统中的所有节点事务结果是一致的，即使出现故障也是如此；然而它也有一些缺点，包括**延迟较高**和**死锁**的可能性，此外它需要一个协调者节点，这可能引起单点故障。
+[两阶段提交协议](https://medium.com/javarevisited/difference-between-saga-pattern-and-2-phase-commit-in-microservices-e1d814e12a5a)能够确保分布式系统中的所有节点事务结果是一致的，即使出现故障也是如此；然而它也有一些缺点，包括**延迟较高**和**死锁**的可能性，此外它需要一个协调者节点，这可能引起单点故障。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/14-10-System-Design-Algorithms-Protocols-Distributed-Data-Structure-Large-Scales-Problems/05.png" style="width:100%"/>
 
