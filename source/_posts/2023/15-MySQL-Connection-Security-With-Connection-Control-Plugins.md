@@ -46,7 +46,7 @@ tags:
 
 为了在运行时加载插件，请使用如下这些 `SQL` 语句，并且根据平台需要调整 `.so` 文件后缀。在这里，我将使用 `Percona Server for MySQL 5.7.36` 对插件进行测试：
 
-```shell
+```sql
 mysql> INSTALL PLUGIN CONNECTION_CONTROL SONAME 'connection_control.so';
 INSTALL PLUGIN CONNECTION_CONTROL_FAILED_LOGIN_ATTEMPTS SONAME 'connection_control.so';
 Query OK, 0 rows affected (0.01 sec)
@@ -71,7 +71,7 @@ connection-control-failed-login-attempts=FORCE_PLUS_PERMANENT
 
 要验证插件安装情况，需要重新启动服务器并检查 `INFORMATION_SCHEMA.PLUGINS` 表或使用 `SHOW PLUGINS` 语句：
 
-```shell
+```sql
 mysql> SELECT PLUGIN_NAME, PLUGIN_STATUS
       FROM INFORMATION_SCHEMA.PLUGINS
       WHERE PLUGIN_NAME LIKE 'connection%';
@@ -87,7 +87,7 @@ mysql> SELECT PLUGIN_NAME, PLUGIN_STATUS
 
 现在，我们尝试使用这些服务器配置参数为失败的连接尝试配置服务器响应延迟。我们将连续失败的连接阈值暂定为三个，并添加至少一秒的连接延迟。
 
-```shell
+```sql
 mysql> SET GLOBAL connection_control_failed_connections_threshold = 3;
 SET GLOBAL connection_control_min_connection_delay = 1000;  
 SET GLOBAL connection_control_min_connection_delay = 90000;
@@ -95,7 +95,7 @@ SET GLOBAL connection_control_min_connection_delay = 90000;
 
 或者，要在运行时设置和保留变量，可以使用如下语句：
 
-```shell
+```sql
 mysql> SET PERSIST connection_control_failed_connections_threshold = 3;
 SET PERSIST connection_control_min_connection_delay = 1000;
 ```
@@ -202,7 +202,7 @@ mysql> show global status like 'connection_control_%';
 
 在这里我们可以注意到 `Connection_control_delay_generated` 的状态现在是 `50`，`CONNECTION_CONTROL_FAILED_LOGIN_ATTEMPTS` 是 `53`。
 
-```shell
+```sql
 mysql> show global status like 'connection_control_%';
 +------------------------------------+-------+
 | Variable_name                      | Value |
@@ -240,7 +240,7 @@ Tue Apr 18 06:28:29 PM UTC 2023
 
 我们还可以确定这些失败的连接尝试来自哪个用户或主机。
 
-```shell
+```sql
 mysql> select * from information_schema.connection_control_failed_login_attempts;
 +-----------------------+-----------------+
 | USERHOST              | FAILED_ATTEMPTS |
@@ -254,7 +254,7 @@ mysql> select * from information_schema.connection_control_failed_login_attempts
 
 如果我们想重置这些计数器，我们只需再次为变量 `connection_control_failed_connections_threshold` 赋值：
 
-```shell
+```sql
 mysql> SET GLOBAL connection_control_failed_connections_threshold = 4;
 Query OK, 0 rows affected (0.00 sec)
 
