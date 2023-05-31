@@ -1,6 +1,6 @@
 ---
-title: （进行中）Difference between Hibernate, JPA, and Spring Data JPA?
-date: 2013-06-03 12:33:45
+title: Hibernate、JPA 和 Spring Data JPA 之间的区别
+date: 2023-06-03 12:33:45
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/hibernate_jpa.png
 
 # author information, multiple authors are set to array
@@ -12,7 +12,7 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 本文将通过 Istio、eBPF 和 RSocket Broker 技术深入探索 Service Mesh 解决方案。
+subtitle: 本文主要介绍 Hibernate、JPA 和 Spring Data JPA 之间的区别。
 
 categories:
 - 架构设计
@@ -25,35 +25,33 @@ tags:
 
 > 原文链接（请科学上网）：https://medium.com/javarevisited/difference-between-hibernate-jpa-and-spring-data-jpa-7df55717692f
 
-大家好，如果您正在准备 Java 开发人员面试，那么除了准备 Core Java、Spring Boot 和微服务之外，您还应该准备 ORM 框架、Hibernate、JPA 和 Spring Data JPA 之类的东西，比如 Hibernate、JPA 之间的区别, 和 Spring Data JPA?，这也是 Java 面试的热门问题之一。
+朋友们大家好，如果大家正在准备 `Java` 开发岗位面试，那么除了准备 `Core Java`、`Spring Boot` 和微服务之外，我们还应该学习 `ORM` 框架，`Hibernate`、`JPA` 和 `Spring Data JPA` 之类的框架知识，比如 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间的区别？这也是 `Java` 面试的热门问题之一。
 
-在上一篇文章中，我分享了[JWT、OAuth 和 SAML](https://medium.com/javarevisited/difference-between-jwt-oauth-and-saml-for-authentication-and-authorization-in-web-apps-75b412754127)、[Kafka 与 RabbitMQ](https://medium.com/javarevisited/difference-between-rabbitmq-apache-kafka-and-activemq-65e26b923114) 以及 [REST 与 GraphQL 与 gRPC](https://medium.com/javarevisited/difference-between-rest-graphql-and-grpc-10ac365462b8) 之间的区别，在本文中，我将分享我对 Hibernate、JPA 和 Spring Data JPA 的看法，从 Java 应用程序访问数据库的三个流行框架。
+在前面的文章中，我分享了[JWT、OAuth 和 SAML 之间的区别](https://medium.com/javarevisited/difference-between-jwt-oauth-and-saml-for-authentication-and-authorization-in-web-apps-75b412754127)、[Kafka 与 RabbitMQ之间的区别](https://medium.com/javarevisited/difference-between-rabbitmq-apache-kafka-and-activemq-65e26b923114) 以及 [REST、GraphQL 与 gRPC 之间的区别](https://medium.com/javarevisited/difference-between-rest-graphql-and-grpc-10ac365462b8) 这几篇文章；在本文中我将分享我对 `Hibernate`、`JPA` 和 `Spring Data JPA` 的理解，学习 `Java` 应用程序访问数据库的三个流行框架。
 
-在开发与数据库交互的 Java 应用程序时，开发人员通常依赖框架和 API 来简化和简化使用持久层的过程。尽管 JDBC 来自 Java，但由于 API 的精心设计和设计不佳，它并不总是最佳选择。
+在开发与数据库交互的 `Java` 应用程序时，开发人员通常依赖某些框架和 `API` 来简化数据持久化的过程；虽然 `JDBC` 来自 `Java`，但是由于 `API` 的过度设计或者设计不足，`JDBC` 并不一定是最佳选择。
 
-在 Java 中管理对象关系映射 (ORM) 的三个流行选项是 Hibernate、JPA（Java Persistence API）和 Spring Data JPA。虽然这些框架有一些相似之处，但了解它们的独特特性、实现和优势至关重要。
+在 `Java` 中处理对象关系映射 (ORM) 的三个主流框架是 `Hibernate`、`JPA`（`Java Persistence API`）和 `Spring Data JPA`。虽然这些框架有一些相似之处，但了解它们的独特特性、实现原理和优缺点是非常重要的。
 
-在本文中，您将了解 Hibernate、JPA 和 Spring Data JPA 之间的区别。我们将探讨它们的定义、实现、持久性 API、数据库支持、事务管理、查询语言、缓存机制、配置选项、与 Spring 的集成以及其他功能。
+在本文中，我们将了解 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间的区别。我们将探讨它们的定义、实现、持久性 API、数据库支持、事务管理、查询语言、缓存机制、配置选项、与 `Spring` 的集成以及其他功能特性。
 
-通过了解这些区别，您可以在为项目选择最合适的框架并利用每个选项提供的功能时做出明智的决定。
+通过了解这些区别，我们可以为项目选择最合适的框架，并在利用每种框架提供的特性时做出最佳的选择。
 
-无论您是开始使用 ORM 框架的 Java 开发人员，还是希望加强对 Hibernate、JPA 和 Spring Data JPA 的理解的人，本文旨在提供有价值的见解和比较，以帮助您应对 Java 应用程序中管理持久性的复杂性。
+无论我们是开始使用 `ORM` 框架的 `Java` 开发人员，还是希望加强对 `Hibernate`、`JPA` 和 `Spring Data JPA` 的理解，本文旨在提供深入的研究和功能比较，以帮助大家应对 `Java` 应用程序开发中数据持久化的复杂性。
 
-让我们首先详细检查每个框架并揭示使它们与众不同的独特特征。
+首先我们详细检查每个框架并揭示使它们与众不同的独特特征。
 
-顺便说一下，如果您正在准备 Java 开发人员面试，您还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、20 个来自面试的 SQL 查询、50 个微服务问题、60 个树数据结构问题、15 个系统问题Design Questions，以及 35 道 Core Java Questions 和 21 道 Lambda and Stream questions，其中包含大量常见问题，可以帮助您更好地准备面试。
-
-而且，如果您还不是 Medium 会员，那么我强烈建议您加入 Medium 并阅读我的其他会员专用文章以准备面试。您可以在这里加入 Medium
+顺便说一下，如果您正在准备 `Java` 开发岗位的面试，您还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试中常见的 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，其中包含大量常见问题，可以帮助大家更好地准备面试。
 
 ## 1. Hibernate：强大的 ORM 框架
 
-与 Spring 框架一起，Hibernate 可能是最受 Java 开发人员欢迎的框架。 Hibernate 是一个功能强大且广泛使用的 ORM 框架，它提供了一组广泛的功能，用于将 Java 对象映射到关系数据库。
+与 `Spring` 框架一起，`Hibernate` 可能是最受 Java 开发人员欢迎的框架。`Hibernate` 是一个功能强大且广泛使用的 `ORM` 框架，它提供了一组广泛的功能，用于将 `Java` 对象映射到关系数据库。
 
-它提供自己的 JPA 规范实现，使其成为管理 Java 应用程序持久性的综合解决方案。 Hibernate 通过其方言支持各种数据库，允许开发人员无缝地使用不同的数据库系统。
+它内部提供了 `JPA` 规范实现，使其成为管理 `Java` 应用程序数据持久化的综合解决方案。`Hibernate` 通过数据库方言支持各种数据库，允许开发人员无缝地使用不同的数据库系统。
 
-借助 Hibernate，Java 开发人员可以使用 XML 配置文件、注释甚至基于 Java 的配置来定义他们的持久性映射。它提供了自己的查询语言，称为 Hibernate 查询语言 (HQL)，允许开发人员使用面向对象的语法编写数据库查询，从而更轻松地处理复杂的关系并执行高效的数据检索。
+借助 `Hibernate`，*`Java` 开发人员可以使用 `XML` 配置文件、注释或者基于 `Java` 的配置来定义对象的持久性映射*。它提供了自己的查询语言，称为 **Hibernate 查询语言（HQL）**，允许开发人员使用面向对象的语法编写数据库查询，从而更轻松地处理复杂的数据关系并执行高效的数据检索。
 
-Hibernate 的主要优势之一是它对缓存机制的支持。它同时提供[一级和二级缓存](https://javarevisited.blogspot.com/2017/03/difference-between-first-and-second-level-cache-in-Hibernate.html)，可以通过减少数据库往返次数来显着提高数据库操作的性能。
+`Hibernate` 的主要优势之一是它对缓存机制的支持，它同时支持[一级和二级缓存](https://javarevisited.blogspot.com/2017/03/difference-between-first-and-second-level-cache-in-Hibernate.html)，可以通过减少数据库交互次数来显着提高操作数据库的性能。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/16-Difference-Between-Hibernate-JPA-Spring-Data-JPA/01.png"/>
 
@@ -61,7 +59,7 @@ Hibernate 的主要优势之一是它对缓存机制的支持。它同时提供[
 
 ## 2. JPA：Java 持久化 API
 
-另一方面，JPA 是一种规范，它为 Java 中的 ORM 定义了一组标准 API。它旨在为对象关系映射提供一致且与供应商无关的方法。但是，JPA 本身不提供实现；它需要使用底层实现。
+另一方面，`JPA` 是一种规范，它为 Java 中的 ORM 定义了一组标准 API。它旨在为对象关系映射提供一致且与供应商无关的方法。但是，JPA 本身不提供实现；它需要使用底层实现。
 
 开发人员可以从各种 JPA 实现中进行选择，例如 Hibernate、EclipseLink 或 Apache OpenJPA 等。这些实现遵循 JPA 规范并提供它们自己独特的功能和优化。
 
