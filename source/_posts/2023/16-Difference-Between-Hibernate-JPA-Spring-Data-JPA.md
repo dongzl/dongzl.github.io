@@ -35,13 +35,13 @@ tags:
 
 在本文中，我们将学习 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间的区别，将会探讨它们的定义、实现、持久性 `API`、数据库支持、事务管理、查询语言、缓存机制、配置选项、与 `Spring` 框架的集成以及其他功能特性。
 
-通过了解这些区别，我们可以为项目选择最合适的框架，并在利用每种框架提供的特性时做出最佳的选择。
+通过了解这些区别，我们可以为项目选择最合适的框架，并利用这些框架提供的特性做出最佳的选择。
 
 无论我们是开始使用 `ORM` 框架的 `Java` 开发人员，还是希望加强对 `Hibernate`、`JPA` 和 `Spring Data JPA` 的理解，本文旨在提供深入的研究和功能比较，来帮助大家应对 `Java` 应用程序开发中数据持久化的复杂性。
 
 首先我们深入研究每个框架并揭示出使它们与众不同的独特功能。
 
-顺便说一下，如果大家正在准备 `Java` 开发岗位的面试，还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试中常见的 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，其中包含大量常见问题，可以帮助大家更好地准备面试。
+顺便说一下，如果大家正在准备 `Java` 开发岗位的面试，还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试中常见的 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)等文章，其中包含大量常见问题，可以帮助大家更好地准备面试。
 
 ## 1. Hibernate：强大的 ORM 框架
 
@@ -73,7 +73,7 @@ tags:
 
 借助 `Spring Data JPA`，`Java` 开发人员可以将存储库定义为接口，利用 `Spring` 强大的依赖注入能力自动生成必要的 `CRUD`（创建、读取、更新、删除）操作，它还支持根据特定命名约定定义的方法名称来创建自定义查询，从而无需手工编写 `JPQL` 或 `SQL` 查询。
 
-`Spring Data JPA` 与 `Spring` 生态系统无缝集成，允许开发人员利用其他 `Spring` 能力，例如事务管理、依赖项注入和声明式缓存。它还提供了一套内聚且高效的解决方案，用于在利用标准化 `JPA` `API` 的同时管理 `Spring` 应用程序中的持久性。
+`Spring Data JPA` 与 `Spring` 生态系统无缝集成，允许开发人员利用其他 `Spring` 能力，例如事务管理、依赖项注入和声明式缓存。它还提供了一套内聚且高效的解决方案，用于在利用标准化 `JPA` `API` 的同时管理 `Spring` 应用程序中的数据持久化。
 
 下图是一张很好的图表，它显示了 `Spring Data JPA` 与使用 `EntityManager` 的 `Raw JPA` 相比是如何工作的：
 
@@ -121,7 +121,7 @@ tags:
 
 ### 6. 查询语言
 
-`Hibernate` 提供了用于编写面向对象查询的 `Hibernate` 查询语言（`HQL`），`JPA` 为数据库查询定义了 `Java` 持久性查询语言（`JPQL`），而 `Spring Data JPA` 使用 `JPQL` 作为查询语言，类似于 `JPA`。
+`Hibernate` 提供了用于编写面向对象查询的 `Hibernate` 查询语言（`HQL`），`JPA` 为数据库查询定义了 `Java` 持久化查询语言（`JPQL`），而 `Spring Data JPA` 使用 `JPQL` 作为查询语言，类似于 `JPA`。
 
 ### 7. 缓存
 
@@ -131,7 +131,7 @@ tags:
 
 `Hibernate` 支持使用 `XML`、注释或基于 `Java` 的方法进行配置，`JPA` 同样支持使用 `XML`、注释或基于 `Java` 的方法进行配置，而 `Spring Data JPA` 也支持使用 `XML`、注释或基于 `Java` 的方法进行配置。
 
-### 9. 一体化
+### 9. 与其他框架整合能力
 
 `Hibernate` 可以独立使用，也可以与 `Spring` 框架集成使用；`JPA` 可以与任何符合 `JPA` 规范的框架一起使用，包括与 `Spring` 和 `Spring Data JPA` 的集成构成了 `Spring Data` 系列的一部分，旨在便于与 `Spring` 应用程序集成。
 
@@ -141,19 +141,19 @@ tags:
 
 这个清单清晰地总结了 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间每个功能的区别；但是如果我们想通过表格形式查看各个框架的区别，这里还有一个非常不错的总结表格，它突出显示了 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间的关键技术差异：
 
-| 特性           | Hibernate            | JPA                               | Spring Data JPA                         |
-|--------------|----------------------|-----------------------------------|-----------------------------------------|
-| 定义           | `ORM`（对象关系映射）框架      | `Java` 中 `ORM` 规范 | 基于 `JPA` 的简化和抽象 |
-| 实现           | 自身提供实现 | 仅定义规范，依赖具体实现 | 构建在 `JPA` 之上，提供额外的特性 |
-| 持久化 `API`    | `Hibernate` 提供内置 `API` | 为 `ORM` 定义一系列标准化 `API` | 构建在 `JPA` 的 `API` 之上，提供更多功能支持 |
-| 数据库支持        | 通过数据库方言支持不同数据库 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现 |
-| 事务管理         | 提供内置的事务管理 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现 |
-| 查询语言         | `Hibernate` 查询语言（`HQL`） | `JPQL`（`Java` 持久化查询语言） | `JPQL`（`Java` 持久化查询语言） |
-| 缓存           | 提供一级和二级缓存 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现 |
-| 配置           | `XML`、注解或者是基于 `Java` 配置 | `XML`、注解或者是基于 `Java` 配置 | `XML`、注解或者是基于 `Java` 配置 |
-| 集成           | 可以独立使用或者与 `JPA` 一起使用 | 与任何符合 `JPA` 规范实现一起工作 | 与任何符合 `JPA` 规范实现一起工作 |
-| `Spring` 集成  | 可以与 `Spring` 集成一起使用 | 可以与 `Spring` 集成一起使用 | `Spring Data` 家族的一款产品，可以与 `Spring` 集成一起使用 |
-| 其他特性         | 提供额外功能特性，超过 `JPA` 规范 | 无 | 提供额外的抽象存储和查询支持 |
+| 特性              | Hibernate            | JPA                               | Spring Data JPA                           |
+|-----------------|----------------------|-----------------------------------|-------------------------------------------|
+| 定义              | `ORM`（对象关系映射）框架      | `Java` 中 `ORM` 规范 | 对 `JPA` 的简化和抽象                            |
+| 实现              | 自身提供实现 | 仅定义规范，依赖具体实现 | 构建在 `JPA` 之上，提供额外的特性                      |
+| 持久化 `API`       | `Hibernate` 提供内置 `API` | 为 `ORM` 定义一系列标准化 `API` | 构建在 `JPA` 的 `API` 之上，提供更多功能支持             |
+| 数据库支持           | 通过数据库方言支持不同数据库 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现                       |
+| 事务管理            | 提供内置的事务管理 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现                       |
+| 查询语言            | `Hibernate` 查询语言（`HQL`） | `JPQL`（`Java` 持久化查询语言） | `JPQL`（`Java` 持久化查询语言）                    |
+| 缓存              | 提供一级和二级缓存 | 依赖于使用的具体 `JPA` 框架实现 | 依赖于使用的具体 `JPA` 框架实现                       |
+| 配置              | `XML`、注解或者是基于 `Java` 配置 | `XML`、注解或者是基于 `Java` 配置 | `XML`、注解或者是基于 `Java` 配置                   |
+| 整合能力            | 可以独立使用或者与 `JPA` 一起使用 | 与任何符合 `JPA` 规范实现一起工作 | 与任何符合 `JPA` 规范实现一起工作                      |
+| 与 `Spring` 整合能力 | 可以与 `Spring` 集成一起使用 | 可以与 `Spring` 集成一起使用 | `Spring Data` 家族的一款产品，可以与 `Spring` 集成一起使用 |
+| 其他特性            | 提供额外功能特性，超过 `JPA` 规范 | 无 | 提供额外的抽象存储和查询支持                            |
 
 <hr />
 
@@ -183,4 +183,4 @@ tags:
 
 通过展示这些区别并突出实际用例，候选人可以用他们在使用这些技术方面的知识和专长给面试官留下深刻印象。
 
-这是我认为每个 `Java` 开发人员都应该准备的一个问题，但如果你想要更多，你还可以准备微服务问题，例如 [API 网关和负载均衡器之间的区别](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何在微服务中管理事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)以及 [SAGA 和 CQRS 模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02), 他们在采访中很受欢迎。
+这是我认为每个 `Java` 开发人员都应该准备的一个问题，但如果你想要更多，你还可以准备微服务问题，例如 [API 网关和负载均衡器之间的区别](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何在微服务中管理事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)以及 [SAGA 和 CQRS 模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02), 这些问题在面试中很受欢迎。
