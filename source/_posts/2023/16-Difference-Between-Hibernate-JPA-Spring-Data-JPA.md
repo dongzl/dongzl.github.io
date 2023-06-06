@@ -1,5 +1,5 @@
 ---
-title: Hibernate、JPA 和 Spring Data JPA 之间的区别
+title: Hibernate、JPA 和 Spring Data JPA 之间对比
 date: 2023-06-03 12:33:45
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/hibernate_jpa.png
 
@@ -157,7 +157,7 @@ tags:
 
 <hr />
 
-## 如何在面试中处理问题？
+## 如何处理面试中问题？
 
 当在 `Java` 开发岗位面试中遇到有关 `Hibernate`、`JPA` 和 `Spring Data JPA` 之间差异对比的问题时，提供全面准确的答案至关重要。我们可以考虑如下思路：
 
