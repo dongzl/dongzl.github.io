@@ -27,19 +27,19 @@ tags:
 
 朋友们大家好，许多 `Java` 开发人员在面试中会被问到 `JWT`、`OAuth2.0` 和 `SAML` 之间的差异，以及何时使用它们？这是最常见的问题之一，如果大家正在准备 `Java` 开发人员岗位面试并恰巧被问到这个问题，那么正好可以来这篇文章中寻找答案。
 
-在前面的文章中，我分享了一些 `Java` 面试内容，例如 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个树数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个核心 Java问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，在这篇文章中我将会系统地回答这个常见问题。
+在前面的文章中，我分享了一些 `Java` 面试内容，例如 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个树数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个核心 Java 问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，在这篇文章中我将会系统地回答这个常见问题。
 
 虽然 `JWT`、`OAuth` 和 `SAML` 都是众所周知的用于 `Web` 应用程序中的身份认证和授权的标准，但是它们之间还是存在很多差异。
 
 比如，`JWT` 表示 `JSON Web Token`，它是*使用 `JSON` 对象在各方之间安全传输信息的标准*。它用于对用户身份进行认证和授权，通常用于 `Web` 应用程序，因为 `JWT` 是经过数字签名的，所以它们可以被验证和信任。
 
-另一方面，`OAuth`（开放授权）是一种*开放的授权协议标准，允许第三方应用程序访问用户数据而无需共享用户登录凭据*。它通常用于外部服务需要访问数据的应用程序，例如社交媒体平台或 `API`。
+另一方面，`OAuth`（开放授权）是一种*开放的授权协议标准，允许第三方应用程序访问用户数据而无需共享用户登录凭证*。它通常用于外部服务需要访问数据的应用程序，例如社交媒体平台或 `API`。
 
 同样，`SAML`（安全断言标记语言）是另一种*用于在各方之间交换身份认证和授权数据的标准，特别是在身份提供者 (`IdP`) 和服务提供者 (`SP`) 之间*。它通常用于企业应用程序中以提供单点登录 (`SSO`) 功能。
 
-`SAML` 最流行的案例之一是被新加坡政府使用 `SingPass` 身份认证（疫苗证书、`CPF`、`IRAS` 等）访问政府网站。
+`SAML` 最著名的案例之一是被新加坡政府网站使用的 `SingPass` 身份认证服务，用来访问`疫苗证书`、`CPF`、`IRAS` 等政府网站。
 
-现在我们对这些知识有了一些基本了解，是时候深入了解并详细地学习这些内容，以便于我们可以回答面试中任何问题。
+现在我们对这些知识有了一些基本了解，是时候深入了解并细致地学习这些内容，以便于我们可以回答面试中关于这些技术的任何问题。
 
 <hr />
 
@@ -49,19 +49,19 @@ tags:
 
 `JWT` 由三部分组成：**标头**、**有效负载**和**签名**。标头指定令牌的类型和使用的签名算法，而有效负载包含正在传输的实际数据。
 
-> 签名是将标头和有效负载与只有服务器知道的密钥组合在一起所创建的。
+> 签名是将标头和有效负载与只有服务器所信任的密钥组合在一起所生成的。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/17-Difference-JWT-OAuth-SAML-Authentication-Authorization/01.png"/>
 
 `JWT` 通常用于 `Web` 应用程序中，作为在客户端和服务器之间传输用户身份认证数据的一种方式。当用户登录时，服务器会生成一个包含用户 `ID` 和相关权限或角色信息的 `JWT`，然后将此令牌返回给客户端，客户端将其存储后并应用到对服务器的后续请求中。
 
-> 然后服务器可以验证 JWT 的真实性并使用其中包含的信息来确认用户是否被授权执行请求的操作。
+> 服务器会验证 JWT 的真实性并使用其中包含的信息来确认用户是否被授权执行请求的操作。
 
 `JWT` 在多个服务需要共享用户身份认证信息的[分布式系统](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)中也很有用，每个服务不需要都维护自己的身份认证系统，而是可以使用某个 `JWT` 对所有服务中的用户进行身份认证。
 
 总的来说，当我们需要以安全高效的方式在各方之间传输敏感信息时，`JWT` 非常有用，尤其是在传统的基于会话的身份验证不可行的情况下。
 
-下图很好地**解释了 `JWT`（JSON Web Token）如何在 Web 应用程序中工作**：
+下图很好地**解释了 `JWT`（`JSON Web Token`）如何在 `Web` 应用程序中工作**：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/17-Difference-JWT-OAuth-SAML-Authentication-Authorization/02.png"/>
 
@@ -142,6 +142,16 @@ tags:
 下面的表格内容总结地很好，大家可以打印出来，帮助记忆 `JWT`、`SAML` 和 `OAuth2.0` 之间的差异。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/17-Difference-JWT-OAuth-SAML-Authentication-Authorization/05.png"/>
+
+|       | JWT                   | OAuth                  | SAML                |
+|-------|-----------------------|------------------------|---------------------|
+| 目标    | 用基于令牌的身份验证机制来传输身份认证信息 | `Web` 应用和移动端应用中认证和授权协议 | 在多个模块之间交换认证和授权协议的协议 |
+| 中心化服务 | 无中心化服务                | 中心化认证服务                | 中心化身份提供者            |
+| 应用场景  | 认证和授权                 | 只做授权，不做认证              | 认证和授权               |
+| 应用程序  | 单页应用程序，移动端应用          | 需要依赖于外部 `API` 或服务的应用程序 | 企业级应用环境             |
+| 关联关系  | 各方之间直接交互              | 在第三方应用程序和资源拥有者之间交互     | 在身份提供者和服务提供者之间交互    |
+| 认证能力  | 有                     | 无                      | 有                   |
+| 授权能力  | 有                     | 有                      | 有                   |
 
 综上所述，`JWT` 是一种基于令牌的身份认证机制，通常用于传递认证信息，`OAuth` 是一种用于用户授予第三方应用程序访问资源的协议，而 `SAML` 是一种用于在各方之间交换身份认证和授权数据的协议建立组织间的信任关系。
 
