@@ -27,7 +27,7 @@ tags:
 
 朋友们大家好，许多 `Java` 开发人员在面试中会被问到 `JWT`、`OAuth2.0` 和 `SAML` 之间的差异，以及何时使用它们？这是最常见的问题之一，如果大家正在准备 `Java` 开发人员岗位面试并恰巧被问到这个问题，那么正好可以来这篇文章中寻找答案。
 
-在前面的文章中，我分享了一些 `Java` 面试内容，例如 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个面试 SQL 查询](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个树数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个核心 Java 问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，在这篇文章中我将会系统地回答这个面试中常见问题。
+在前面的文章中，我分享了一些 `Java` 面试内容，例如 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个 SQL 查询面试题](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac)，在这篇文章中我将会系统地回答这个面试中常见问题。
 
 虽然 `JWT`、`OAuth` 和 `SAML` 都是众所周知的用于 `Web` 应用程序中的身份认证和授权的标准，但是它们之间还是存在很多差异。
 
@@ -140,8 +140,6 @@ tags:
 - 它用于身份认证和授权。
 
 下面的表格内容总结地很好，大家可以打印出来，帮助记忆 `JWT`、`SAML` 和 `OAuth2.0` 之间的差异。
-
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/17-Difference-JWT-OAuth-SAML-Authentication-Authorization/05.png"/>
 
 |       | JWT                   | OAuth                  | SAML                |
 |-------|-----------------------|------------------------|---------------------|
