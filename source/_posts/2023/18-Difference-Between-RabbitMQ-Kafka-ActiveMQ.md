@@ -19,7 +19,7 @@ categories:
 
 tags:
 - RabbitMQ
-- Apache Kafka
+- Kafka
 - ActiveMQ
 ---
 
