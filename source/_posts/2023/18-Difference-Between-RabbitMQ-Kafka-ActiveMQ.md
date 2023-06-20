@@ -111,7 +111,7 @@ tags:
 
 `ActiveMQ` 也是为高性能而设计的，可以以较高速率处理消息。`ActiveMQ` 通过使用异步架构和批处理方案来实现高性能。
 
-这是来自 [confluent 的图表](https://www.confluent.io/blog/kafka-fastest-messaging-system/)，比较了 Apache Kafka、Pulsar 和 Rabbit MQ 的性能
+这是来自 [confluent 的图表](https://www.confluent.io/blog/kafka-fastest-messaging-system/)，比较了 `Apache Kafka`、`Pulsar` 和 `RabbitMQ` 的性能：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/06.png"/>
 
@@ -119,33 +119,33 @@ tags:
 
 ### 4. 数据持久化
 
-数据持久性是消息传递系统的一个重要特性，因为它允许在消息传递系统出现故障时存储和检索消息。 RabbitMQ、Kafka 和 ActiveMQ 都有不同的数据持久化方法。
+数据持久化是消息系统的一个重要特性，因为它允许消息系统在出现故障时存储并再次处理消息。`RabbitMQ`、`Kafka` 和 `ActiveMQ` 都有不同的数据持久化方法。
 
-RabbitMQ 默认情况下将消息存储在磁盘上，这允许即使代理关闭也可以持久保存消息。 RabbitMQ 还支持不同的存储后端，包括内存存储，它以数据持久性为代价提供更好的性能。
+`RabbitMQ` 默认情况下将消息存储在磁盘上，这使得即使代理节点关闭也可以持久化保存消息。`RabbitMQ` 还支持不同类型的存储后端，包括内存存储，它可以在支持数据持久化同时还能提供良好的性能。
 
-Kafka 默认将消息存储在磁盘上，并使用基于日志的架构来实现高持久性和可靠性。 Kafka 将消息保留一段可配置的时间，这允许在必要时重播消息。
+`Kafka` 默认将消息存储在磁盘上，并使用基于日志的架构来实现持久性和可靠性。`Kafka` 将消息保留一段时间，这个时间是可配置的，这使得在必要时可以重放消息。
 
-ActiveMQ 还默认将消息存储在磁盘上，并支持不同的存储后端，包括 JDBC 和基于文件的存储。 ActiveMQ 可以将消息存储在数据库中，以性能为代价提供更好的数据持久性。
+`ActiveMQ` 也是默认将消息存储在磁盘上，并支持不同的存储后端，包括 `JDBC` 和基于文件的存储。`ActiveMQ` 可以将消息存储在数据库中，以牺牲一部分性能为代价提供更好的数据持久性。
 
-这是来自 IBM 的一张很好的图表，它显示了 Kafka 架构：
+这是来自 `IBM` 网站的一张图片，它很好地展示了 `Kafka` 的架构：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/07.png"/>
 
-image — https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-overview/
+<font color=DarkGray size=2>image — [https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-overview/](https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-overview/)</font>
 
 <hr />
 
 ### 5. 与其他系统集成
 
-与其他系统的集成是选择消息系统时要考虑的重要因素。 RabbitMQ、Kafka 和 ActiveMQ 都具有不同的集成能力。
+与其他系统的集成是选择消息系统时需要考虑的一个重要因素。`RabbitMQ`、`Kafka` 和 `ActiveMQ` 都具有不同的集成能力。
 
-RabbitMQ 与不同的编程语言很好地集成，包括 Java、Python、Ruby 和 .NET。 RabbitMQ 也有插件，允许它与不同的系统集成，包括数据库、Web 服务器和消息代理。
+`RabbitMQ` 能够与很好地支持不同的编程语言，包括 `Java`、`Python`、`Ruby` 和 `.NET`。`RabbitMQ` 同时支持插件功能，允许使用插件与不同的系统集成，包括**数据库**、**web 服务器**和**消息代理**。
 
-Kafka 与不同的数据处理系统很好地集成，包括 Apache Spark、Apache Storm 和 Apache Flink。 Kafka 还有一个连接器框架，允许它与不同的数据库和数据源集成。
+`Kafka` 能够与不同的数据处理系统很好地集成到一起，包括 `Apache Spark`、`Apache Storm` 和 `Apache Flink`。`Kafka` 支持连接器框架，允许它与不同的数据库和数据源集成。
 
-ActiveMQ 与不同的 JMS 客户端很好地集成，包括 Java、.NET 和 C。 ActiveMQ 还具有允许它与不同系统集成的插件，包括 Apache Camel 和 Apache CXF。
+`ActiveMQ` 能够与不同的 `JMS` 客户端很好地集成，包括 `Java`、`.NET` 和 `C`。`ActiveMQ` 还具支持与不同系统集成的插件，包括 `Apache Camel` 和 `Apache CXF`。
 
-这里还有一个很好的表格来突出显示 Kafka、Rabbit MQ 和 ActiveMQ 之间的区别
+这里整理了一个表格，这个表格很好地展示了 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 之间的差异：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/08.png"/>
 
@@ -153,14 +153,14 @@ ActiveMQ 与不同的 JMS 客户端很好地集成，包括 Java、.NET 和 C。
 
 ## 总结
 
-这就是 Apache Kafka、RabbitMQ 和 ActiveMQ 之间的区别。 RabbitMQ、Apache Kafka 和 ActiveMQ 是三种流行的消息传递系统，它们具有不同的特性和功能。
+这就是 `Apache Kafka`、`RabbitMQ` 和 `ActiveMQ` 之间的差异。`RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 是三种流行的消息系统框架，它们具备不同的功能和特性。
 
-RabbitMQ 和 ActiveMQ 遵循传统的消息传递模型，而 Kafka 使用发布/订阅消息传递模型。 RabbitMQ 和 ActiveMQ 使用集群和代理网络方法来实现可扩展性，而 Kafka 使用分区。 RabbitMQ 优先考虑消息传递而不是性能，而 Kafka 和 ActiveMQ 优先考虑性能。 RabbitMQ、Kafka、ActiveMQ 都具有不同的数据持久化和集成能力。
+`RabbitMQ` 和 `ActiveMQ` 遵循传统的消息传输模型，而 `Kafka` 使用的是发布/订阅消息传输模型。`RabbitMQ` 和 `ActiveMQ` 使用集群和网络代理方案来实现可扩展性，而 `Kafka` 使用分区方式实现可扩展性。`RabbitMQ` 优先考虑消息传递可靠性而不是性能，而 `Kafka` 和 `ActiveMQ` 优先考虑性能。`RabbitMQ`、`Kafka`、`ActiveMQ` 都具备不同的数据持久化和与其他框架的集成能力。
 
-选择消息系统时，必须考虑应用程序或系统的具体要求。 RabbitMQ 和 ActiveMQ 适用于要求消息严格排序和可靠传递的应用，而 Kafka 适用于流式数据场景。
+选择消息系统时，必须考虑应用程序或系统的具体要求。`RabbitMQ` 和 `ActiveMQ` 适用于要求消息严格有序和消息可靠传输的应用场景，而 `Kafka` 适用于流式数据场景。
 
-> RabbitMQ和ActiveMQ适用于对消息速率要求中高的应用，而Kafka适用于对消息速率要求高的应用。
+`RabbitMQ` 和 `ActiveMQ` 适用于对消息处理速率要求不高的应用场景，而 `Kafka` 适用于对消息处理速率要求很高的应用场景。
 
-同样，RabbitMQ和ActiveMQ适用于对数据持久性要求高的应用，而Kafka适用于对性能要求高的应用。
+同样，`RabbitMQ` 和 `ActiveMQ` 适用于对数据持久性要求比较高的应用场景，而 `Kafka` 适用于对性能要求比较高的应用场景。
 
 这是我认为每个 Java 开发人员都应该准备的一个问题，但如果你想要更多，你还可以准备微服务问题，例如[API Gateway 和 Load Balancer 的区别](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何在微服务中管理事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e) 以及 [SAGA 和 CQRS 模式的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，它们在面试中很受欢迎。
