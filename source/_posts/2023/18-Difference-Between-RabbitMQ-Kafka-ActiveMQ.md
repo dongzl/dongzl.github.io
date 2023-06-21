@@ -25,13 +25,13 @@ tags:
 
 > 原文链接（请科学上网）：https://medium.com/javarevisited/difference-between-rabbitmq-apache-kafka-and-activemq-65e26b923114
 
-朋友们大家好，如果大家正在准备 `Java` 开发人员面试以及 `Spring Boot` 和微服务面试，还应该准备消息代理、`Kafka`、`RabbitMQ` 和 `ActiveMQ` 等框架知识，比如 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 之间有什么差异？这也是 `Java` 面试的热门问题之一。
+朋友们大家好，如果大家正在通过学习 `Spring Boot` 和微服务知识来准备 `Java` 开发岗位的面试，我建议还应该准备一下消息代理、`Kafka`、`RabbitMQ` 和 `ActiveMQ` 等框架知识，比如 **Kafka、RabbitMQ 和 ActiveMQ 之间有什么差异**？这也是 `Java` 面试的热门问题之一。
 
 在我的上一篇文章中，我分享了[JWT、OAuth 和 SAML 之间的差异](https://medium.com/javarevisited/difference-between-jwt-oauth-and-saml-for-authentication-and-authorization-in-web-apps-75b412754127) 和 [REST、GraphQL 和 gRPC 之间的差异](https://medium.com/javarevisited/difference-between-rest-graphql-and-grpc-10ac365462b8) ；在这篇文章中，我将分享我对 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 这三个流行的[异步消息](https://medium.com/javarevisited/how-microservices-communicates-with-each-other-synchronous-vs-asynchronous-communication-pattern-31ca01027c53)代理框架的一些理解。
 
 消息系统在现代分布式架构中，在通过网络相互通信的分布式应用程序和服务中扮演着至关重要的角色。消息系统可以使消息发送方和消息接收方解耦，从而实现[异步通信](https://medium.com/javarevisited/how-microservices-communicates-with-each-other-synchronous-vs-asynchronous-communication-pattern-31ca01027c53) 。`RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 是业界使用的三个流行消息队列框架。在本文中，我们将讨论 `RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 之间的差异。
 
-顺便说一下，如果大家正在准备 `Java` 开发人员面试，还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个 SQL 查询面试题](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac) 等文章，这些文章包含大量常见问题，可以帮助大家更好地准备面试。
+顺便说一下，如果大家正在准备 `Java` 开发岗位的面试，还可以查看我之前发布的关于 [21 个软件设计模式问题](https://medium.com/javarevisited/21-software-design-pattern-interview-questions-and-answers-b7d1774b5dd2)、[10 个基于微服务场景的问题](https://medium.com/javarevisited/top-10-microservices-problem-solving-questions-for-5-to-10-years-experienced-developers-3391e4f6b591)、[20 个 SQL 查询面试题](https://medium.com/javarevisited/20-sql-queries-for-programming-interviews-a7b5a7ea8144)、[50 个微服务问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)、[60 个关于树的数据结构问题](https://medium.com/javarevisited/top-60-tree-data-structure-coding-interview-questions-every-programmer-should-solve-89c4dbda7c5a)、[15 个系统设计问题](https://medium.com/javarevisited/7-system-design-problems-to-crack-software-engineering-interviews-in-2023-13a518467c3e)、[35 个 Java 核心问题](https://medium.com/javarevisited/top-10-java-interview-questions-for-3-to-4-years-experienced-programmers-c4bf6d8b5e7b) 和 [21 个 Lambda 和 Stream 问题](https://medium.com/javarevisited/21-lambda-and-stream-interview-questions-for-java-programmers-38d7e83b5cac) 等文章，这些文章包含大量常见问题，可以帮助大家更好地准备面试。
 
 <hr />
 
@@ -39,7 +39,7 @@ tags:
 
 `RabbitMQ` 是一个实现高级消息队列协议 (`AMQP`) 标准的开源消息代理框架。它是用 `Erlang` 语言编写的，具备可插拔的体系结构，可以轻松进行扩展。
 
-`RabbitMQ` 支持多种消息传输模式，例如**发布/订阅**、**请求/回复**和**点对点**模式，并且它具有一组强大的功能，例如**消息确认机制**、**消息路由**和**消息队列**。
+`RabbitMQ` 支持多种消息传输模式，例如**发布/订阅**、**请求/应答**和**点对点**模式，并且它具有一组强大的功能，例如**消息确认机制**、**消息路由**和**消息队列**。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/01.png"/>
 
@@ -49,9 +49,9 @@ tags:
 
 `Apache Kafka` 是一个开源分布式事件流平台，最初由 `LinkedIn` 公司开发。`Kafka` 是用 `Scala` 和 `Java` 语言编写的，旨在处理大规模流式数据。
 
-`Kafka` 使用**发布/订阅消息传输模型**，并针对高吞吐量、低延迟和容错进行了优化。
+`Kafka` 使用**发布/订阅消息传输模型**，并针对高吞吐量、低延迟和容错方面进行了优化。
 
-`Kafka` 支持持久化的消息传递模型，这意味着消息可以存储在磁盘上并且可以多次重放。
+`Kafka` 支持持久化的消息传递模型，这意味着消息可以存储在磁盘上并且可以进行多次重放。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/02.png"/>
 
@@ -61,7 +61,7 @@ tags:
 
 `Apache ActiveMQ` 是一个开源消息代理框架，它实现了 `Java` 消息服务（`JMS`）的 `API`。`ActiveMQ` 是用 `Java` 语言编写的，具有可插拔的体系结构，可以轻松实现扩展。
 
-`ActiveMQ` 支持多种消息传输模式，例如**点对点**、**发布/订阅**和**请求/回复**模式，并且它具有一组强大的功能，例如**消息确认机制**、**消息路由**和**消息队列**。
+`ActiveMQ` 支持多种消息传输模型，例如**点对点**、**发布/订阅**和**请求/应答**模式，并且它具备一组强大的功能，例如**消息确认机制**、**消息路由**和**消息队列**。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/03.gif"/>
 
@@ -81,7 +81,7 @@ tags:
 
 另一方面，`Kafka` 使用的发布/订阅消息模型更适合流式数据，需要实时处理数据的场景。
 
-下图是一张很好的对比图，它突出了 `Kafka` 和 `RabbitMQ` 之间的架构差异：
+下图是一张很好的对比图，它突出展示了 `Kafka` 和 `RabbitMQ` 之间的架构差异：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/04.png"/>
 
@@ -95,7 +95,7 @@ tags:
 
 `ActiveMQ` 使用网络代理方法来实现可扩展性，其中多个 `ActiveMQ` 代理连接形成一个网络。消息分布在整个网络中，消费者可以连接到网络中的任何代理节点来消费消息。`ActiveMQ` 还支持**主/从**复制，为消息代理节点提供高可用性。
 
-另一方面，`Kafka` 被设计为具备开箱即用的高可扩展性。`Kafka` 使用分区方法来实现可扩展性，其中消息在多个 `Kafka` 代理之间进行分区，每个分区都被复制到多个代理节点中实现容错，这种方法允许 `Kafka` 处理海量数据，同时保证低延迟和高吞吐量性。
+另一方面，`Kafka` 具备开箱即用的高可扩展性。`Kafka` 使用分区方法来实现可扩展性，其中消息在多个 `Kafka` 代理之间进行分区，每个分区都被复制到多个代理节点中实现容错，这种方法允许 `Kafka` 处理海量数据，同时保证低延迟和高吞吐量性。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/05.png"/>
 
@@ -139,15 +139,22 @@ tags:
 
 与其他系统的集成是选择消息系统时需要考虑的一个重要因素。`RabbitMQ`、`Kafka` 和 `ActiveMQ` 都具有不同的集成能力。
 
-`RabbitMQ` 能够与很好地支持不同的编程语言，包括 `Java`、`Python`、`Ruby` 和 `.NET`。`RabbitMQ` 同时支持插件功能，允许使用插件与不同的系统集成，包括**数据库**、**web 服务器**和**消息代理**。
+`RabbitMQ` 能够很好地支持不同的编程语言，包括 `Java`、`Python`、`Ruby` 和 `.NET`。`RabbitMQ` 同时支持插件功能，允许使用插件与不同的系统集成，包括**数据库**、**Web 服务器**和**消息代理**。
 
-`Kafka` 能够与不同的数据处理系统很好地集成到一起，包括 `Apache Spark`、`Apache Storm` 和 `Apache Flink`。`Kafka` 支持连接器框架，允许它与不同的数据库和数据源集成。
+`Kafka` 能够与不同的数据处理系统很好地集成到一起，包括 `Apache Spark`、`Apache Storm` 和 `Apache Flink`，`Kafka` 还支持连接器框架，允许它与不同的数据库和数据源集成。
 
-`ActiveMQ` 能够与不同的 `JMS` 客户端很好地集成，包括 `Java`、`.NET` 和 `C`。`ActiveMQ` 还具支持与不同系统集成的插件，包括 `Apache Camel` 和 `Apache CXF`。
+`ActiveMQ` 能够与不同的 `JMS` 客户端很好地集成，包括 `Java`、`.NET` 和 `C`。`ActiveMQ` 还支持与不同系统集成的插件，包括 `Apache Camel` 和 `Apache CXF`。
 
 这里整理了一个表格，这个表格很好地展示了 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 之间的差异：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/18-Difference-Between-RabbitMQ-Kafka-ActiveMQ/08.png"/>
+| 特性 | RabbitMQ              | Apache Kafka           | ActiveMQ            |
+|--|-----------------------|------------------------|---------------------|
+| 消息模型 | 传统消息模型 | 发布/订阅模型 | 传统消息模型 |
+| 可扩展性 | 集群/网络代理节点 | 分区模型 | 集群/网络代理节点 |
+| 性能 | 中等 | 高 | 高 |
+| 数据持久化 | 磁盘模式（默认设置）、内存模式 | 磁盘模式 | 磁盘模式（默认设置）、数据库模式 |
+| 集成能力 | 支持各种编程语言、数据库、`Web` 服务器 | 数据处理系统、数据库、其他数据源 | `JMS` 客户端、`Apache Camel` 和 `Apache CXF` |
+| 适用场景 | 消息严格有序、可靠传输、消息处理速率适中场景 | 流式数据、消息处理速率要求较高场景 | 数据持久性要求比较高、高性能场景 |
 
 <hr />
 
@@ -155,12 +162,14 @@ tags:
 
 这就是 `Apache Kafka`、`RabbitMQ` 和 `ActiveMQ` 之间的差异。`RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 是三种流行的消息系统框架，它们具备不同的功能和特性。
 
-`RabbitMQ` 和 `ActiveMQ` 遵循传统的消息传输模型，而 `Kafka` 使用的是发布/订阅消息传输模型。`RabbitMQ` 和 `ActiveMQ` 使用集群和网络代理方案来实现可扩展性，而 `Kafka` 使用分区方式实现可扩展性。`RabbitMQ` 优先考虑消息传递可靠性而不是性能，而 `Kafka` 和 `ActiveMQ` 优先考虑性能。`RabbitMQ`、`Kafka`、`ActiveMQ` 都具备不同的数据持久化和与其他框架的集成能力。
+`RabbitMQ` 和 `ActiveMQ` 遵循传统的消息传输模型，而 `Kafka` 使用的是发布/订阅消息传输模型。`RabbitMQ` 和 `ActiveMQ` 使用集群和网络代理方案来实现可扩展性，而 `Kafka` 使用分区方式实现可扩展性。
+
+`RabbitMQ` 优先考虑消息传递可靠性而不是性能，而 `Kafka` 和 `ActiveMQ` 优先考虑性能。`RabbitMQ`、`Kafka`、`ActiveMQ` 都具备不同的数据持久化和与其他框架的集成能力。
 
 选择消息系统时，必须考虑应用程序或系统的具体要求。`RabbitMQ` 和 `ActiveMQ` 适用于要求消息严格有序和消息可靠传输的应用场景，而 `Kafka` 适用于流式数据场景。
 
-`RabbitMQ` 和 `ActiveMQ` 适用于对消息处理速率要求不高的应用场景，而 `Kafka` 适用于对消息处理速率要求很高的应用场景。
+`RabbitMQ` 和 `ActiveMQ` 适用于对消息处理速率要求不高的应用场景，而 `Kafka` 适用于对消息处理速率要求较高的应用场景。
 
 同样，`RabbitMQ` 和 `ActiveMQ` 适用于对数据持久性要求比较高的应用场景，而 `Kafka` 适用于对性能要求比较高的应用场景。
 
-这是我认为每个 Java 开发人员都应该准备的一个问题，但如果你想要更多，你还可以准备微服务问题，例如[API Gateway 和 Load Balancer 的区别](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何在微服务中管理事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e) 以及 [SAGA 和 CQRS 模式的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，它们在面试中很受欢迎。
+这是我认为每个 `Java` 开发人员都应该准备的面试问题，但如果大家想要了解更多，还可以准备微服务面试问题，例如[API Gateway 和 Load Balancer 的区别](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何在微服务中管理事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e) 以及 [SAGA 和 CQRS 模式的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，它们在面试中很受欢迎。
