@@ -27,7 +27,7 @@ tags:
 
 朋友们大家好，如果大家正在通过学习 `Spring Boot` 和微服务知识来准备 `Java` 开发岗位的面试，我建议还应该准备一下消息代理、`Kafka`、`RabbitMQ` 和 `ActiveMQ` 等框架知识，比如 **Kafka、RabbitMQ 和 ActiveMQ 之间有什么差异**？这也是 `Java` 面试的热门问题之一。
 
-在我的上一篇文章中，我分享了[JWT、OAuth 和 SAML 之间的差异](https://medium.com/javarevisited/difference-between-jwt-oauth-and-saml-for-authentication-and-authorization-in-web-apps-75b412754127) 和 [REST、GraphQL 和 gRPC 之间的差异](https://medium.com/javarevisited/difference-between-rest-graphql-and-grpc-10ac365462b8) ；在这篇文章中，我将分享我对 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 这三个流行的[异步消息](https://medium.com/javarevisited/how-microservices-communicates-with-each-other-synchronous-vs-asynchronous-communication-pattern-31ca01027c53)代理框架的一些理解。
+在我的上一篇文章中，我分享了[JWT、OAuth 和 SAML 之间的差异](https://medium.com/javarevisited/difference-between-jwt-oauth-and-saml-for-authentication-and-authorization-in-web-apps-75b412754127) 和 [REST、GraphQL 和 gRPC 之间的差异](https://medium.com/javarevisited/difference-between-rest-graphql-and-grpc-10ac365462b8) ；在这篇文章中，我将分享我对 `Kafka`、`RabbitMQ` 和 `ActiveMQ` 这三个流行的[异步通信](https://medium.com/javarevisited/how-microservices-communicates-with-each-other-synchronous-vs-asynchronous-communication-pattern-31ca01027c53)代理框架的一些理解。
 
 消息系统在现代分布式架构中，在通过网络相互通信的分布式应用程序和服务中扮演着至关重要的角色。消息系统可以使消息发送方和消息接收方解耦，从而实现[异步通信](https://medium.com/javarevisited/how-microservices-communicates-with-each-other-synchronous-vs-asynchronous-communication-pattern-31ca01027c53) 。`RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 是业界使用的三个流行消息队列框架。在本文中，我们将讨论 `RabbitMQ`、`Apache Kafka` 和 `ActiveMQ` 之间的差异。
 
