@@ -65,7 +65,7 @@ REST 还依赖于无状态的客户端-服务器架构，其中来自客户端�
 
 此外，了解 HTTP 方法对于设计 REST API 非常重要
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/19-Difference-Between-REST-GraphQL-gRPC/01.png"/>
 
 总体而言，REST 是一种灵活且广泛采用的协议，对于许多类型的 API 来说都是不错的选择。但是，它可能不是所有场景的最佳选择，尤其是那些需要实时更新或更复杂的查询和数据操作的场景。在这些情况下，其他协议（例如 GraphQL 或 gRPC）可能更合适。
 
@@ -89,7 +89,7 @@ GraphQL 允许客户端定义他们需要的数据的结构，并且服务器可
 
 这也是一个很好的图表，突出**显示了 REST 和 GraphQL 查询**之间的区别：
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/19-Difference-Between-REST-GraphQL-gRPC/02.png"/>
 
 <hr />
 
@@ -109,9 +109,9 @@ GraphQL 允许客户端定义他们需要的数据的结构，并且服务器可
 
 这是一个很好的图表，突出显示了 REST、gRPC 和 GraphQL 请求之间的区别
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/19-Difference-Between-REST-GraphQL-gRPC/03.png"/>
 
-image_credit — [https://medium.com/@LadyNoBug/grpc-v-s-rest-v-s-others-5d8b6eaa61df](https://medium.com/@LadyNoBug/grpc-v-s-rest-v-s-others-5d8b6eaa61df)
+<font color=DarkGray size=2>image_credit — [https://medium.com/@LadyNoBug/grpc-v-s-rest-v-s-others-5d8b6eaa61df](https://medium.com/@LadyNoBug/grpc-v-s-rest-v-s-others-5d8b6eaa61df)</font>
 
 <hr />
 
@@ -151,9 +151,9 @@ image_credit — [https://medium.com/@LadyNoBug/grpc-v-s-rest-v-s-others-5d8b6ea
 
 这里还有一个很好的表格，突出显示了 REST、GraphQL 和 REST 之间的区别，您可以使用它来快速复习：
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/19-Difference-Between-REST-GraphQL-gRPC/04.png"/>
 
-还值得注意的是，这些协议并不相互排斥，并且可以组合使用它们以利用它们的不同优势。
+还值得注意的是，**这些协议并不相互排斥，并且可以组合使用它们以利用它们的不同优势**。
 
 例如，您可能对大多数 API 使用 REST，但对某些资源密集型查询使用 GraphQL，或者使用 gRPC 在微服务之间进行通信，同时对外部 API 客户端使用 REST 或 GraphQL。
 
