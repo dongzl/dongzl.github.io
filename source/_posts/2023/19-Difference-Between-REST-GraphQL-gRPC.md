@@ -1,7 +1,7 @@
 ---
 title: REST、GraphQL 和 gRPC 之间的差异
-date: 2023-06-16 15:14:51
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/RabbitMQ_Kafka_ActiveMQ.png
+date: 2023-07-24 20:37:51
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/REST_GraphQL_gRPC.png
 
 # author information, multiple authors are set to array
 # single author
