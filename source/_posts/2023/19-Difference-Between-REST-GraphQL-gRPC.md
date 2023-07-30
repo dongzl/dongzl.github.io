@@ -151,7 +151,17 @@ tags:
 
 这里总结了一个很好的表格，突出显示了 `REST`、`GraphQL` 和 `REST` 之间的差异，我们可以使用它来复习前面的知识：
 
-<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/19-Difference-Between-REST-GraphQL-gRPC/04.png"/>
+| 特性 | REST              | GraphQL           | gRPC            |
+|--|-----------------------|------------------------|---------------------|
+| 定义 | 表述性状态转移 | `API` 查询语言 | 使用 `Protocol Buffers` 的远程过程调用 |
+| 支持的 HTTP 方法 | `GET`、`POST`、`PUT`、`DELETE` | `POST` | 自定义方法 |
+| 数据格式 | `JSON` 或者 `XML` | `GraphQL` 规范格式 | 二进制格式 |
+| `endpoint` 风格 | 支持多 `endpoint` | 单个 `endpoint` | 无 |
+| 查询语言 | 无 | `GraphQL` | 无 |
+| 实时更新 | 不支持（只能轮询） | 支持（通过订阅） | 支持（通过流机制） |
+| 效率 | 中等 | 高 | 高 |
+| 缓存能力 | 支持，但是管理比较复杂 | 支持细粒度缓存，管理比较方便 | 不常用，需要做很多设置 |
+| 互操作性 | 高 | 中等 | 低 |
 
 还值得注意的是，**这些协议并不互斥，完全可以组合使用它们，充分利用它们之间的不同优势**。
 
