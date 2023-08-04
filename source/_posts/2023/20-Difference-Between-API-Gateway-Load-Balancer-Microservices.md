@@ -1,5 +1,5 @@
 ---
-title: （进行中）Difference between API Gateway and Load Balancer in Microservices?
+title: 微服务中 API 网关和负载均衡技术的差异？
 date: 2023-07-30 16:52:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/Load_Balancer-vs-API_Gateway.png
 
@@ -12,13 +12,15 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: xxxxxxxxxx。
+subtitle: 本文旨在对比微服务架构中，API 网关和负载均衡技术所扮演的不同角色，以及它们之间的差异。
 
 categories:
 - 架构设计
 
 tags:
-- Service Mesh
+- 微服务
+- API网关
+- 负载均衡
 ---
 
 > 原文链接（请科学上网）：https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024
