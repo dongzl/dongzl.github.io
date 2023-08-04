@@ -23,15 +23,15 @@ tags:
 
 > 原文链接（请科学上网）：https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024
 
-大家好，API 网关和负载均衡器之间的区别是[流行的微服务面试问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)之一，经常在电话或面对面的面试中向经验丰富的 Java 开发人员询问。过去，我分享了[基本的微服务设计原则和最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)以及流行的[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e)，在本文中，我将回答这个问题，并告诉您它们之间的关键区别。
+朋友们大家好，`API` 网关和负载均衡技术之间的差异对比是非常[流行的微服务面试问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)之一，面试官经常会在电话或现场面试中用这个问题来考察经验丰富的 `Java` 开发人员。过去，我分享了[基本的微服务设计原则和最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)以及流行的[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e) 等文章；在本文中，我将回答这个问题，并告诉大家它们之间的关键区别。
 
-虽然API网关和负载均衡器都是微服务架构中的重要组件，但它们的用途不同。
+虽然 `API` 网关和负载均衡都是微服务架构中的重要组件，但它们的用途却不相同。
 
-**API 网关充当所有 API 请求的单一入口点**，提供请求路由、速率限制、身份验证和 API 版本控制等功能，并且还向客户端应用程序隐藏底层微服务的复杂性。
+**API 网关充当所有 API 请求的单一入口点**，提供*请求路由*、*请求限流*、*身份认证*和 *API 版本控制*等功能，并且还向客户端应用程序隐藏底层微服务的复杂性。
 
-另一方面，**负载均衡器负责在微服务的多个实例之间分配传入请求**，以提高可用性、性能和可扩展性。它有助于在多个实例之间均匀分配工作负载，并确保每个实例都得到充分利用。
+另一方面，**负载均衡负责在微服务的多个实例之间分发传入请求**，以提升服务可用性、性能和可扩展性。它有助于*在多个实例之间均匀分配工作负载*，并确保每个实例都得到充分利用。
 
-换句话说，API网关提供与API管理相关的**更高级别的功能**，而负载均衡器提供与跨微服务的多个实例的流量分配相关的**较低级别的功能**。
+换句话说，`API` 网关提供与 `API` 管理相关的**更高层级的能力**，而负载均衡提供与跨微服务的多个实例的流量分发相关的**较低层级的能力**。
 
 ## 微服务中的 API 网关模式是什么？
 
