@@ -25,6 +25,8 @@ tags:
 
 > 原文链接（请科学上网）：https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024
 
+<img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/20-Difference-Between-API-Gateway-Load-Balancer-Microservices/01.webp"/>
+
 朋友们大家好，`API` 网关和负载均衡技术之间的差异对比是非常[流行的微服务面试问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)之一，面试官经常会在电话或现场面试中用这个问题来考察经验丰富的 `Java` 开发人员。过去，我分享了[基本的微服务设计原则和最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)以及流行的[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e) 等文章；在本文中，我将回答这个问题，并告诉大家它们之间的关键区别。
 
 虽然 `API` 网关和负载均衡都是微服务架构中的重要组件，但它们的用途却不相同。
