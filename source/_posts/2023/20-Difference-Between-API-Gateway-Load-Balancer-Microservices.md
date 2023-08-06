@@ -19,7 +19,7 @@ categories:
 
 tags:
 - 微服务
-- API网关
+- 网关
 - 负载均衡
 ---
 
