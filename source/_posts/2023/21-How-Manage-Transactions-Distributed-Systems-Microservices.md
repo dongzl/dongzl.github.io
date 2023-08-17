@@ -29,27 +29,27 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/01.webp"/>
 
-大家好，如果您正在准备微服务面试问题，那么您可能知道如何管理分布式系统或微服务中的事务？是[流行的微服务面试问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)之一，为什么不呢，它是重要的概念之一。
+朋友们大家好，如果大家正在准备微服务相关的面试题，那么我们可能同样需要知道*如何管理分布式系统或微服务中的事务*？这个问题是[流行的微服务面试问题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)之一，难道不是吗，它也是重要的概念之一。
 
-在过去，我分享了[基本的微服务设计原则和最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)以及流行的[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e)，在本文中，我将回答这个问题，并告诉您在分布式系统中处理事务的不同方法。
+在前面的文章中，我分享了[基本的微服务设计原则和最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)以及流行的[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e)，在本文中，我将回答这个问题，并告诉大家在分布式系统中处理事务的不同方法。
 
-如果您曾在[微服务架构](https://medium.com/javarevisited/difference-between-microservices-and-monolithic-architecture-for-java-interviews-af525908c2d5)中工作过，那么您就会知道单个业务事务通常会跨越多个微服务，这就是确保数据一致性和管理事务具有挑战性的原因。
+如果我们曾在[微服务架构](https://medium.com/javarevisited/difference-between-microservices-and-monolithic-architecture-for-java-interviews-af525908c2d5)的系统场景中工作过，那么我们就应该知道单个业务的事务通常会跨越多个微服务，这就是为什么确保数据一致性和管理事务是具有挑战性的工作。
 
-> 管理不善的事务可能会导致数据不一致、更新丢失或重复记录，这可能会给业务带来严重后果。
+> 事务处理不当可能会导致数据不一致、丢失更新或数据重复，这可能会给业务带来严重后果。
 
-因此，拥有强大的事务管理系统以确保系统的可靠性至关重要。
+因此，拥有强大的事务管理系统以确保系统的可靠性是至关重要。
 
-在本文中，我们将**探讨管理分布式系统和微服务中事务的各种策略和最佳实践**。我们将讨论与分布式事务相关的挑战以及如何克服这些挑战，包括两阶段提交和传奇模式。
+在本文中，我们将**探讨管理分布式系统和微服务中事务的各种策略和最佳实践**。我们将讨论与分布式事务相关的挑战以及如何克服这些挑战，包括两阶段提交和 `SAGA` 模式。
 
-此外，我们还将介绍流行的微服务框架（例如 Spring Cloud 和 Apache Kafka）提供的不同事务管理机制。
+此外，我们还将介绍流行的微服务相关的框架（例如 `Spring Cloud` 和 `Apache Kafka`）所提供的不同事务管理机制。
 
-读完本文后，您将清楚地了解如何管理分布式系统中的事务并确保数据的可靠性和一致性。
+阅读完本文后，我们将能够清楚地了解如何管理分布式系统中的事务并确保数据的可靠性和一致性。
 
-## 管理分布式系统和微服务中事务的 3 种方法？
+## 管理分布式系统和微服务中事务的三种方法？
 
-正如我所说，由于系统的分布式特性，管理分布式系统和微服务中的事务可能是一项复杂的任务。在现实世界中，事务对于确保多个服务需要协作和共享数据的分布式系统中的数据一致性和完整性至关重要。
+正如我所说，由于系统的分布式特性，管理分布式系统和微服务中的事务可能是一项复杂的工作。在现实世界中，对于多个服务需要协作和共享数据的分布式系统中，事务对于确保数据一致性和完整性是至关重要的。
 
-管理分布式系统中事务的最流行方法之一是使用**两阶段提交协议（2PC）**。在该协议中，**事务协调者**负责确保事务中的所有参与者都同意提交事务。
+管理分布式系统中事务的最流行方案之一是使用**两阶段提交协议（`2PC`）**。在该协议中，**事务协调者**负责确保事务中的所有参与者都同意提交事务。
 
 协调者首先向所有参与者发送“准备提交”消息，如果所有参与者都积极响应，则向所有参与者发送“提交”消息。
 
@@ -57,11 +57,11 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/02.gif"/>
 
-但是，**两阶段提交可能会成为性能瓶颈**，并可能导致系统可用性降低。另一种方法是使用**基于补偿的交易协议**。在该协议中，交易的每个参与者都有责任在交易失败时补偿交易的任何影响。
+但是，**两阶段提交可能会成为性能瓶颈**，并可能导致系统可用性降低。另一种方法是使用**基于补偿的事务协议**。在该协议中，事务的每个参与者都有责任在事务失败时补偿事务所产生的任何影响。
 
-这种方法比 2PC 更灵活，速度更快，可扩展性更强，但需要仔细设计补偿操作。
+这种方法比 `2PC` 协议更灵活，速度更快，可扩展性更强，但需要仔细设计补偿逻辑。
 
-用于管理分布式系统中事务的其他技术包括[Saga 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)和事件源。 [Saga](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)是一种事务模式，它使用一系列本地事务来实现全局事务。
+用于管理分布式系统中事务的其它技术还包括[Saga 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)和事件源。 [Saga](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)是一种事务模式，它使用一系列本地事务来实现全局事务。
 
 另一方面，**事件溯源**涉及将系统状态的所有更改存储为事件序列，而不是当前状态，这可以简化事务管理。
 
