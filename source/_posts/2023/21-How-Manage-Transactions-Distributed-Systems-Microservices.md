@@ -63,17 +63,17 @@ tags:
 
 用于管理分布式系统中事务的其它技术还包括[Saga 模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)和事件源。 [Saga](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)是一种事务模式，它使用一系列本地事务来实现全局事务。
 
-另一方面，**事件溯源**涉及将系统状态的所有更改存储为事件序列，而不是当前状态，这可以简化事务管理。
+另一方面，**事件溯源**会将系统状态的所有更改存储为事件序列，而不仅仅是当前状态，这种方式可以简化事务管理流程。
 
-在微服务架构中，必须确保正确定义每个微服务的事务边界，以避免多个服务之间的数据更新不一致。
+在微服务架构中，必须确保正确定义每个微服务的事务边界，以避免出现多个服务之间的数据更新不一致。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/03.webp"/>
 
-使用可以跨多个微服务协调分布式事务的事务管理器也很重要。
+使用事务管理器也是很有必要的，它可以跨多个微服务协调分布式事务。
 
-简而言之，管理分布式系统和微服务中的事务可能具有挑战性，但使用适当的事务管理技术，例如 2PC、基于补偿的协议、Saga 和事件源，可以帮助确保分布式系统中的数据一致性和完整性。
+简而言之，管理分布式系统和微服务中的事务可能很具有挑战性，但是使用适当的事务管理技术，例如 `2PC`、基于补偿的协议、`Saga` 和事件源，可以帮助我们确保分布式系统中的数据一致性和完整性。
 
-现在您已经了解了基础知识，让我们更详细地了解这些技术。
+现在我们已经了解了一些基础知识，下面让我们更深入地学习这些技术。
 
 ### 什么是两阶段提交？它如何帮助分布式事务管理？
 
