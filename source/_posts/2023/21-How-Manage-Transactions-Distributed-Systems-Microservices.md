@@ -75,43 +75,43 @@ tags:
 
 现在我们已经了解了一些基础知识，下面让我们更深入地学习这些技术。
 
-### 什么是两阶段提交？它如何帮助分布式事务管理？
+### 什么是两阶段提交？它是如何管理分布式事务的？
 
-两阶段提交（2PC）是一种分布式事务协议，用于管理跨多个分布式系统的事务。它确保参与分布式事务的所有节点都同意提交或回滚事务。
+两阶段提交（`2PC`）是一种分布式事务协议，用于管理跨多个分布式系统的事务。它确保参与分布式事务的所有节点都达成一致提交或回滚事务。
 
-在分布式事务中，协调节点负责管理事务并与所有参与节点进行协调。
+在分布式事务中，协调节点负责管理事务，并负责协调所有参与节点。
 
-**协调者向所有参与者发送准备消息，以确认他们准备好提交事务**。如果所有参与者都准备好，协调器会发送提交消息，所有参与者都会提交事务。
+**协调者向所有参与者发送准备消息，以确认他们做好准备提交事务**。如果所有参与者都已做好准备，协调者会发送提交消息，所有参与者都会提交事务。
 
-另一方面，**如果任何参与者没有准备好或做出否定响应，协调器会向所有参与者发送回滚消息**，并且它们都会回滚事务。
+另一方面，**如果某个参与者没有做好准备或者做出了否定响应，协调者会向所有参与者发送回滚消息**，所有参与者都会回滚事务。
 
-两阶段提交协议确保即使存在通信故障或崩溃，事务也可以在分布式环境中提交或回滚。该协议广泛应用于分布式数据库、消息系统和其他分布式应用程序。
+两阶段提交协议确保即使在出现通信故障或系统崩溃时，事务也可以在分布式环境中正常提交或者回滚。两阶段提交协议被广泛应用于分布式数据库、分布式消息系统和其他分布式应用程序。
 
-例如，考虑一个具有多个分支机构的银行系统，每个分支机构都有自己的数据库。当客户在一个分支机构执行交易时，需要与其他分支机构的数据库同步以保持一致性。
+例如，考虑一个具有多个分支机构的银行系统，每个分支机构都有自己的数据库。当客户在一个分支机构执行交易时，需要与其他分支机构的数据库同步以保持数据一致性。
 
-在这种情况下，可以使用两阶段提交协议来确保事务在所有分支上一致地提交或回滚。
+在这种情况下，我们就可以考虑使用两阶段提交协议来确保事务在所有分支机构的数据库上一致地提交或者回滚。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/04.webp"/>
 
 <br />
 
-### 什么是微服务中的 SAGA 设计模式？它如何帮助管理分布式事务？
+### 什么是微服务中的 SAGA 设计模式？它是如何管理分布式事务的？
 
-SAGA 是“[Saga Pattern](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)”的缩写，是一种帮助管理微服务架构中的分布式事务的设计模式。在微服务环境中，不同的服务可以拥有自己的数据库和事务，SAGA 模式提供了一种确保跨服务的事务一致性的方法。
+`SAGA` 是 “[Saga Pattern](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)” 的缩写，是一种协助管理微服务架构中的分布式事务的设计模式。在微服务环境中，不同的服务可以拥有自己的数据库和独立的事务，`SAGA` 模式提供了一种确保跨多个服务的事务一致性的方法。
 
-[SAGA](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b) 将一个长时间运行的事务分解为多个较小的事务，每个事务都可以独立提交或回滚。这些较小的事务由 saga 协调器编排，该协调器负责以正确的顺序执行 saga 并在发生故障时管理补偿操作。
+[SAGA](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b) 将一个长时间运行的事务分解为多个较小的事务，每个事务都可以独立提交或者回滚。这些较小的事务由 `SAGA` 协调器进行编排，该协调器负责以正确的顺序执行程序并在发生故障时进行补偿操作。
 
-SAGA模式可以通过两种方式实现：基于编排和基于编排。在基于编排的 SAGA 中，每个服务负责自己的事务，并且通过服务之间的事件驱动通信来完成协调。
+`SAGA` 模式可以通过两种方式实现：`choreography-based` 和 `orchestration-based`。在 `choreography-based` 实现的 `SAGA` 方案中，每个服务负责自己的事务，并且通过服务之间的事件驱动通信来完成协调。
 
-而在基于编排的 SAGA 中，saga 协调器负责协调事务并控制 saga 的流程。
+而在 `orchestration-based` 实现的 `SAGA` 方案中，是由 `SAGA` 协调器负责协调事务并控制 `SAGA` 的整个流程。
 
-这是一个很好的图表，解释了分布式微服务中的 Saga 模式：
+下图很好地解释了分布式微服务中的 `Saga` 模式：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/05.webp"/>
 
 <br />
 
-### 什么是微服务中的事件溯源模式？它如何帮助管理分布式事务？
+### 什么是微服务中的事件溯源模式？它是如何管理分布式事务的？
 
 事件溯源是微服务架构中使用的一种设计模式，涉及将系统状态持久化为一系列事件，而不是系统的当前状态。
 
