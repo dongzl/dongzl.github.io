@@ -1,5 +1,5 @@
 ---
-title: （进行中）How to manage transactions in Distributed Systems and Microservices?
+title: 如何实现分布式系统和微服务中的事务管理？
 date: 2023-08-13 21:23:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/transactions_distributed.png
 
@@ -12,14 +12,12 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 在本文中，我们将学习管理分布式系统和微服务中事务的三种种方法：两阶段提交、SAGA 和事件溯源机制。
+subtitle: 在本文中，我们将学习实现分布式系统和微服务中事务管理的三种种方案：两阶段提交、SAGA 和事件溯源机制。
 
 categories:
 - 架构设计
 
 tags:
-- 微服务
-- 分布式事务
 - 两阶段提交
 - SAGA
 - 事件溯源
