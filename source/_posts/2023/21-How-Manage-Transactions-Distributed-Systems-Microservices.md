@@ -23,7 +23,7 @@ tags:
 - 事件溯源
 ---
 
-> 原文链接（请科学上网）：https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e
+> 原文链接（请科学上网）：https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/21-How-Manage-Transactions-Distributed-Systems-Microservices/01.webp"/>
 
