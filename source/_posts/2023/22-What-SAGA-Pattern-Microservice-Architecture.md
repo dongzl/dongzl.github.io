@@ -21,6 +21,6 @@ tags:
 - Service Mesh
 ---
 
-> 原文链接：https://medium.com/@bb8s/deep-dive-into-redis-cluster-sharding-algorithms-and-architecture-a093a92e97af
+> 原文链接：https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b
 
-https://medium.com/javarevisited/what-is-consistent-hashing-what-problem-does-it-solve-9c161fc6147d
+https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b
