@@ -1,5 +1,5 @@
 ---
-title: （进行中）What is SAGA Pattern in MicroserviceArchitecture? Which Problem does it solve?
+title: 微服务架构中的SAGA模式是什么？它能够解决哪些问题？
 date: 2023-08-20 11:04:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/saga_pattern.png
 
@@ -12,7 +12,7 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: SAGA是一种必不可少的微服务模式，它解决了分布式系统中保持数据一致性的问题
+subtitle: SAGA 是微服务中一种非常重要的架构模式，它常用于解决分布式系统中数据一致性问题。
 
 categories:
 - 架构设计
