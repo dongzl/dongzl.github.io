@@ -28,15 +28,15 @@ tags:
 
 <font color=DarkGray size=2>image_credit — uber.com</font>
 
-朋友们大家好，很多朋友都曾建议我写一篇如何**在实际工作中实现微服务可扩展性**的文章？这就是我写这篇文章的初衷，在这篇文章中我将会分享我对实现微服务可扩展性的一些理解，并为大家提供一个将微服务扩展至百万服务的案例，同时能够保障 99% 的时间正常提供服务，而这正是 `Uber.com`（我最喜欢的出租车叫车服务）的应用程序。
+朋友们大家好，很多朋友都曾建议我写一篇如何**在实际工作中实现微服务可扩展性**的文章？这就是我写这篇文章的初衷，在这篇文章中我将会分享我对实现微服务可扩展性的一些理解，并为大家提供一个将微服务扩展至百万服务的案例，同时能够保障 `99%` 的时间正常提供服务，而这正是 `Uber.com`（我最喜欢的出租车叫车服务）的应用程序。
 
-[创建](https://www.java67.com/2023/06/how-to-create-microservice-application.html)一个能够正常运行的微服务是一回事，而创建一个每天与数百万用户完成数十亿次事件交互的微服务则完全不同。
+[创建](https://www.java67.com/2023/06/how-to-create-microservice-application.html)一个能够正常运行的微服务是一回事，而创建一个每天与数百万用户完成数十亿次交互的微服务则完全不同。
 
 近年来，[微服务架构](https://javarevisited.blogspot.com/2021/09/microservices-design-patterns-principles.html#axzz8EaNxWt4z)因其模块化、独立且高度可扩展的软件架构能力而受到广泛欢迎。然而，随着应用系统用户数量和访问量的增长，如何实现微服务的高效扩展也成为一项极具挑战的任务。
 
-在前面的几篇文章中，我一直在分享我在微服务和 `Spring Cloud` 方面的经验，例如[微服务最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)、[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e)、[50 个微服务常见面试题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)和 [Spring Cloud 所具备的 10 个微服务特性](https://medium.com/javarevisited/10-spring-cloud-features-which-makes-microservice-development-easier-in-java-e061885422fe)，我之前还分享过关于[SAGA 设计模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)和[单体与微服务架构](https://medium.com/javarevisited/difference-between-microservices-and-monolithic-architecture-for-java-interviews-af525908c2d5)的文章。
+在前面的几篇文章中，我一直在分享我在微服务和 `Spring Cloud` 方面的经验，例如[微服务最佳实践](https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)、[微服务设计模式](https://medium.com/javarevisited/top-10-microservice-design-patterns-for-experienced-developers-f4f5f782810e)、[50 个微服务常见面试题](https://medium.com/javarevisited/50-microservices-interview-questions-for-java-programmers-70a4a68c4349)和 [Spring Cloud 所具备的 10 个微服务特性](https://medium.com/javarevisited/10-spring-cloud-features-which-makes-microservice-development-easier-in-java-e061885422fe)，我之前还分享过关于[SAGA 设计模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)和[单体与微服务架构](https://medium.com/javarevisited/difference-between-microservices-and-monolithic-architecture-for-java-interviews-af525908c2d5)等文章。
 
-在本文中，我们将深入探讨如何应对微服务架构中不断增长的流量和不断变化的需求，会重点关注负载平衡、弹性扩展和性能优化，同时我们还将通过一个真实的案例来理解如何在实际工作中运用这些概念。
+在本文中，我们将深入探讨如何应对微服务架构中不断增长的流量和不断变化的需求，重点关注负载平衡、弹性扩展和性能优化，同时我们还将通过一个真实的案例来理解如何在实际工作中运用这些概念。
 
 <hr />
 
@@ -44,22 +44,22 @@ tags:
 
 微服务架构将单一应用程序拆分成多个较小的、互连的服务，这些服务通过网络进行通信。
 
-这种设计非常地灵活，可以更充分的实现资源利用以及服务的独立开发和部署。然而随着用户流量的增长，个别的服务可能会出现性能瓶颈，遇到性能问题。
+这种设计非常地灵活，可以更充分的实现资源利用以及服务的独立开发和部署。然而随着用户流量的增长，个别的服务可能会出现瓶颈，遇到性能问题。
 
 如何实现[微服务](https://www.java67.com/2023/01/what-is-cqrs-command-query.html)扩展，软件开发团队会面临几个挑战，来应对微服务架构中不断增长的流量和不断变化的需求。主要挑战包括：
 
 1. **服务依赖**：微服务通常依赖其他服务来实现特定功能；随着流量的增加，服务之间的互相依赖可能会导致瓶颈和性能问题，从而影响整个系统的可扩展性；
-2. **数据管理**：跨分布式微服务场景中协调和管理数据可能会变得复杂，尤其是在处理海量数据时，确保跨多个服务的数据一致性、可用性和完整性可能是一个需要面对的挑战；
+2. **数据管理**：跨分布式微服务场景中协调和管理数据可能会变得复杂，尤其是在处理海量数据时，确保跨多个服务的数据一致性、可用性和完整性是一个需要面对的挑战；
 3. **网络通信开销**：微服务通过网络进行通信，随着服务数量的增长，网络通信可能会产生巨大的开销，这可能会导致系统延迟和响应时间变长，从而影响用户体验；
-4. **维护复杂性**：维护和监控大量微服务需要强大的基础设施、部署和监控工具；随着系统的扩展，管理工作会变得越来越复杂；
+4. **维护复杂性**：维护和监控大量微服务需要强大的基础设施、部署和监控工具，随着系统的扩展，管理工作会变得越来越复杂；
 5. **动态可扩展性**：虽然自动扩展是一项关键策略，但根据实际需要动态添加或删除实例可能会导致资源争用，尤其是在操作不当的情况下；
-6. **一致性和事务**：确保分布式微服务之间的事务一致性是一项具有挑战性的任务，确保多个服务的变更操作全部完成或在发生故障时全部回滚是很复杂的工作；
-7. **状态管理**：管理微服务的状态，尤其是在需要状态的应用场景中，可能会很困难；处理有状态服务的故障转移和主从复制增加了整个扩展过程的复杂性；
-8. **安全和授权**：在处理增长的流量的同时确保微服务的安全性需要强大的身份验证和授权机制；随着请求数量的增长，安全性管理变得非常重要。
+6. **一致性和事务**：确保分布式微服务之间的事务一致性是一项具有挑战性的任务，多个服务的变更操作全部完成或在发生故障时全部回滚是很复杂的工作；
+7. **状态管理**：管理微服务的状态，尤其是在需要状态的应用场景中，可能会很困难，处理有状态服务的故障转移和主从复制增加了整个扩展过程的复杂性；
+8. **安全和授权**：在处理增长的流量的同时确保微服务的安全性需要强大的身份验证和授权机制，随着请求数量的增长，安全性管理变得非常重要。
 
 应对这些挑战需要仔细进行系统规划、架构设计以及采用一些在微服务开发、部署和运维方面的**最佳实践**。微服务的自动扩展需要专业技术知识、监控工具和持续优化工作相结合。
 
-但是不用担心，我们将会学习一些可以遵循的最佳实践，将微服务扩展到数百万级用户量，并保持 99% 的效率。
+但是不用担心，我们将会学习一些可以遵循的最佳实践，将微服务扩展到数百万级用户量，并保证 `99%` 的效率。
 
 <hr />
 
@@ -89,7 +89,7 @@ tags:
 
 这种策略确保了最佳性能和成本效率。
 
-触发弹性扩容的关键指标包括CPU利用率、内存使用率和系统响应时间。主流的云平台服务商，像 `AWS`、`Google Cloud` 和 `Azure` 都提供与微服务部署集成的弹性扩容服务。
+触发弹性扩容的关键指标包括**CPU利用率**、**内存使用率**和**系统响应时间**。主流的云平台服务商，像 `AWS`、`Google Cloud` 和 `Azure` 都提供与微服务部署集成的弹性扩容服务。
 
 下图是在 `AWS` 云服务中设置自动扩容的示例：
 
@@ -115,7 +115,7 @@ tags:
 
 ### 5. 现实中真实案例：Uber 系统的可扩展性之旅
 
-没有什么是比研究一个真实的案例更好的方法来理解某个事情了，让我们看一个现实世界的真实案例来理解这些扩展策略的实际应用：**租车服务巨头 Uber**。
+没有什么是比研究一个真实的案例更好的方法来理解某个事情了，让我们看一个现实世界的真实案例来理解这些扩展策略的实际应用：**约车服务巨头 Uber**。
 
 `Uber` 的微服务架构使其能够在全球众多城市中高效运营，每天为数百万用户提供服务。随着 `Uber` 的受欢迎程度不断飙升，有效扩展系统微服务变得至关重要。
 
@@ -125,11 +125,11 @@ tags:
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/04.webp"/>
 
-通过这幅图大家可以了解到他们正在使用 [API 网关](https://www.java67.com/2023/04/3-what-is-api-gateway-design-pattern-in.html)、缓存代理以及更多大家可以学习借鉴的东西，方便将我们的微服务扩展到数百万个。
+通过这幅图大家可以了解到他们正在使用 [API 网关](https://www.java67.com/2023/04/3-what-is-api-gateway-design-pattern-in.html)、缓存代理以及更多大家可以学习借鉴的东西，方便将我们的微服务扩展到数百万级。
 
 ### 6. Uber 系统架构中的负载均衡
 
-为了应对大流量，`Uber` 在系统重使用了强大的负载均衡机制；当用户打开 `Uber` 应用程序时，他们的请求将被定向到用户附近的数据中心。
+为了应对大流量，`Uber` 在系统中使用了强大的负载均衡机制；当用户打开 `Uber` 应用程序时，他们的请求将被重定向到用户附近的数据中心。
 
 在数据中心内部，负载均衡器使用最少连接算法将请求分发到负载最低的微服务实例。
 
@@ -143,7 +143,7 @@ tags:
 
 在流量高峰时段或特殊活动期间，`Uber` 系统的用户请求会激增；为了应对这些高峰，`Uber` 广泛使用了弹性扩容机制。
 
-例如，负责匹配乘客和司机的“乘车请求”微服务会根据传入请求数量和平均响应时间等指标动态扩容服务实例数量。
+例如，负责匹配乘客和司机的“乘车约车”微服务会根据传入请求数量和平均响应时间等指标动态扩容服务实例数量。
 
 `Uber` 的弹性扩容系统会监控这些指标并自动调整实例数量，以确保系统保持较短的响应时间和快速的完成乘车匹配。当流量减少时，微服务的实例就会减少，从而节约资源使用和成本。
 
@@ -173,4 +173,4 @@ tags:
 
 总之，面对不断增长的用户期望和流量，掌握扩展微服务的艺术对于旨在提供高质量数字服务的企业来说是至关重要。
 
-顺便说一句，如果大家正在准备微服务面试，那么还应该准备一些其它问题，比如[API网关和负载均衡之间的差异](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何管理微服务中的事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)、[SAGA 和 CQRS模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，这些问题在面试中同样很受欢迎。
+顺便说一句，如果大家正在准备微服务面试，那么还应该准备一些其它问题，比如[API网关和负载均衡之间的差异](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何管理微服务中的事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)、[SAGA 和 CQRS模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，这些问题在面试中也很常见。
