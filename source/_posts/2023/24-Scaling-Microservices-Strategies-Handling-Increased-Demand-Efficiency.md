@@ -81,69 +81,71 @@ tags:
 
 <hr />
 
-### 3. 自动扩展：适应需求
+### 3. 弹性扩容：适应需求变化
 
-这是您可以用来将微服务扩展到数百万个的另一种策略。自动缩放允许微服务根据流量波动动态调整其资源。
+这是我们用来将微服务扩展到百万级的另一种策略，弹性扩容允许微服务应用根据流量波动动态调整资源数量。
 
-自动扩展系统无需手动配置和取消配置实例，而是持续监控负载并根据需要添加或删除实例。
+弹性扩容允许系统无需手动增加或者删除实例，而是持续监控流量负载并根据实际需要自动添加或删除实例。
 
-这确保了最佳性能和成本效率。
+这种策略确保了最佳性能和成本效率。
 
-触发自动缩放的关键指标包括CPU利用率、内存消耗和响应时间。AWS、Google Cloud和Azure等所有主要云平台都提供可与微服务部署集成的自动扩展服务。
+触发弹性扩容的关键指标包括CPU利用率、内存使用率和系统响应时间。主流的云平台服务商，像 `AWS`、`Google Cloud` 和 `Azure` 都提供与微服务部署集成的弹性扩容服务。
 
-以下是在 AWS 云中设置 Auto Scaling 的示例：
+下图是在 `AWS` 云服务中设置自动扩容的示例：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/02.webp"/>
 
 <hr />
 
-### 4. 性能优化：保证高效执行
+### 4. 性能优化：确保高效执行
 
-这可能是扩展应用程序并保持其响应能力的最古老的策略。性能优化涉及微调微服务以最大限度地提高效率并最大限度地缩短响应时间。技术包括：
+性能优化是实现应用程序扩展并保障其响应能力的非常传统的策略。性能优化涉及对微服务功能进行微调以最大限度地提高效率并最大限度地缩短请求响应时间。性能优化的技术包括：
 
-1. 缓存：将经常访问的数据存储在内存中，以减少数据库查询。
-2. 异步处理：将资源密集型任务移至后台工作人员或队列。
-3. 数据库分片：将数据分布到多个数据库实例以提高读写性能。
+1. **缓存**：将经常访问的数据存储在内存中，来减少数据库查询操作；
+2. **异步处理**：将资源密集型任务放到后台任务或队列中执行；
+3. **数据库分片**：将数据分布到多个数据库实例以提高读写性能。
 
-这是AWS无服务器架构中缓存的另一个很好的例子
+下图是 `AWS` [无服务器架构](https://medium.com/javarevisited/serverless-architecture-with-spring-cloud-function-an-introduction-and-practical-implementation-84ff5a17fab9)中使用缓存的另一个非常好的示例：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/03.webp"/>
 
+<font color=DarkGray size=2>image — https://aws.amazon.com/blogs/architecture/data-caching-across-microservices-in-a-serverless-architecture/</font>
+
 <hr />
 
-### 5. 现实世界的例子：Uber 的可扩展性之旅
+### 5. 现实中真实案例：Uber 系统的可扩展性之旅
 
-没有比看例子更好的方法来理解任何事情了。让我们看一个现实世界的例子来说明这些扩展策略的实际应用：叫车巨头 Uber。
+没有什么是比研究一个真实的案例更好的方法来理解某个事情了，让我们看一个现实世界的真实案例来理解这些扩展策略的实际应用：**租车服务巨头 Uber**。
 
-Uber 的微服务架构使其能够在全球众多城市无缝运营，每天为数百万用户提供服务。随着 Uber 的受欢迎程度飙升，有效扩展其服务变得至关重要。
+`Uber` 的微服务架构使其能够在全球众多城市中高效运营，每天为数百万用户提供服务。随着 `Uber` 的受欢迎程度不断飙升，有效扩展系统微服务变得至关重要。
 
-顺便说一句，这是我做的另一件事，建议其他开发人员阅读 Uber、NetFlix 等科技巨头的工程博客，了解他们如何解决挑战。这将提高您的知识和理解力。
+这里还要顺便说一句，对于软件开发人员我还有另外一个建议是阅读 `Uber`、`NetFlix` 等科技巨头的工程博客，学习他们如何应对软件开发中的挑战，这能够提高大家的知识和理解力。
 
-Uber 的微服务架构如下所示：
+`Uber` 公司的微服务架构如下所示：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/04.webp"/>
 
-您可以看到他们正在使用API 网关、缓存代理以及更多您可以学习的东西，以将您的微服务扩展到数百万个。
+通过这幅图大家可以了解到他们正在使用 [API 网关](https://www.java67.com/2023/04/3-what-is-api-gateway-design-pattern-in.html)、缓存代理以及更多大家可以学习借鉴的东西，方便将我们的微服务扩展到数百万个。
 
-### 6. Uber 中的负载均衡
+### 6. Uber 系统架构中的负载均衡
 
-为了管理高流量，Uber 采用了强大的负载平衡机制。当用户打开 Uber 应用程序时，他们的请求将被定向到附近的数据中心。
+为了应对大流量，`Uber` 在系统重使用了强大的负载均衡机制；当用户打开 `Uber` 应用程序时，他们的请求将被定向到用户附近的数据中心。
 
-在数据中心内，负载均衡器使用最少连接算法将请求分发到最不繁忙的微服务实例。
+在数据中心内部，负载均衡器使用最少连接算法将请求分发到负载最低的微服务实例。
 
-这确保了用户请求的均匀分布，防止任何单个微服务实例变得不堪重负。您可以在此处阅读有关 Uber 实时负载平衡的更多信息。
+这种机制确保了用户请求的均匀分布，防止某个微服务实例变得不堪重负。我们可以在[此处](https://www.uber.com/en-SG/blog/better-load-balancing-real-time-dynamic-subsetting/)学习有关 `Uber` 实时负载均衡机制的更多信息。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/05.webp"/>
 
 <hr />
 
-### 7. 自动扩展以满足需求
+### 7. 弹性扩容以满足系统需要
 
-在高峰时段或特殊活动期间，优步的乘车请求会激增。为了应对这些高峰，Uber 广泛利用了自动扩展功能。
+在流量高峰时段或特殊活动期间，`Uber` 系统的用户请求会激增；为了应对这些高峰，`Uber` 广泛使用了弹性扩容机制。
 
-例如，负责匹配乘客和司机的“乘车请求”微服务会根据传入请求数量和平均响应时间等指标动态扩展其实例。
+例如，负责匹配乘客和司机的“乘车请求”微服务会根据传入请求数量和平均响应时间等指标动态扩容服务实例数量。
 
-Uber 的自动扩展系统会监控这些指标并自动调整实例数量，以确保较短的响应时间和快速的乘车匹配。当流量减少时，不必要的实例就会减少，从而优化资源使用和成本。
+`Uber` 的弹性扩容系统会监控这些指标并自动调整实例数量，以确保系统保持较短的响应时间和快速的完成乘车匹配。当流量减少时，微服务的实例就会减少，从而节约资源使用和成本。
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/06.webp"/>
 
@@ -151,24 +153,24 @@ Uber 的自动扩展系统会监控这些指标并自动调整实例数量，以
 
 ### 8. 性能优化，打造无缝体验
    
-Uber 的应用程序提供实时位置跟踪，这需要高性能的微服务。为了优化性能，Uber 广泛使用缓存。
+`Uber` 的应用程序提供实时位置跟踪，这对微服务应用的性能要求非常高。为了优化性能，`Uber` 系统广泛使用缓存。
 
-驾驶员和乘客数据以及乘车状态更新都缓存在内存中，从而减少了频繁的数据库查询的需要。
+驾驶员和乘客数据以及乘车状态变更都缓存在内存中，从而减少了频繁的数据库查询操作。
 
-此外，Uber 采用异步处理来执行计算乘车费用和发送通知等任务。
+此外 `Uber` 采用异步机制计算乘客乘车费用、发送通知等任务。
 
-通过将这些任务转移到后台工作人员和队列，微服务可以快速处理乘车数据，而不会影响用户体验。
+通过将这些任务转移到后台任务或队列中执行，微服务系统可以快速处理用户乘车数据，减少对用户体验的影响。
 
 ### 结论
 
-这就是将微服务扩展到数百万用户所需要做的所有重要事情。虽然这看起来很简单，但当你真正去做时，你会意识到它需要仔细的计划和执行。
+这就是将一个微服务扩展到数百万级用户所需要做的重要工作，虽然这些工作看起来并不难，但是当我们真正去做时，我们还是需要对系统进行仔细的计划。
 
-随着用户需求不断增加，有效扩展微服务是现代应用程序开发的一个关键方面。负载均衡、自动扩展和性能优化是确保基于微服务的应用程序实现最佳性能、可靠性和成本效益的基本策略。
+随着用户数量不断增加，实现微服务的高效扩展是现代应用程序开发中一个很关键方面。负载均衡、弹性扩容和性能优化是确保基于微服务的应用程序实现最佳性能、可靠性和成本效益的根本策略。
 
-Uber 等现实世界的例子展示了这些策略的实际实施，展示了它们在处理高流量和需求方面的有效性。
+`Uber` 等现实中真实的案例展示如何在实际工作实施这些策略，也展示了它们在处理大流量和多样化需求方面的高效性。
 
-通过利用负载平衡算法、自动扩展机制和性能优化技术，您可以创建弹性且响应迅速的微服务生态系统，即使在高峰使用期间也能提供无缝的用户体验。
+**通过使用负载均衡算法、弹性扩容机制和性能优化技术**，我们可以创建具备弹性且响应迅速的微服务生态系统，即使在高峰使用期间也能提供无缝的用户体验。
 
-总之，面对不断增长的用户期望和流量，掌握扩展微服务的艺术对于旨在提供高质量数字服务的企业至关重要。
+总之，面对不断增长的用户期望和流量，掌握扩展微服务的艺术对于旨在提供高质量数字服务的企业来说是至关重要。
 
-顺便说一句，如果你正在准备微服务面试，那么你还应该准备一些问题，比如API网关和负载均衡器之间的区别、SAGA模式、如何管理微服务中的事务、SAGA和CQRS模式之间的区别，这些问题在面试中很受欢迎。
+顺便说一句，如果大家正在准备微服务面试，那么还应该准备一些其它问题，比如[API网关和负载均衡之间的差异](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何管理微服务中的事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)、[SAGA 和 CQRS模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，这些问题在面试中同样很受欢迎。
