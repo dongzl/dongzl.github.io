@@ -22,7 +22,7 @@ tags:
 - 弹性
 ---
 
-> 原文链接：https://blog.stackademic.com/scaling-microservices-strategies-for-handling-increased-demand-with-99-efficiency-1ce47dd02490
+> 原文链接（请科学上网）：https://blog.stackademic.com/scaling-microservices-strategies-for-handling-increased-demand-with-99-efficiency-1ce47dd02490
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/24-Scaling-Microservices-Strategies-Handling-Increased-Demand-Efficiency/04.webp"/>
 
@@ -89,7 +89,7 @@ tags:
 
 这种策略确保了最佳性能和成本效率。
 
-触发弹性扩容的关键指标包括**CPU利用率**、**内存使用率**和**系统响应时间**。主流的云平台服务商，像 `AWS`、`Google Cloud` 和 `Azure` 都提供与微服务部署集成的弹性扩容服务。
+触发弹性扩容的关键指标包括**CPU利用率**、**内存使用率**和**系统响应时间**。主流的云平台服务商，像 [AWS](https://medium.com/javarevisited/10-best-aws-certified-cloud-practitioner-clf-c01-online-courses-and-practice-test-to-crack-ecc0f913091e)、[Google Cloud](https://medium.com/javarevisited/10-best-aws-google-cloud-and-azure-courses-and-certification-from-coursera-to-join-in-2021-5c5e2029a8e7) 和 [Azure](https://medium.com/javarevisited/6-best-ai-900-practice-tests-to-crack-azure-ai-fundamentals-certification-exam-c2a7124c8415) 都提供与微服务部署集成的弹性扩容服务。
 
 下图是在 `AWS` 云服务中设置自动扩容的示例：
 
@@ -173,4 +173,4 @@ tags:
 
 总之，面对不断增长的用户期望和流量，掌握扩展微服务的艺术对于旨在提供高质量数字服务的企业来说是至关重要。
 
-顺便说一句，如果大家正在准备微服务面试，那么还应该准备一些其它问题，比如[API网关和负载均衡之间的差异](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何管理微服务中的事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)、[SAGA 和 CQRS模式之间的区别](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，这些问题在面试中也很常见。
+顺便说一句，如果大家正在准备微服务面试，那么还应该准备一些其它问题，比如[API网关和负载均衡之间的差异](https://medium.com/javarevisited/difference-between-api-gateway-and-load-balancer-in-microservices-8c8b552a024)、[SAGA模式](https://medium.com/javarevisited/what-is-saga-pattern-in-microservice-architecture-which-problem-does-it-solve-de45d7d01d2b)、[如何管理微服务中的事务](https://medium.com/javarevisited/how-to-manage-transactions-in-distributed-systems-and-microservices-d66ff26b405e)、[SAGA 和 CQRS模式之间的差异](https://medium.com/javarevisited/difference-between-saga-and-cqrs-design-patterns-in-microservices-acd1729a6b02)，这些问题在面试中也很常见。
