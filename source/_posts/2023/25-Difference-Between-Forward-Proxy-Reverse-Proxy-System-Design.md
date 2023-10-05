@@ -1,7 +1,7 @@
 ---
 title: Difference between Forward Proxy and Reverse Proxy in System Design
-date: 2013-10-05 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/redis_study.png
+date: 2023-10-05 20:03:22
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/forward_reverse_proxy.png
 
 # author information, multiple authors are set to array
 # single author
