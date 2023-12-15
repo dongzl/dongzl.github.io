@@ -1,5 +1,5 @@
 ---
-title: Difference between Forward Proxy and Reverse Proxy in System Design
+title: 系统设计中正向代理和反向代理的差异
 date: 2023-11-18 20:03:22
 cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/forward_reverse_proxy.png
 
@@ -12,7 +12,7 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle:了解系统设计中正向代理和反向代理之间的区别以及何时使用它们。
+subtitle: 了解系统设计中正向代理和反向代理之间的区别以及何时使用它们。
 
 categories:
 - 架构设计
