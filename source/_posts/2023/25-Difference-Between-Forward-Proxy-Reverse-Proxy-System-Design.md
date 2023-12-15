@@ -1,7 +1,7 @@
 ---
 title: 系统设计中正向代理和反向代理的差异
 date: 2023-11-18 20:03:22
-cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/forward_reverse_proxy.png
+cover: https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/cover/forward_reverse_proxy_v2.png
 
 # author information, multiple authors are set to array
 # single author
