@@ -12,7 +12,7 @@ author:
   link: https://www.github.com/dongzl
 
 # post subtitle in your index page
-subtitle: 了解系统设计中正向代理和反向代理之间的区别以及何时使用它们。
+subtitle: 学习系统设计中正向代理和反向代理之间的差异以及何时使用它们。
 
 categories:
 - 架构设计
@@ -32,7 +32,7 @@ tags:
 
 我们经常使用到的两种代理服务的类型是正向代理和反向代理。虽然两者的设计目的都是**提高系统的性能和安全性**，但它们的工作方式却有很大的不同，并且是在不同的场景中使用。在本文中，我们将探讨正向代理和反向代理在[系统设计](https://medium.com/javarevisited/top-10-system-design-concepts-every-programmer-should-learn-54375d8557a6)方面的差异。
 
-顺便说一句，如果大家正在准备高级开发人员岗位的面试，那么除了系统设计之外，我们还应该熟悉像微服务等不同架构，以及各种微服务设计模式，例如[事件溯源](https://medium.com/javarevisited/what-is-event-sourcing-design-pattern-in-microservices-architecture-how-does-it-work-b38c996d445a)、[CQRS](https://medium.com/javarevisited/what-is-cqrs-command-and-query-responsibility-segregation-pattern-7b1b38514edd)、[SAGA](https://dongzl.github.io/2023/08/20/22-What-SAGA-Pattern-Microservice-Architecture/)、[微服务独立数据库](https://medium.com/javarevisited/what-is-database-per-microservices-pattern-what-problem-does-it-solve-60b8c5478825)、[API 网关](https://dongzl.github.io/2023/07/30/20-Difference-Between-API-Gateway-Load-Balancer-Microservices/)、[熔断器](https://medium.com/javarevisited/what-is-circuit-breaker-design-pattern-in-microservices-java-spring-cloud-netflix-hystrix-example-f285929d7f68)，这些文章内容将会在面试中为大家提供很大帮助，因为这些内容通常用于衡量一名开发人员的资历水平。
+顺便说一句，如果大家正在准备高级开发人员岗位的面试，那么除了系统设计之外，我们还应该熟悉像微服务等不同架构，以及各种微服务设计模式，例如[事件溯源](https://medium.com/javarevisited/what-is-event-sourcing-design-pattern-in-microservices-architecture-how-does-it-work-b38c996d445a)、[CQRS](https://medium.com/javarevisited/what-is-cqrs-command-and-query-responsibility-segregation-pattern-7b1b38514edd)、[SAGA](https://dongzl.github.io/2023/08/20/22-What-SAGA-Pattern-Microservice-Architecture/)、[微服务独立数据库模式](https://medium.com/javarevisited/what-is-database-per-microservices-pattern-what-problem-does-it-solve-60b8c5478825)、[API 网关](https://dongzl.github.io/2023/07/30/20-Difference-Between-API-Gateway-Load-Balancer-Microservices/)、[熔断器](https://medium.com/javarevisited/what-is-circuit-breaker-design-pattern-in-microservices-java-spring-cloud-netflix-hystrix-example-f285929d7f68)，这些文章内容将会在面试中为大家提供很大帮助，因为这些内容通常用于衡量一名开发人员的资历水平。
 
 现在让我们回到本文的主题，详细了解什么是正向代理和反向代理、它们的优缺点、如何去使用它们以及最重要的一点--正向代理和反向代理之间的差异。
 
@@ -114,7 +114,7 @@ tags:
 
 ## 正向代理和反向代理之间的差异
 
-现在我们已经基本了解了什么是正向代理和反向代理、它们的所处的位置以及它们的功能，现在需要研究一下这二者之间的差异以便我们更好地理解它们：
+现在我们已经基本了解了什么是正向代理和反向代理，它们的所处的位置以及它们的功能，现在需要研究一下这二者之间的差异以便我们更好地理解它们：
 
 **1. 方向**
 正向代理和反向代理之间的主要差异在于流量的方向。正向代理用于将流量从客户端转发到 `Internet`，而反向代理用于将流量从 `Internet` 转发到应用服务器。
@@ -126,10 +126,10 @@ tags:
 反向代理可以将客户端的请求分发到多个服务器以平衡负载，而正向代理则不具备该能力。
 
 **4. 缓存**
-正向代理可以缓存被频繁访问的资源，从而降低应用服务器的负载并可以缩短请求的响应时间。反向代理还可以缓存资源，但缓存通常在更靠近客户端的地方进行，以提高性能。
+正向代理可以缓存被频繁访问的资源，从而降低应用服务器的负载并可以缩短请求的响应时间；反向代理同样可以缓存被访问的资源，但缓存通常在更靠近客户端的地方进行，以提高性能。
 
 **5. 安全**
-正向代理可以通过隐藏因特网上的 `IP` 地址来保护客户端的身份；反向代理可以通过隐藏服务器身份并向互联网公开指定 `IP` 地址来保护应用服务器。
+正向代理可以通过隐藏因特网上的 `IP` 地址来保护客户端用户；反向代理可以通过隐藏服务器身份并向互联网公开指定 `IP` 地址来保护应用服务器。
 
 **6. SSL/TLS 终端**
 反向代理可以代理应用服务器终止 `SSL/TLS` 连接，从而减少服务器的负载并简化证书管理；正向代理通常不会终止 `SSL/TLS` 的连接。
@@ -144,8 +144,8 @@ tags:
 反向代理可以通过在多个服务器之间分配流量来水平扩展应用程序；正向代理不提供这种可扩展性能力。
 
 **10. 网络复杂性**
-正向代理的设置和管理相对简单；而反向代理由于其负载平衡、`SSL/TLS` 终端和缓存功能可能导致架构更加复杂。
+正向代理的设置和管理相对简单；而反向代理由于其负载均衡、`SSL/TLS` 终端和缓存功能可能导致架构更加复杂。
 
-这是一张来自 `ByteByteGo` 网站的精美图表，这个网站是学习系统设计的更好地方之一，它还强调了正向代理和反向代理之间的区别：
+这是一张来自 `ByteByteGo` 网站的精美图表，这个网站是学习系统设计的更好地方之一，这张图片重点强调了正向代理和反向代理之间的差异：
 
 <img src="https://cdn.jsdelivr.net/gh/dongzl/dongzl.github.io@hexo/source/images/2023/25-Difference-Between-Forward-Proxy-Reverse-Proxy-System-Design/05.jpeg"/>
